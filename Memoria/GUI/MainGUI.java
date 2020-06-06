@@ -23,6 +23,7 @@ import java.awt.Font;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.border.LineBorder;
 
 public class MainGUI {
 
@@ -67,6 +68,7 @@ public class MainGUI {
 		panel_Calendar.setLayout(null);
 		
 		JLabel label_Sunday = new JLabel("\uC77C");
+		label_Sunday.setBorder(new LineBorder(Color.GRAY));
 		label_Sunday.setForeground(Color.RED);
 		label_Sunday.setFont(new Font("����", Font.BOLD, 17));
 		label_Sunday.setHorizontalAlignment(SwingConstants.CENTER);
@@ -76,6 +78,8 @@ public class MainGUI {
 		panel_Calendar.add(label_Sunday);
 		
 		JLabel label_Monday = new JLabel("\uC6D4");
+		label_Monday.setOpaque(true);
+		label_Monday.setBorder(new LineBorder(Color.GRAY));
 		label_Monday.setBackground(SystemColor.activeCaption);
 		label_Monday.setFont(new Font("����", Font.BOLD, 17));
 		label_Monday.setHorizontalAlignment(SwingConstants.CENTER);
@@ -83,6 +87,8 @@ public class MainGUI {
 		panel_Calendar.add(label_Monday);
 		
 		JLabel label_Tuesday = new JLabel("\uD654");
+		label_Tuesday.setOpaque(true);
+		label_Tuesday.setBorder(new LineBorder(Color.GRAY));
 		label_Tuesday.setBackground(SystemColor.activeCaption);
 		label_Tuesday.setFont(new Font("����", Font.BOLD, 17));
 		label_Tuesday.setHorizontalAlignment(SwingConstants.CENTER);
@@ -90,6 +96,8 @@ public class MainGUI {
 		panel_Calendar.add(label_Tuesday);
 		
 		JLabel label_Wednesday = new JLabel("\uC218");
+		label_Wednesday.setOpaque(true);
+		label_Wednesday.setBorder(new LineBorder(Color.GRAY));
 		label_Wednesday.setBackground(SystemColor.activeCaption);
 		label_Wednesday.setFont(new Font("����", Font.BOLD, 17));
 		label_Wednesday.setHorizontalAlignment(SwingConstants.CENTER);
@@ -97,6 +105,8 @@ public class MainGUI {
 		panel_Calendar.add(label_Wednesday);
 		
 		JLabel label_Thursday = new JLabel("\uBAA9");
+		label_Thursday.setOpaque(true);
+		label_Thursday.setBorder(new LineBorder(Color.GRAY));
 		label_Thursday.setBackground(SystemColor.activeCaption);
 		label_Thursday.setFont(new Font("����", Font.BOLD, 17));
 		label_Thursday.setHorizontalAlignment(SwingConstants.CENTER);
@@ -104,6 +114,8 @@ public class MainGUI {
 		panel_Calendar.add(label_Thursday);
 		
 		JLabel label_Friday = new JLabel("\uAE08");
+		label_Friday.setOpaque(true);
+		label_Friday.setBorder(new LineBorder(Color.GRAY));
 		label_Friday.setBackground(SystemColor.activeCaption);
 		label_Friday.setFont(new Font("����", Font.BOLD, 17));
 		label_Friday.setHorizontalAlignment(SwingConstants.CENTER);
@@ -111,6 +123,8 @@ public class MainGUI {
 		panel_Calendar.add(label_Friday);
 		
 		JLabel label_Saturday = new JLabel("\uD1A0");
+		label_Saturday.setOpaque(true);
+		label_Saturday.setBorder(new LineBorder(Color.GRAY));
 		label_Saturday.setBackground(SystemColor.activeCaption);
 		label_Saturday.setForeground(SystemColor.textHighlight);
 		label_Saturday.setFont(new Font("����", Font.BOLD, 17));
@@ -119,6 +133,8 @@ public class MainGUI {
 		panel_Calendar.add(label_Saturday);
 		
 		JLabel label_space_0_1 = new JLabel("n");
+		label_space_0_1.setOpaque(true);
+		label_space_0_1.setBorder(new LineBorder(Color.GRAY));
 		label_space_0_1.setForeground(new Color(255, 51, 51));
 		label_space_0_1.setVerticalAlignment(SwingConstants.TOP);
 		label_space_0_1.setHorizontalAlignment(SwingConstants.LEFT);
@@ -128,6 +144,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_0_1);
 		
 		JLabel label_space_0_2 = new JLabel("n");
+		label_space_0_2.setOpaque(true);
+		label_space_0_2.setBorder(new LineBorder(Color.GRAY));
 		label_space_0_2.setVerticalAlignment(SwingConstants.TOP);
 		label_space_0_2.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_0_2.setFont(new Font("����", Font.PLAIN, 14));
@@ -136,6 +154,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_0_2);
 		
 		JLabel label_space_0_3 = new JLabel("n");
+		label_space_0_3.setOpaque(true);
+		label_space_0_3.setBorder(new LineBorder(Color.GRAY));
 		label_space_0_3.setVerticalAlignment(SwingConstants.TOP);
 		label_space_0_3.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_0_3.setFont(new Font("����", Font.PLAIN, 14));
@@ -144,6 +164,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_0_3);
 		
 		JLabel label_space_0_4 = new JLabel("n");
+		label_space_0_4.setOpaque(true);
+		label_space_0_4.setBorder(new LineBorder(Color.GRAY));
 		label_space_0_4.setVerticalAlignment(SwingConstants.TOP);
 		label_space_0_4.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_0_4.setFont(new Font("����", Font.PLAIN, 14));
@@ -152,6 +174,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_0_4);
 		
 		JLabel label_space_0_5 = new JLabel("n");
+		label_space_0_5.setOpaque(true);
+		label_space_0_5.setBorder(new LineBorder(Color.GRAY));
 		label_space_0_5.setVerticalAlignment(SwingConstants.TOP);
 		label_space_0_5.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_0_5.setFont(new Font("����", Font.PLAIN, 14));
@@ -160,6 +184,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_0_5);
 		
 		JLabel label_space_0_6 = new JLabel("n");
+		label_space_0_6.setOpaque(true);
+		label_space_0_6.setBorder(new LineBorder(Color.GRAY));
 		label_space_0_6.setVerticalAlignment(SwingConstants.TOP);
 		label_space_0_6.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_0_6.setFont(new Font("����", Font.PLAIN, 14));
@@ -168,6 +194,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_0_6);
 		
 		JLabel label_space_0_7 = new JLabel("n");
+		label_space_0_7.setOpaque(true);
+		label_space_0_7.setBorder(new LineBorder(Color.GRAY));
 		label_space_0_7.setForeground(new Color(102, 102, 102));
 		label_space_0_7.setVerticalAlignment(SwingConstants.TOP);
 		label_space_0_7.setHorizontalAlignment(SwingConstants.LEFT);
@@ -177,6 +205,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_0_7);
 		
 		JLabel label_space_1_1 = new JLabel("n");
+		label_space_1_1.setOpaque(true);
+		label_space_1_1.setBorder(new LineBorder(Color.GRAY));
 		label_space_1_1.setForeground(new Color(255, 51, 51));
 		label_space_1_1.setVerticalAlignment(SwingConstants.TOP);
 		label_space_1_1.setHorizontalAlignment(SwingConstants.LEFT);
@@ -186,6 +216,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_1_1);
 		
 		JLabel label_space_1_2 = new JLabel("n");
+		label_space_1_2.setOpaque(true);
+		label_space_1_2.setBorder(new LineBorder(Color.GRAY));
 		label_space_1_2.setVerticalAlignment(SwingConstants.TOP);
 		label_space_1_2.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_1_2.setFont(new Font("����", Font.PLAIN, 14));
@@ -194,6 +226,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_1_2);
 		
 		JLabel label_space_1_3 = new JLabel("n");
+		label_space_1_3.setOpaque(true);
+		label_space_1_3.setBorder(new LineBorder(Color.GRAY));
 		label_space_1_3.setVerticalAlignment(SwingConstants.TOP);
 		label_space_1_3.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_1_3.setFont(new Font("����", Font.PLAIN, 14));
@@ -202,6 +236,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_1_3);
 		
 		JLabel label_space_1_4 = new JLabel("n");
+		label_space_1_4.setOpaque(true);
+		label_space_1_4.setBorder(new LineBorder(Color.GRAY));
 		label_space_1_4.setVerticalAlignment(SwingConstants.TOP);
 		label_space_1_4.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_1_4.setFont(new Font("����", Font.PLAIN, 14));
@@ -210,6 +246,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_1_4);
 		
 		JLabel label_space_1_5 = new JLabel("n");
+		label_space_1_5.setOpaque(true);
+		label_space_1_5.setBorder(new LineBorder(Color.GRAY));
 		label_space_1_5.setVerticalAlignment(SwingConstants.TOP);
 		label_space_1_5.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_1_5.setFont(new Font("����", Font.PLAIN, 14));
@@ -218,6 +256,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_1_5);
 		
 		JLabel label_space_1_6 = new JLabel("n");
+		label_space_1_6.setOpaque(true);
+		label_space_1_6.setBorder(new LineBorder(Color.GRAY));
 		label_space_1_6.setVerticalAlignment(SwingConstants.TOP);
 		label_space_1_6.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_1_6.setFont(new Font("����", Font.PLAIN, 14));
@@ -226,6 +266,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_1_6);
 		
 		JLabel label_space_1_7 = new JLabel("n");
+		label_space_1_7.setOpaque(true);
+		label_space_1_7.setBorder(new LineBorder(Color.GRAY));
 		label_space_1_7.setForeground(new Color(102, 102, 102));
 		label_space_1_7.setVerticalAlignment(SwingConstants.TOP);
 		label_space_1_7.setHorizontalAlignment(SwingConstants.LEFT);
@@ -235,6 +277,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_1_7);
 		
 		JLabel label_space_2_1 = new JLabel("n");
+		label_space_2_1.setOpaque(true);
+		label_space_2_1.setBorder(new LineBorder(Color.GRAY));
 		label_space_2_1.setForeground(new Color(255, 51, 51));
 		label_space_2_1.setVerticalAlignment(SwingConstants.TOP);
 		label_space_2_1.setHorizontalAlignment(SwingConstants.LEFT);
@@ -244,6 +288,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_2_1);
 		
 		JLabel label_space_2_2 = new JLabel("n");
+		label_space_2_2.setOpaque(true);
+		label_space_2_2.setBorder(new LineBorder(Color.GRAY));
 		label_space_2_2.setVerticalAlignment(SwingConstants.TOP);
 		label_space_2_2.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_2_2.setFont(new Font("����", Font.PLAIN, 14));
@@ -252,6 +298,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_2_2);
 		
 		JLabel label_space_2_3 = new JLabel("n");
+		label_space_2_3.setOpaque(true);
+		label_space_2_3.setBorder(new LineBorder(Color.GRAY));
 		label_space_2_3.setVerticalAlignment(SwingConstants.TOP);
 		label_space_2_3.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_2_3.setFont(new Font("����", Font.PLAIN, 14));
@@ -260,6 +308,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_2_3);
 		
 		JLabel label_space_2_4 = new JLabel("n");
+		label_space_2_4.setOpaque(true);
+		label_space_2_4.setBorder(new LineBorder(Color.GRAY));
 		label_space_2_4.setVerticalAlignment(SwingConstants.TOP);
 		label_space_2_4.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_2_4.setFont(new Font("����", Font.PLAIN, 14));
@@ -268,6 +318,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_2_4);
 		
 		JLabel label_space_2_5 = new JLabel("n");
+		label_space_2_5.setOpaque(true);
+		label_space_2_5.setBorder(new LineBorder(Color.GRAY));
 		label_space_2_5.setVerticalAlignment(SwingConstants.TOP);
 		label_space_2_5.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_2_5.setFont(new Font("����", Font.PLAIN, 14));
@@ -276,6 +328,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_2_5);
 		
 		JLabel label_space_2_6 = new JLabel("n");
+		label_space_2_6.setOpaque(true);
+		label_space_2_6.setBorder(new LineBorder(Color.GRAY));
 		label_space_2_6.setVerticalAlignment(SwingConstants.TOP);
 		label_space_2_6.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_2_6.setFont(new Font("����", Font.PLAIN, 14));
@@ -284,6 +338,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_2_6);
 		
 		JLabel label_space_2_7 = new JLabel("n");
+		label_space_2_7.setOpaque(true);
+		label_space_2_7.setBorder(new LineBorder(Color.GRAY));
 		label_space_2_7.setForeground(new Color(102, 102, 102));
 		label_space_2_7.setVerticalAlignment(SwingConstants.TOP);
 		label_space_2_7.setHorizontalAlignment(SwingConstants.LEFT);
@@ -293,6 +349,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_2_7);
 		
 		JLabel label_space_3_1 = new JLabel("n");
+		label_space_3_1.setOpaque(true);
+		label_space_3_1.setBorder(new LineBorder(Color.GRAY));
 		label_space_3_1.setForeground(new Color(255, 51, 51));
 		label_space_3_1.setVerticalAlignment(SwingConstants.TOP);
 		label_space_3_1.setHorizontalAlignment(SwingConstants.LEFT);
@@ -302,6 +360,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_3_1);
 		
 		JLabel label_space_3_2 = new JLabel("n");
+		label_space_3_2.setOpaque(true);
+		label_space_3_2.setBorder(new LineBorder(Color.GRAY));
 		label_space_3_2.setVerticalAlignment(SwingConstants.TOP);
 		label_space_3_2.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_3_2.setFont(new Font("����", Font.PLAIN, 14));
@@ -310,6 +370,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_3_2);
 		
 		JLabel label_space_3_3 = new JLabel("n");
+		label_space_3_3.setOpaque(true);
+		label_space_3_3.setBorder(new LineBorder(Color.GRAY));
 		label_space_3_3.setVerticalAlignment(SwingConstants.TOP);
 		label_space_3_3.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_3_3.setFont(new Font("����", Font.PLAIN, 14));
@@ -318,6 +380,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_3_3);
 		
 		JLabel label_space_3_4 = new JLabel("n");
+		label_space_3_4.setOpaque(true);
+		label_space_3_4.setBorder(new LineBorder(Color.GRAY));
 		label_space_3_4.setVerticalAlignment(SwingConstants.TOP);
 		label_space_3_4.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_3_4.setFont(new Font("����", Font.PLAIN, 14));
@@ -326,6 +390,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_3_4);
 		
 		JLabel label_space_3_5 = new JLabel("n");
+		label_space_3_5.setOpaque(true);
+		label_space_3_5.setBorder(new LineBorder(Color.GRAY));
 		label_space_3_5.setVerticalAlignment(SwingConstants.TOP);
 		label_space_3_5.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_3_5.setFont(new Font("����", Font.PLAIN, 14));
@@ -334,6 +400,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_3_5);
 		
 		JLabel label_space_3_6 = new JLabel("n");
+		label_space_3_6.setOpaque(true);
+		label_space_3_6.setBorder(new LineBorder(Color.GRAY));
 		label_space_3_6.setVerticalAlignment(SwingConstants.TOP);
 		label_space_3_6.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_3_6.setFont(new Font("����", Font.PLAIN, 14));
@@ -342,6 +410,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_3_6);
 		
 		JLabel label_space_3_7 = new JLabel("n");
+		label_space_3_7.setOpaque(true);
+		label_space_3_7.setBorder(new LineBorder(Color.GRAY));
 		label_space_3_7.setForeground(new Color(102, 102, 102));
 		label_space_3_7.setVerticalAlignment(SwingConstants.TOP);
 		label_space_3_7.setHorizontalAlignment(SwingConstants.LEFT);
@@ -351,6 +421,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_3_7);
 		
 		JLabel label_space_4_1 = new JLabel("n");
+		label_space_4_1.setOpaque(true);
+		label_space_4_1.setBorder(new LineBorder(Color.GRAY));
 		label_space_4_1.setForeground(new Color(255, 51, 51));
 		label_space_4_1.setVerticalAlignment(SwingConstants.TOP);
 		label_space_4_1.setHorizontalAlignment(SwingConstants.LEFT);
@@ -360,6 +432,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_4_1);
 		
 		JLabel label_space_4_2 = new JLabel("n");
+		label_space_4_2.setOpaque(true);
+		label_space_4_2.setBorder(new LineBorder(Color.GRAY));
 		label_space_4_2.setVerticalAlignment(SwingConstants.TOP);
 		label_space_4_2.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_4_2.setFont(new Font("����", Font.PLAIN, 14));
@@ -368,6 +442,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_4_2);
 		
 		JLabel label_space_4_3 = new JLabel("n");
+		label_space_4_3.setOpaque(true);
+		label_space_4_3.setBorder(new LineBorder(Color.GRAY));
 		label_space_4_3.setVerticalAlignment(SwingConstants.TOP);
 		label_space_4_3.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_4_3.setFont(new Font("����", Font.PLAIN, 14));
@@ -376,6 +452,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_4_3);
 		
 		JLabel label_space_4_4 = new JLabel("n");
+		label_space_4_4.setOpaque(true);
+		label_space_4_4.setBorder(new LineBorder(Color.GRAY));
 		label_space_4_4.setVerticalAlignment(SwingConstants.TOP);
 		label_space_4_4.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_4_4.setFont(new Font("����", Font.PLAIN, 14));
@@ -384,6 +462,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_4_4);
 		
 		JLabel label_space_4_5 = new JLabel("n");
+		label_space_4_5.setOpaque(true);
+		label_space_4_5.setBorder(new LineBorder(Color.GRAY));
 		label_space_4_5.setVerticalAlignment(SwingConstants.TOP);
 		label_space_4_5.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_4_5.setFont(new Font("����", Font.PLAIN, 14));
@@ -392,6 +472,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_4_5);
 		
 		JLabel label_space_4_6 = new JLabel("n");
+		label_space_4_6.setOpaque(true);
+		label_space_4_6.setBorder(new LineBorder(Color.GRAY));
 		label_space_4_6.setVerticalAlignment(SwingConstants.TOP);
 		label_space_4_6.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_4_6.setFont(new Font("����", Font.PLAIN, 14));
@@ -400,6 +482,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_4_6);
 		
 		JLabel label_space_4_7 = new JLabel("n");
+		label_space_4_7.setOpaque(true);
+		label_space_4_7.setBorder(new LineBorder(Color.GRAY));
 		label_space_4_7.setForeground(new Color(102, 102, 102));
 		label_space_4_7.setVerticalAlignment(SwingConstants.TOP);
 		label_space_4_7.setHorizontalAlignment(SwingConstants.LEFT);
@@ -409,6 +493,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_4_7);
 		
 		JLabel label_space_5_1 = new JLabel("n");
+		label_space_5_1.setOpaque(true);
+		label_space_5_1.setBorder(new LineBorder(Color.GRAY));
 		label_space_5_1.setForeground(new Color(255, 51, 51));
 		label_space_5_1.setVerticalAlignment(SwingConstants.TOP);
 		label_space_5_1.setHorizontalAlignment(SwingConstants.LEFT);
@@ -418,6 +504,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_5_1);
 		
 		JLabel label_space_5_2 = new JLabel("n");
+		label_space_5_2.setOpaque(true);
+		label_space_5_2.setBorder(new LineBorder(Color.GRAY));
 		label_space_5_2.setVerticalAlignment(SwingConstants.TOP);
 		label_space_5_2.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_5_2.setFont(new Font("����", Font.PLAIN, 14));
@@ -426,6 +514,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_5_2);
 		
 		JLabel label_space_5_3 = new JLabel("n");
+		label_space_5_3.setOpaque(true);
+		label_space_5_3.setBorder(new LineBorder(Color.GRAY));
 		label_space_5_3.setVerticalAlignment(SwingConstants.TOP);
 		label_space_5_3.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_5_3.setFont(new Font("����", Font.PLAIN, 14));
@@ -434,6 +524,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_5_3);
 		
 		JLabel label_space_5_4 = new JLabel("n");
+		label_space_5_4.setOpaque(true);
+		label_space_5_4.setBorder(new LineBorder(Color.GRAY));
 		label_space_5_4.setVerticalAlignment(SwingConstants.TOP);
 		label_space_5_4.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_5_4.setFont(new Font("����", Font.PLAIN, 14));
@@ -442,6 +534,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_5_4);
 		
 		JLabel label_space_5_5 = new JLabel("n");
+		label_space_5_5.setOpaque(true);
+		label_space_5_5.setBorder(new LineBorder(Color.GRAY));
 		label_space_5_5.setVerticalAlignment(SwingConstants.TOP);
 		label_space_5_5.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_5_5.setFont(new Font("����", Font.PLAIN, 14));
@@ -450,6 +544,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_5_5);
 		
 		JLabel label_space_5_6 = new JLabel("n");
+		label_space_5_6.setOpaque(true);
+		label_space_5_6.setBorder(new LineBorder(Color.GRAY));
 		label_space_5_6.setVerticalAlignment(SwingConstants.TOP);
 		label_space_5_6.setHorizontalAlignment(SwingConstants.LEFT);
 		label_space_5_6.setFont(new Font("����", Font.PLAIN, 14));
@@ -458,6 +554,8 @@ public class MainGUI {
 		panel_Calendar.add(label_space_5_6);
 		
 		JLabel label_space_5_7 = new JLabel("n");
+		label_space_5_7.setOpaque(true);
+		label_space_5_7.setBorder(new LineBorder(Color.GRAY));
 		label_space_5_7.setForeground(new Color(102, 102, 102));
 		label_space_5_7.setVerticalAlignment(SwingConstants.TOP);
 		label_space_5_7.setHorizontalAlignment(SwingConstants.LEFT);
@@ -472,7 +570,8 @@ public class MainGUI {
 		panel_Search.setLayout(null);
 		
 		textField_searchField = new JTextField();
-		textField_searchField.setBounds(0, 0, 232, 26);
+		textField_searchField.setBorder(new LineBorder(Color.GRAY));
+		textField_searchField.setBounds(0, 0, 231, 26);
 		textField_searchField.setHorizontalAlignment(SwingConstants.CENTER);
 		textField_searchField.setText("\uAC80\uC0C9..");
 		textField_searchField.setToolTipText("");
@@ -480,7 +579,8 @@ public class MainGUI {
 		textField_searchField.setColumns(10);
 		
 		JList list_searchlist = new JList();
-		list_searchlist.setBounds(0, 25, 232, 585);
+		list_searchlist.setBorder(new LineBorder(Color.GRAY));
+		list_searchlist.setBounds(0, 25, 231, 585);
 		panel_Search.add(list_searchlist);
 		
 		JScrollBar scrollBar_searchList = new JScrollBar();
