@@ -10,6 +10,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.Window.Type;
+import java.text.SimpleDateFormat;
+
 import javax.swing.JScrollPane;
 import java.awt.Color;
 import java.awt.Toolkit;
@@ -18,8 +20,9 @@ import javax.swing.AbstractListModel;
 import javax.swing.border.LineBorder;
 import javax.swing.border.BevelBorder;
 import java.awt.Font;
-
+import java.util.Date;
 public class PlannerGUI {
+	
 
 	private JFrame frmMemoriaplanner;
 
@@ -27,6 +30,17 @@ public class PlannerGUI {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat format2 = new SimpleDateFormat ( "yyyy년 MM월dd일 HH시mm분ss초");
+				
+		Date time = new Date();
+				
+		String time1 = format1.format(time);
+		String time2 = format2.format(time);
+				
+		System.out.println(time1);
+		System.out.println(time2);
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -71,7 +85,7 @@ public class PlannerGUI {
 		
 		JLabel lblNewLabel_1 = new JLabel("\uC815\uB82C");
 		lblNewLabel_1.setForeground(Color.WHITE);
-		lblNewLabel_1.setBounds(269, 37, 24, 15);
+		lblNewLabel_1.setBounds(269, 37, 35, 15);
 		frmMemoriaplanner.getContentPane().add(lblNewLabel_1);
 		
 		JCheckBox chckbxNewCheckBox = new JCheckBox("\uB0B4\uC6A9 ");
