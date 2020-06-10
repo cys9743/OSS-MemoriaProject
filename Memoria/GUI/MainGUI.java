@@ -31,15 +31,21 @@ public class MainGUI {
 	JPanel panel_Calendar = new JPanel();
 	
 	JLabel[][] label_space = new JLabel[6][7];
+	
+	MyListener ml = new MyListener();
 
 	
-	int calYear = cal.get(Calendar.YEAR); 			//오늘의 년도 설정
-	int calMonth = cal.get(Calendar.MONTH)+1;			//오늘의 달 설정 (+1 해줘야함)
-	int calDay = cal.get(Calendar.DAY_OF_MONTH);			// 오늘의 일 설정
-	int calDayOfWeek = cal.get(Calendar.DAY_OF_WEEK);			//오늘의 요일
+	int calYear; 			//표시할 년도 설정
+	int calMonth;			//표시할 달 설정 (+1 해줘야함)
+	int calDay;			//표시할 일 설정
+	int calDayOfWeek;			//표시할 요일
 	final int calLastDate[] = {31,28,31,30,31,30,31,31,30,31,30,31};			//0~11 (1~12) 월 의 마지막 일 
 	
+
 	
+	JButton btn_Backward = new JButton((cal.get(Calendar.MONTH)+1)-1+"월");	
+	JButton btn_Forward = new JButton((cal.get(Calendar.MONTH)+1+1)+"월");
+	JLabel label_Month = new JLabel(cal.get(Calendar.MONTH)+"월");
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -60,14 +66,17 @@ public class MainGUI {
 		calYear = cal.get(Calendar.YEAR); 
 		calMonth = cal.get(Calendar.MONTH)+1;
 		calDay = cal.get(Calendar.DAY_OF_MONTH);
+		calDayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
 	}
 	
 	private int startDateOfMonth(Calendar cal) {		// 1일이 시작하는 위치 구하는 메소드
 		
-		int StartingPoint = (cal.get(Calendar.DAY_OF_WEEK)+7-(cal.get(Calendar.DAY_OF_MONTH))%7)%7;	//캘린더의 특정 날짜가 무슨요일인지와 몇일인지만 알면 그 달의 시작 요일을 알 수 있다.
+		int StartingPoint = (cal.get(Calendar.DAY_OF_WEEK)+7-cal.get(Calendar.DAY_OF_MONTH)%7)%7;	//캘린더의 특정 날짜가 무슨요일인지와 몇일인지만 알면 그 달의 시작 요일을 알 수 있다.
 		
 		return StartingPoint;			//0~6까지의 숫자로 일월화수목금토  순서로 시작 요일을 알려준다.
 	}
+	
+
 
 	public void showCal() {			//캘린더를 표시해주는 메소드
 		switch(startDateOfMonth(cal))			//시작요일을 구하는 메소드
@@ -206,12 +215,49 @@ public class MainGUI {
 		}
 	}
 	
+	public void clearCal(){				//캘린더의 일자 표시 초기화 시키는 메소드
+		for (int i=0;i<6;i++){
+			for(int j=0;j<7;j++){
+				label_space[i][j].setText("");
+			}
+		}
+	}
+	public void nextMonth(){			//다음 달로 변경하는 메소드
+		calMonth++;
+		cal.set(Calendar.MONTH, calMonth-1);
+		cal.set(Calendar.DAY_OF_MONTH, 1);
+		clearCal();
+		showCal();
+		btn_Backward.setText(calMonth-1+"월");
+		btn_Forward.setText((calMonth+1)+"월");
+		label_Month.setText(calMonth+"월");
+		
+		if(btn_Forward.getText().equals("13월")) btn_Forward.setText("1월");
+		
+	}
+	
+	public void previousMonth(){			//전 달로 변경하는 메소드
+		calMonth--;
+		System.out.println(calMonth+"dd");
+		cal.set(Calendar.MONTH, calMonth-1);
+		cal.set(Calendar.DAY_OF_MONTH, 1);
+		clearCal();
+		showCal();
+		btn_Backward.setText(calMonth-1+"월");
+		btn_Forward.setText((calMonth+1)+"월");
+		label_Month.setText(calMonth+"월");
+		
+		if(btn_Backward.getText().equals("0월")) btn_Backward.setText("12월");
+
+	}
+	
 	public MainGUI() {
 		initialize();
 		showCal();
 	}
 
 	private void initialize() {
+		setToday();
 		
 		SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
 		SimpleDateFormat format2 = new SimpleDateFormat ( "yyyy년 MM월dd일 HH시mm분ss초");
@@ -739,7 +785,7 @@ public class MainGUI {
 		label_filesize.setBounds(12, 60, 307, 15);
 		panel_South.add(label_filesize);
 		
-		JLabel label_Month = new JLabel(calMonth+"월");
+
 		label_Month.setHorizontalAlignment(SwingConstants.CENTER);
 		label_Month.setBounds(655, 31, 85, 23);
 		panel_South.add(label_Month);
@@ -750,16 +796,13 @@ public class MainGUI {
 		label_Year.setBounds(671, 10, 57, 25);
 		panel_South.add(label_Year);
 		
-		JButton btn_Backward = new JButton("\uB4A4");
-		btn_Backward.setBounds(574, 20, 51, 44);
+
+		btn_Backward.setBounds(574, 20, 69, 44);
 		panel_South.add(btn_Backward);
+		btn_Backward.addActionListener(ml);
 		
-		JButton btn_Forward = new JButton("\uC55E");
-		btn_Forward.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btn_Forward.setBounds(768, 20, 45, 44);
+		btn_Forward.addActionListener(ml);
+		btn_Forward.setBounds(752, 20, 68, 44);
 		panel_South.add(btn_Forward);
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -778,4 +821,17 @@ public class MainGUI {
 		JMenuItem mntmNewMenuItem_1 = new JMenuItem("\uC0C9\uC0C1\uC124\uC815(C)");
 		mnNewMenu_1.add(mntmNewMenuItem_1);
 	}
+	
+	public class MyListener implements ActionListener{			//모든 리스너 클래스
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(e.getSource().equals(btn_Forward)) nextMonth();
+			if(e.getSource().equals(btn_Backward)) previousMonth();
+			
+		}
+		
+	}
 }
+
+
