@@ -65,38 +65,38 @@ public class PlannerGUI {
 		JLabel lblNewLabel = new JLabel("Daliy Plan");
 		lblNewLabel.setForeground(Color.WHITE);
 		lblNewLabel.setBackground(Color.WHITE);
-		lblNewLabel.setFont(new Font("����", Font.BOLD | Font.ITALIC, 12));
-		lblNewLabel.setBounds(157, 0, 71, 23);
+		lblNewLabel.setFont(new Font("DialogInput", Font.BOLD | Font.ITALIC, 13));
+		lblNewLabel.setBounds(155, 10, 81, 23);
 		frmMemoriaplanner.getContentPane().add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("\uC815\uB82C");
 		lblNewLabel_1.setForeground(Color.WHITE);
-		lblNewLabel_1.setBounds(262, 23, 35, 15);
+		lblNewLabel_1.setBounds(269, 37, 24, 15);
 		frmMemoriaplanner.getContentPane().add(lblNewLabel_1);
 		
 		JCheckBox chckbxNewCheckBox = new JCheckBox("\uB0B4\uC6A9 ");
 		chckbxNewCheckBox.setBackground(Color.LIGHT_GRAY);
-		chckbxNewCheckBox.setBounds(8, 57, 376, 23);
+		chckbxNewCheckBox.setBounds(8, 73, 368, 23);
 		frmMemoriaplanner.getContentPane().add(chckbxNewCheckBox);
 		
 		JCheckBox chckbxNewCheckBox_1 = new JCheckBox("\uC624\uD508\uC18C\uC2A4 \uD504\uB85C\uC81D\uD2B8 \uACFC\uC81C");
 		chckbxNewCheckBox_1.setBackground(Color.LIGHT_GRAY);
-		chckbxNewCheckBox_1.setBounds(8, 82, 376, 23);
+		chckbxNewCheckBox_1.setBounds(8, 98, 368, 23);
 		frmMemoriaplanner.getContentPane().add(chckbxNewCheckBox_1);
 		
 		JCheckBox chckbxNewCheckBox_1_1 = new JCheckBox("New check box");
 		chckbxNewCheckBox_1_1.setBackground(Color.LIGHT_GRAY);
-		chckbxNewCheckBox_1_1.setBounds(8, 107, 376, 23);
+		chckbxNewCheckBox_1_1.setBounds(8, 123, 368, 23);
 		frmMemoriaplanner.getContentPane().add(chckbxNewCheckBox_1_1);
 		
 		JCheckBox chckbxNewCheckBox_1_2 = new JCheckBox("New check box");
 		chckbxNewCheckBox_1_2.setBackground(Color.LIGHT_GRAY);
-		chckbxNewCheckBox_1_2.setBounds(8, 132, 376, 23);
+		chckbxNewCheckBox_1_2.setBounds(8, 148, 368, 23);
 		frmMemoriaplanner.getContentPane().add(chckbxNewCheckBox_1_2);
 		
 		JCheckBox chckbxNewCheckBox_1_3 = new JCheckBox("New check box");
 		chckbxNewCheckBox_1_3.setBackground(Color.LIGHT_GRAY);
-		chckbxNewCheckBox_1_3.setBounds(8, 157, 376, 23);
+		chckbxNewCheckBox_1_3.setBounds(8, 173, 368, 23);
 		frmMemoriaplanner.getContentPane().add(chckbxNewCheckBox_1_3);
 		
 		JList list = new JList();
@@ -111,7 +111,18 @@ public class PlannerGUI {
 			}
 		});
 		list.setToolTipText("");
-		list.setBounds(301, 20, 71, 19);
+		list.setBounds(305, 34, 71, 19);
 		frmMemoriaplanner.getContentPane().add(list);
+		
+		JList list_1 = new JList();
+		list_1.setToolTipText("");
+		list_1.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		list_1.setBounds(42, 34, 71, 19);
+		frmMemoriaplanner.getContentPane().add(list_1);
+		
+		JLabel lblNewLabel_1_1 = new JLabel("\uAC80\uC0C9");
+		lblNewLabel_1_1.setForeground(Color.WHITE);
+		lblNewLabel_1_1.setBounds(8, 37, 35, 15);
+		frmMemoriaplanner.getContentPane().add(lblNewLabel_1_1);
 	}
 }
