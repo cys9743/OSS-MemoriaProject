@@ -72,145 +72,138 @@ public class MainGUI {
 	public void showCal() {			//캘린더를 표시해주는 메소드
 		switch(startDateOfMonth(cal))			//시작요일을 구하는 메소드
 		{
-		case 0:							//시작 요일이 일요일일 경우
-		{
-			int i =1;
-			for(int w=0; w<6 ; w++){
-				for(int h=0; h<7;h++) {
-					if(i<= calLastDate[calMonth-1])			//해당하는 달의 최대 일까지 반복
-					{
-						label_space[w][h].setText(i+"");
-						i++;
-						if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))			//'일' 의 값이 0 혹은 음수일경우 빈칸으로 변경
+			case 0:							//시작 요일이 일요일일 경우
+			{
+				int i =1;
+				for(int w=0; w<6 ; w++){
+					for(int h=0; h<7;h++) {
+						if(i<= calLastDate[calMonth-1])			//해당하는 달의 최대 일까지 반복
 						{
-							label_space[w][h].setText("");
-						}
-					}	
+							label_space[w][h].setText(i+"");
+							i++;
+							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))			//'일' 의 값이 0 혹은 음수일경우 빈칸으로 변경
+							{
+								label_space[w][h].setText("");
+							}
+						}	
+					}
 				}
+				break;
 			}
-			break;
-		}
-		
-		case 1:							//시작 요일이 월요일일 경우
-		{
-			int i =0;
-			for(int w=0; w<6 ; w++){
-				for(int h=0; h<7;h++) {
-					if(i<= calLastDate[calMonth-1])
-					{
-						label_space[w][h].setText(i+"");
-						i++;
-						if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
-						{
-							label_space[w][h].setText("");
-						}
-					}	
-				}
-			}
-			break;
-		}
 			
-		case 2:							//시작 요일이 화요일일 경우
-		{
-			int i =-1;
-			for(int w=0; w<6 ; w++){
-				for(int h=0; h<7;h++) {
-					if(i<= calLastDate[calMonth-1])
-					{
-						label_space[w][h].setText(i+"");
-						i++;
-						if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
+			case 1:							//시작 요일이 월요일일 경우
+			{
+				int i =0;
+				for(int w=0; w<6 ; w++){
+					for(int h=0; h<7;h++) {
+						if(i<= calLastDate[calMonth-1])
 						{
-							label_space[w][h].setText("");
-						}
-					}	
+							label_space[w][h].setText(i+"");
+							i++;
+							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
+							{
+								label_space[w][h].setText("");
+							}
+						}	
+					}
 				}
+				break;
 			}
-			break;
-		}
-		
-		case 3:							//시작 요일이 수요일일 경우
-		{
-			int i =-2;
-			for(int w=0; w<6 ; w++){
-				for(int h=0; h<7;h++) {
-					if(i<= calLastDate[calMonth-1])
-					{
-						label_space[w][h].setText(i+"");
-						i++;
-						if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
+				
+			case 2:							//시작 요일이 화요일일 경우
+			{
+				int i =-1;
+				for(int w=0; w<6 ; w++){
+					for(int h=0; h<7;h++) {
+						if(i<= calLastDate[calMonth-1])
 						{
-							label_space[w][h].setText("");
-						}
-					}	
+							label_space[w][h].setText(i+"");
+							i++;
+							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
+							{
+								label_space[w][h].setText("");
+							}
+						}	
+					}
 				}
+				break;
 			}
-			break;
-		}
-		
-		case 4:							//시작 요일이 목요일일 경우
-		{
-			int i =-3;
-			for(int w=0; w<6 ; w++){
-				for(int h=0; h<7;h++) {
-					if(i<= calLastDate[calMonth-1])
-					{
-						label_space[w][h].setText(i+"");
-						i++;
-						if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
+			
+			case 3:							//시작 요일이 수요일일 경우
+			{
+				int i =-2;
+				for(int w=0; w<6 ; w++){
+					for(int h=0; h<7;h++) {
+						if(i<= calLastDate[calMonth-1])
 						{
-							label_space[w][h].setText("");
-						}
-					}	
+							label_space[w][h].setText(i+"");
+							i++;
+							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
+							{
+								label_space[w][h].setText("");
+							}
+						}	
+					}
 				}
+				break;
 			}
-			break;
-		}
-		
-		case 5:							//시작 요일이 금요일일 경우
-		{
-			int i =-4;
-			for(int w=0; w<6 ; w++){
-				for(int h=0; h<7;h++) {
-					if(i<= calLastDate[calMonth-1])
-					{
-						label_space[w][h].setText(i+"");
-						i++;
-						if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
+			
+			case 4:							//시작 요일이 목요일일 경우
+			{
+				int i =-3;
+				for(int w=0; w<6 ; w++){
+					for(int h=0; h<7;h++) {
+						if(i<= calLastDate[calMonth-1])
 						{
-							label_space[w][h].setText("");
-						}
-					}	
+							label_space[w][h].setText(i+"");
+							i++;
+							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
+							{
+								label_space[w][h].setText("");
+							}
+						}	
+					}
 				}
+				break;
 			}
-			break;
-		}
-		
-		case 6:							//시작 요일이 토요일일 경우
-		{
-			int i =-5;
-			for(int w=0; w<6 ; w++){
-				for(int h=0; h<7;h++) {
-					if(i<= calLastDate[calMonth-1])
-					{
-						label_space[w][h].setText(i+"");
-						if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
+			
+			case 5:							//시작 요일이 금요일일 경우
+			{
+				int i =-4;
+				for(int w=0; w<6 ; w++){
+					for(int h=0; h<7;h++) {
+						if(i<= calLastDate[calMonth-1])
 						{
-							label_space[w][h].setText("");
-						}
-					}	
+							label_space[w][h].setText(i+"");
+							i++;
+							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
+							{
+								label_space[w][h].setText("");
+							}
+						}	
+					}
 				}
+				break;
 			}
-			break;
+			
+			case 6:							//시작 요일이 토요일일 경우
+			{
+				int i =-5;
+				for(int w=0; w<6 ; w++){
+					for(int h=0; h<7;h++) {
+						if(i<= calLastDate[calMonth-1])
+						{
+							label_space[w][h].setText(i+"");
+							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
+							{
+								label_space[w][h].setText("");
+							}
+						}	
+					}
+				}
+				break;
+			}
 		}
-		
-		
-		
-
-		
-		}
-		
-		
 	}
 	
 	public MainGUI() {
@@ -371,7 +364,7 @@ public class MainGUI {
 
 		label_space[0][6].setOpaque(true);
 		label_space[0][6].setBorder(new LineBorder(Color.GRAY));
-		label_space[0][6].setForeground(new Color(102, 102, 102));
+		label_space[0][6].setForeground(SystemColor.textHighlight);
 		label_space[0][6].setVerticalAlignment(SwingConstants.TOP);
 		label_space[0][6].setHorizontalAlignment(SwingConstants.LEFT);
 		label_space[0][6].setFont(new Font("占쏙옙占쏙옙", Font.PLAIN, 14));
@@ -437,7 +430,7 @@ public class MainGUI {
 
 		label_space[1][6].setOpaque(true);
 		label_space[1][6].setBorder(new LineBorder(Color.GRAY));
-		label_space[1][6].setForeground(new Color(102, 102, 102));
+		label_space[1][6].setForeground(SystemColor.textHighlight);
 		label_space[1][6].setVerticalAlignment(SwingConstants.TOP);
 		label_space[1][6].setHorizontalAlignment(SwingConstants.LEFT);
 		label_space[1][6].setFont(new Font("占쏙옙占쏙옙", Font.PLAIN, 14));
@@ -503,7 +496,7 @@ public class MainGUI {
 
 		label_space[2][6].setOpaque(true);
 		label_space[2][6].setBorder(new LineBorder(Color.GRAY));
-		label_space[2][6].setForeground(new Color(102, 102, 102));
+		label_space[2][6].setForeground(SystemColor.textHighlight);
 		label_space[2][6].setVerticalAlignment(SwingConstants.TOP);
 		label_space[2][6].setHorizontalAlignment(SwingConstants.LEFT);
 		label_space[2][6].setFont(new Font("占쏙옙占쏙옙", Font.PLAIN, 14));
@@ -568,7 +561,7 @@ public class MainGUI {
 
 		label_space[3][6].setOpaque(true);
 		label_space[3][6].setBorder(new LineBorder(Color.GRAY));
-		label_space[3][6].setForeground(new Color(102, 102, 102));
+		label_space[3][6].setForeground(SystemColor.textHighlight);
 		label_space[3][6].setVerticalAlignment(SwingConstants.TOP);
 		label_space[3][6].setHorizontalAlignment(SwingConstants.LEFT);
 		label_space[3][6].setFont(new Font("占쏙옙占쏙옙", Font.PLAIN, 14));
@@ -633,7 +626,7 @@ public class MainGUI {
 
 		label_space[4][6].setOpaque(true);
 		label_space[4][6].setBorder(new LineBorder(Color.GRAY));
-		label_space[4][6].setForeground(new Color(102, 102, 102));
+		label_space[4][6].setForeground(SystemColor.textHighlight);
 		label_space[4][6].setVerticalAlignment(SwingConstants.TOP);
 		label_space[4][6].setHorizontalAlignment(SwingConstants.LEFT);
 		label_space[4][6].setFont(new Font("占쏙옙占쏙옙", Font.PLAIN, 14));
@@ -698,12 +691,12 @@ public class MainGUI {
 
 		label_space[5][6].setOpaque(true);
 		label_space[5][6].setBorder(new LineBorder(Color.GRAY));
-		label_space[5][6].setForeground(new Color(102, 102, 102));
+		label_space[5][6].setForeground(SystemColor.textHighlight);
 		label_space[5][6].setVerticalAlignment(SwingConstants.TOP);
 		label_space[5][6].setHorizontalAlignment(SwingConstants.LEFT);
 		label_space[5][6].setFont(new Font("占쏙옙占쏙옙", Font.PLAIN, 14));
 		label_space[5][6].setBackground(Color.WHITE);
-		label_space[5][6].setBounds(953, 521, 159, 97);
+		label_space[5][6].setBounds(954, 511, 159, 97);
 		panel_Calendar.add(label_space[5][6]);
 		
 		JPanel panel_Search = new JPanel();
