@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -17,6 +19,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollBar;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -31,13 +34,24 @@ public class MainGUI {
 	JPanel panel_Calendar = new JPanel();
 	
 	JLabel[][] label_space = new JLabel[6][7];
+	
+	MyListener ml = new MyListener();
 
 	
-	int calYear = cal.get(Calendar.YEAR); 			//오늘의 년도 설정
-	int calMonth = cal.get(Calendar.MONTH)+1;			//오늘의 달 설정 (+1 해줘야함)
-	int calDay = cal.get(Calendar.DAY_OF_MONTH);			// 오늘의 일 설정
-	int calDayOfWeek = cal.get(Calendar.DAY_OF_WEEK);			//오늘의 요일
+	int calYear; 			//표시할 년도 설정
+	int calMonth;			//표시할 달 설정 (+1 해줘야함)
+	int calDay;			//표시할 일 설정
+	int calDayOfWeek;			//표시할 요일
 	final int calLastDate[] = {31,28,31,30,31,30,31,31,30,31,30,31};			//0~11 (1~12) 월 의 마지막 일 
+	
+
+	
+	JButton btn_Backward = new JButton((cal.get(Calendar.MONTH)+1)-1+"월");	
+	JButton btn_Forward = new JButton((cal.get(Calendar.MONTH)+1+1)+"월");
+	JLabel label_Month = new JLabel(cal.get(Calendar.MONTH)+"월");
+	
+	JPopupMenu popupMenuLabel = new JPopupMenu();
+	JPopupMenu popupMenuButton = new JPopupMenu();
 	
 	
 	
@@ -60,165 +74,208 @@ public class MainGUI {
 		calYear = cal.get(Calendar.YEAR); 
 		calMonth = cal.get(Calendar.MONTH)+1;
 		calDay = cal.get(Calendar.DAY_OF_MONTH);
+		calDayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
 	}
 	
 	private int startDateOfMonth(Calendar cal) {		// 1일이 시작하는 위치 구하는 메소드
 		
-		int StartingPoint = (cal.get(Calendar.DAY_OF_WEEK)+7-(cal.get(Calendar.DAY_OF_MONTH))%7)%7;	//캘린더의 특정 날짜가 무슨요일인지와 몇일인지만 알면 그 달의 시작 요일을 알 수 있다.
+		int StartingPoint = (cal.get(Calendar.DAY_OF_WEEK)+7-cal.get(Calendar.DAY_OF_MONTH)%7)%7;	//캘린더의 특정 날짜가 무슨요일인지와 몇일인지만 알면 그 달의 시작 요일을 알 수 있다.
 		
 		return StartingPoint;			//0~6까지의 숫자로 일월화수목금토  순서로 시작 요일을 알려준다.
 	}
+	
+
 
 	public void showCal() {			//캘린더를 표시해주는 메소드
 		switch(startDateOfMonth(cal))			//시작요일을 구하는 메소드
 		{
-		case 0:							//시작 요일이 일요일일 경우
-		{
-			int i =1;
-			for(int w=0; w<6 ; w++){
-				for(int h=0; h<7;h++) {
-					if(i<= calLastDate[calMonth-1])			//해당하는 달의 최대 일까지 반복
-					{
-						label_space[w][h].setText(i+"");
-						i++;
-						if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))			//'일' 의 값이 0 혹은 음수일경우 빈칸으로 변경
+			case 0:							//시작 요일이 일요일일 경우
+			{
+				int i =1;
+				for(int w=0; w<6 ; w++){
+					for(int h=0; h<7;h++) {
+						if(i<= calLastDate[calMonth-1])			//해당하는 달의 최대 일까지 반복
 						{
-							label_space[w][h].setText("");
-						}
-					}	
+							label_space[w][h].setText(i+"");
+							i++;
+							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))			//'일' 의 값이 0 혹은 음수일경우 빈칸으로 변경
+							{
+								label_space[w][h].setText("");
+							}
+						}	
+					}
 				}
+				break;
 			}
-			break;
-		}
-		
-		case 1:							//시작 요일이 월요일일 경우
-		{
-			int i =0;
-			for(int w=0; w<6 ; w++){
-				for(int h=0; h<7;h++) {
-					if(i<= calLastDate[calMonth-1])
-					{
-						label_space[w][h].setText(i+"");
-						i++;
-						if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
-						{
-							label_space[w][h].setText("");
-						}
-					}	
-				}
-			}
-			break;
-		}
 			
-		case 2:							//시작 요일이 화요일일 경우
-		{
-			int i =-1;
-			for(int w=0; w<6 ; w++){
-				for(int h=0; h<7;h++) {
-					if(i<= calLastDate[calMonth-1])
-					{
-						label_space[w][h].setText(i+"");
-						i++;
-						if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
+			case 1:							//시작 요일이 월요일일 경우
+			{
+				int i =0;
+				for(int w=0; w<6 ; w++){
+					for(int h=0; h<7;h++) {
+						if(i<= calLastDate[calMonth-1])
 						{
-							label_space[w][h].setText("");
-						}
-					}	
+							label_space[w][h].setText(i+"");
+							i++;
+							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
+							{
+								label_space[w][h].setText("");
+							}
+						}	
+					}
 				}
+				break;
 			}
-			break;
-		}
-		
-		case 3:							//시작 요일이 수요일일 경우
-		{
-			int i =-2;
-			for(int w=0; w<6 ; w++){
-				for(int h=0; h<7;h++) {
-					if(i<= calLastDate[calMonth-1])
-					{
-						label_space[w][h].setText(i+"");
-						i++;
-						if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
+				
+			case 2:							//시작 요일이 화요일일 경우
+			{
+				int i =-1;
+				for(int w=0; w<6 ; w++){
+					for(int h=0; h<7;h++) {
+						if(i<= calLastDate[calMonth-1])
 						{
-							label_space[w][h].setText("");
-						}
-					}	
+							label_space[w][h].setText(i+"");
+							i++;
+							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
+							{
+								label_space[w][h].setText("");
+							}
+						}	
+					}
 				}
+				break;
 			}
-			break;
-		}
-		
-		case 4:							//시작 요일이 목요일일 경우
-		{
-			int i =-3;
-			for(int w=0; w<6 ; w++){
-				for(int h=0; h<7;h++) {
-					if(i<= calLastDate[calMonth-1])
-					{
-						label_space[w][h].setText(i+"");
-						i++;
-						if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
+			
+			case 3:							//시작 요일이 수요일일 경우
+			{
+				int i =-2;
+				for(int w=0; w<6 ; w++){
+					for(int h=0; h<7;h++) {
+						if(i<= calLastDate[calMonth-1])
 						{
-							label_space[w][h].setText("");
-						}
-					}	
+							label_space[w][h].setText(i+"");
+							i++;
+							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
+							{
+								label_space[w][h].setText("");
+							}
+						}	
+					}
 				}
+				break;
 			}
-			break;
-		}
-		
-		case 5:							//시작 요일이 금요일일 경우
-		{
-			int i =-4;
-			for(int w=0; w<6 ; w++){
-				for(int h=0; h<7;h++) {
-					if(i<= calLastDate[calMonth-1])
-					{
-						label_space[w][h].setText(i+"");
-						i++;
-						if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
+			
+			case 4:							//시작 요일이 목요일일 경우
+			{
+				int i =-3;
+				for(int w=0; w<6 ; w++){
+					for(int h=0; h<7;h++) {
+						if(i<= calLastDate[calMonth-1])
 						{
-							label_space[w][h].setText("");
-						}
-					}	
+							label_space[w][h].setText(i+"");
+							i++;
+							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
+							{
+								label_space[w][h].setText("");
+							}
+						}	
+					}
 				}
+				break;
 			}
-			break;
-		}
-		
-		case 6:							//시작 요일이 토요일일 경우
-		{
-			int i =-5;
-			for(int w=0; w<6 ; w++){
-				for(int h=0; h<7;h++) {
-					if(i<= calLastDate[calMonth-1])
-					{
-						label_space[w][h].setText(i+"");
-						if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
+			
+			case 5:							//시작 요일이 금요일일 경우
+			{
+				int i =-4;
+				for(int w=0; w<6 ; w++){
+					for(int h=0; h<7;h++) {
+						if(i<= calLastDate[calMonth-1])
 						{
-							label_space[w][h].setText("");
-						}
-					}	
+							label_space[w][h].setText(i+"");
+							i++;
+							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
+							{
+								label_space[w][h].setText("");
+							}
+						}	
+					}
 				}
+				break;
 			}
-			break;
+			
+			case 6:							//시작 요일이 토요일일 경우
+			{
+				int i =-5;
+				for(int w=0; w<6 ; w++){
+					for(int h=0; h<7;h++) {
+						if(i<= calLastDate[calMonth-1])
+						{
+							label_space[w][h].setText(i+"");
+							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
+							{
+								label_space[w][h].setText("");
+							}
+						}	
+					}
+				}
+				break;
+			}
 		}
-		
-		
-		
-
-		
+	}
+	
+	public void clearCal(){				//캘린더의 일자 표시 초기화 시키는 메소드
+		for (int i=0;i<6;i++){
+			for(int j=0;j<7;j++){
+				label_space[i][j].setText("");
+			}
 		}
+	}
+	public void nextMonth(){			//다음 달로 변경하는 메소드
+		calMonth++;
+		cal.set(Calendar.MONTH, calMonth-1);
+		cal.set(Calendar.DAY_OF_MONTH, 1);
+		clearCal();
+		showCal();
+		btn_Backward.setText(calMonth-1+"월");
+		btn_Forward.setText((calMonth+1)+"월");
+		label_Month.setText(calMonth+"월");
 		
+		if(btn_Forward.getText().equals("13월")) btn_Forward.setText("1월");
 		
 	}
 	
-	public MainGUI() {
+	public void previousMonth(){			//전 달로 변경하는 메소드
+		calMonth--;
+		System.out.println(calMonth+"dd");
+		cal.set(Calendar.MONTH, calMonth-1);
+		cal.set(Calendar.DAY_OF_MONTH, 1);
+		clearCal();
+		showCal();
+		btn_Backward.setText(calMonth-1+"월");
+		btn_Forward.setText((calMonth+1)+"월");
+		label_Month.setText(calMonth+"월");
+		
+		if(btn_Backward.getText().equals("0월")) btn_Backward.setText("12월");
+
+	}
+	
+	public JPopupMenu getPopupMenu(String type){ // 팝업메뉴 객체를 반환하는 메소드
+		
+		if(type.equals("btn"))
+			return popupMenuButton;
+		
+		else
+			return popupMenuLabel;
+		
+	}
+	
+	public MainGUI() { // 생성자
 		initialize();
 		showCal();
 	}
 
 	private void initialize() {
+		setToday();
 		
 		SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
 		SimpleDateFormat format2 = new SimpleDateFormat ( "yyyy년 MM월dd일 HH시mm분ss초");
@@ -237,9 +294,11 @@ public class MainGUI {
 		frame.getContentPane().setLayout(null);
 		
 		
+		
 		panel_Calendar.setBounds(231, 0, 1113, 610);
 		frame.getContentPane().add(panel_Calendar);
 		panel_Calendar.setLayout(null);
+		panel_Calendar.addMouseListener(ml);
 		
 		JLabel label_Sunday = new JLabel("일");
 		label_Sunday.setBorder(new LineBorder(Color.GRAY));
@@ -311,8 +370,12 @@ public class MainGUI {
 			for(int j=0;j<7;j++)
 			{
 				label_space[i][j] = new JLabel("");			//맨위의 필드에서 생성해준 라벨들을 여기서 초기화 (안하면 에러뜸)
+				label_space[i][j].addMouseListener(ml);
 			}
 		}
+		
+		
+		
 		
 		label_space[0][0].setOpaque(true);
 		label_space[0][0].setBorder(new LineBorder(Color.GRAY));
@@ -323,6 +386,7 @@ public class MainGUI {
 		label_space[0][0].setBackground(new Color(255, 255, 255));
 		label_space[0][0].setBounds(0, 26, 159, 97);
 		panel_Calendar.add(label_space[0][0]);
+		label_space[0][0].addMouseListener(ml);
 		
 		label_space[0][1].setOpaque(true);
 		label_space[0][1].setBorder(new LineBorder(Color.GRAY));
@@ -371,7 +435,7 @@ public class MainGUI {
 
 		label_space[0][6].setOpaque(true);
 		label_space[0][6].setBorder(new LineBorder(Color.GRAY));
-		label_space[0][6].setForeground(new Color(102, 102, 102));
+		label_space[0][6].setForeground(SystemColor.textHighlight);
 		label_space[0][6].setVerticalAlignment(SwingConstants.TOP);
 		label_space[0][6].setHorizontalAlignment(SwingConstants.LEFT);
 		label_space[0][6].setFont(new Font("占쏙옙占쏙옙", Font.PLAIN, 14));
@@ -437,7 +501,7 @@ public class MainGUI {
 
 		label_space[1][6].setOpaque(true);
 		label_space[1][6].setBorder(new LineBorder(Color.GRAY));
-		label_space[1][6].setForeground(new Color(102, 102, 102));
+		label_space[1][6].setForeground(SystemColor.textHighlight);
 		label_space[1][6].setVerticalAlignment(SwingConstants.TOP);
 		label_space[1][6].setHorizontalAlignment(SwingConstants.LEFT);
 		label_space[1][6].setFont(new Font("占쏙옙占쏙옙", Font.PLAIN, 14));
@@ -503,7 +567,7 @@ public class MainGUI {
 
 		label_space[2][6].setOpaque(true);
 		label_space[2][6].setBorder(new LineBorder(Color.GRAY));
-		label_space[2][6].setForeground(new Color(102, 102, 102));
+		label_space[2][6].setForeground(SystemColor.textHighlight);
 		label_space[2][6].setVerticalAlignment(SwingConstants.TOP);
 		label_space[2][6].setHorizontalAlignment(SwingConstants.LEFT);
 		label_space[2][6].setFont(new Font("占쏙옙占쏙옙", Font.PLAIN, 14));
@@ -568,7 +632,7 @@ public class MainGUI {
 
 		label_space[3][6].setOpaque(true);
 		label_space[3][6].setBorder(new LineBorder(Color.GRAY));
-		label_space[3][6].setForeground(new Color(102, 102, 102));
+		label_space[3][6].setForeground(SystemColor.textHighlight);
 		label_space[3][6].setVerticalAlignment(SwingConstants.TOP);
 		label_space[3][6].setHorizontalAlignment(SwingConstants.LEFT);
 		label_space[3][6].setFont(new Font("占쏙옙占쏙옙", Font.PLAIN, 14));
@@ -633,7 +697,7 @@ public class MainGUI {
 
 		label_space[4][6].setOpaque(true);
 		label_space[4][6].setBorder(new LineBorder(Color.GRAY));
-		label_space[4][6].setForeground(new Color(102, 102, 102));
+		label_space[4][6].setForeground(SystemColor.textHighlight);
 		label_space[4][6].setVerticalAlignment(SwingConstants.TOP);
 		label_space[4][6].setHorizontalAlignment(SwingConstants.LEFT);
 		label_space[4][6].setFont(new Font("占쏙옙占쏙옙", Font.PLAIN, 14));
@@ -698,12 +762,12 @@ public class MainGUI {
 
 		label_space[5][6].setOpaque(true);
 		label_space[5][6].setBorder(new LineBorder(Color.GRAY));
-		label_space[5][6].setForeground(new Color(102, 102, 102));
+		label_space[5][6].setForeground(SystemColor.textHighlight);
 		label_space[5][6].setVerticalAlignment(SwingConstants.TOP);
 		label_space[5][6].setHorizontalAlignment(SwingConstants.LEFT);
 		label_space[5][6].setFont(new Font("占쏙옙占쏙옙", Font.PLAIN, 14));
 		label_space[5][6].setBackground(Color.WHITE);
-		label_space[5][6].setBounds(953, 521, 159, 97);
+		label_space[5][6].setBounds(954, 511, 159, 97);
 		panel_Calendar.add(label_space[5][6]);
 		
 		JPanel panel_Search = new JPanel();
@@ -746,7 +810,7 @@ public class MainGUI {
 		label_filesize.setBounds(12, 60, 307, 15);
 		panel_South.add(label_filesize);
 		
-		JLabel label_Month = new JLabel(calMonth+"월");
+
 		label_Month.setHorizontalAlignment(SwingConstants.CENTER);
 		label_Month.setBounds(655, 31, 85, 23);
 		panel_South.add(label_Month);
@@ -757,32 +821,82 @@ public class MainGUI {
 		label_Year.setBounds(671, 10, 57, 25);
 		panel_South.add(label_Year);
 		
-		JButton btn_Backward = new JButton("\uB4A4");
-		btn_Backward.setBounds(574, 20, 51, 44);
+
+		btn_Backward.setBounds(574, 20, 69, 44);
 		panel_South.add(btn_Backward);
+		btn_Backward.addActionListener(ml);
 		
-		JButton btn_Forward = new JButton("\uC55E");
-		btn_Forward.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btn_Forward.setBounds(768, 20, 45, 44);
+		btn_Forward.addActionListener(ml);
+		btn_Forward.setBounds(752, 20, 68, 44);
 		panel_South.add(btn_Forward);
+		
+		//Main 메뉴바 컴포넌트
 		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBackground(Color.LIGHT_GRAY);
 		frame.setJMenuBar(menuBar);
 		
-		JMenu mnNewMenu = new JMenu("\uD30C\uC77C(F)");
+		JMenu mnNewMenu = new JMenu("\uD30C\uC77C(F)"); // 파일 메뉴
 		menuBar.add(mnNewMenu);
 		
-		JMenuItem Filemenu_MenuItem = new JMenuItem("\uB4F1\uB85D(N)");
-		mnNewMenu.add(Filemenu_MenuItem);
+		JMenuItem mntmNewMenuItem_register = new JMenuItem("\uB4F1\uB85D(N)"); // 등록 메뉴아이템
+		mnNewMenu.add(mntmNewMenuItem_register);
 		
-		JMenu mnNewMenu_1 = new JMenu("\uC124\uC815(S)");
+		JMenu mnNewMenu_1 = new JMenu("\uC124\uC815(S)"); // 설정 메뉴
 		menuBar.add(mnNewMenu_1);
 		
-		JMenuItem mntmNewMenuItem_1 = new JMenuItem("\uC0C9\uC0C1\uC124\uC815(C)");
-		mnNewMenu_1.add(mntmNewMenuItem_1);
+		JMenuItem mntmSetcolor = new JMenuItem("\uC0C9\uC0C1\uC124\uC815(C)"); // 색상변경 메뉴아이템
+		mnNewMenu_1.add(mntmSetcolor);
+		
+		// 팝업 메뉴 컴포넌트
+		
+
+		JMenuItem mntmNewMenuItem_register2 = new JMenuItem("\uB4F1\uB85D(N)"); // 등록 메뉴아이템
+		JMenuItem mntmNewMenuItem_fix = new JMenuItem("수정(F)"); // 수정 메뉴아이템
+		JMenuItem mntmNewMenuItem_remove = new JMenuItem("삭제(R)"); // 삭제 메뉴아이템
+		
+		popupMenuButton.add(mntmNewMenuItem_remove);
+		popupMenuButton.add(mntmNewMenuItem_fix);
+
+		popupMenuLabel.add(mntmNewMenuItem_register2);
+		
+
+	
+		
+
+		//JMenuItem 
+	   
+		
+		
+	}
+	
+	class MyListener extends MouseAdapter implements ActionListener {			//모든 리스너 클래스
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			if(e.getSource().equals(btn_Forward)) nextMonth();
+			if(e.getSource().equals(btn_Backward)) previousMonth();	
+		}
+		public void mouseReleased (MouseEvent e) { // 마우스가 눌렸다가 때어질때 발생하는 리스너 ((라벨))
+			if(e.isPopupTrigger()) {// 만약 우클릭(팝업트리거 발동)을 했다면 프레임에 해당 좌표에 팝업메뉴 호출
+
+				if(e.getComponent().getClass().equals(JLabel.class)) {  // 라벨 우클릭
+					JLabel event = (JLabel)e.getSource();
+					
+					if(event.getText().equals("") == false) { // 만약 클릭한 라벨의 텍스트 값이 널값이 아니라면 인식
+						getPopupMenu("label").show(panel_Calendar, e.getX() + e.getComponent().getX() ,
+								e.getY() + e.getComponent().getY());
+					}
+				}
+				else if(e.getComponent().getClass().equals(JButton.class)) { // 버튼 우클릭
+					getPopupMenu("button").show(panel_Calendar, e.getX() , e.getY());
+				}
+				
+			}
+		}
+		
 	}
 }
+
+
