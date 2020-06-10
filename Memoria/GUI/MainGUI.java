@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -17,6 +19,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollBar;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -46,6 +49,11 @@ public class MainGUI {
 	JButton btn_Backward = new JButton((cal.get(Calendar.MONTH)+1)-1+"월");	
 	JButton btn_Forward = new JButton((cal.get(Calendar.MONTH)+1+1)+"월");
 	JLabel label_Month = new JLabel(cal.get(Calendar.MONTH)+"월");
+	
+	JPopupMenu popupMenuLabel = new JPopupMenu();
+	JPopupMenu popupMenuButton = new JPopupMenu();
+	
+	
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -251,7 +259,17 @@ public class MainGUI {
 
 	}
 	
-	public MainGUI() {
+	public JPopupMenu getPopupMenu(String type){ // 팝업메뉴 객체를 반환하는 메소드
+		
+		if(type.equals("btn"))
+			return popupMenuButton;
+		
+		else
+			return popupMenuLabel;
+		
+	}
+	
+	public MainGUI() { // 생성자
 		initialize();
 		showCal();
 	}
@@ -276,9 +294,11 @@ public class MainGUI {
 		frame.getContentPane().setLayout(null);
 		
 		
+		
 		panel_Calendar.setBounds(231, 0, 1113, 610);
 		frame.getContentPane().add(panel_Calendar);
 		panel_Calendar.setLayout(null);
+		panel_Calendar.addMouseListener(ml);
 		
 		JLabel label_Sunday = new JLabel("일");
 		label_Sunday.setBorder(new LineBorder(Color.GRAY));
@@ -350,8 +370,12 @@ public class MainGUI {
 			for(int j=0;j<7;j++)
 			{
 				label_space[i][j] = new JLabel("");			//맨위의 필드에서 생성해준 라벨들을 여기서 초기화 (안하면 에러뜸)
+				label_space[i][j].addMouseListener(ml);
 			}
 		}
+		
+		
+		
 		
 		label_space[0][0].setOpaque(true);
 		label_space[0][0].setBorder(new LineBorder(Color.GRAY));
@@ -362,6 +386,7 @@ public class MainGUI {
 		label_space[0][0].setBackground(new Color(255, 255, 255));
 		label_space[0][0].setBounds(0, 26, 159, 97);
 		panel_Calendar.add(label_space[0][0]);
+		label_space[0][0].addMouseListener(ml);
 		
 		label_space[0][1].setOpaque(true);
 		label_space[0][1].setBorder(new LineBorder(Color.GRAY));
@@ -805,30 +830,70 @@ public class MainGUI {
 		btn_Forward.setBounds(752, 20, 68, 44);
 		panel_South.add(btn_Forward);
 		
+		//Main 메뉴바 컴포넌트
+		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBackground(Color.LIGHT_GRAY);
 		frame.setJMenuBar(menuBar);
 		
-		JMenu mnNewMenu = new JMenu("\uD30C\uC77C(F)");
+		JMenu mnNewMenu = new JMenu("\uD30C\uC77C(F)"); // 파일 메뉴
 		menuBar.add(mnNewMenu);
 		
-		JMenuItem Filemenu_MenuItem = new JMenuItem("\uB4F1\uB85D(N)");
-		mnNewMenu.add(Filemenu_MenuItem);
+		JMenuItem mntmNewMenuItem_register = new JMenuItem("\uB4F1\uB85D(N)"); // 등록 메뉴아이템
+		mnNewMenu.add(mntmNewMenuItem_register);
 		
-		JMenu mnNewMenu_1 = new JMenu("\uC124\uC815(S)");
+		JMenu mnNewMenu_1 = new JMenu("\uC124\uC815(S)"); // 설정 메뉴
 		menuBar.add(mnNewMenu_1);
 		
-		JMenuItem mntmNewMenuItem_1 = new JMenuItem("\uC0C9\uC0C1\uC124\uC815(C)");
-		mnNewMenu_1.add(mntmNewMenuItem_1);
+		JMenuItem mntmSetcolor = new JMenuItem("\uC0C9\uC0C1\uC124\uC815(C)"); // 색상변경 메뉴아이템
+		mnNewMenu_1.add(mntmSetcolor);
+		
+		// 팝업 메뉴 컴포넌트
+		
+
+		JMenuItem mntmNewMenuItem_register2 = new JMenuItem("\uB4F1\uB85D(N)"); // 등록 메뉴아이템
+		JMenuItem mntmNewMenuItem_fix = new JMenuItem("수정(F)"); // 수정 메뉴아이템
+		JMenuItem mntmNewMenuItem_remove = new JMenuItem("삭제(R)"); // 삭제 메뉴아이템
+		
+		popupMenuButton.add(mntmNewMenuItem_remove);
+		popupMenuButton.add(mntmNewMenuItem_fix);
+
+		popupMenuLabel.add(mntmNewMenuItem_register2);
+		
+
+	
+		
+
+		//JMenuItem 
+	   
+		
+		
 	}
 	
-	public class MyListener implements ActionListener{			//모든 리스너 클래스
+	class MyListener extends MouseAdapter implements ActionListener {			//모든 리스너 클래스
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(e.getSource().equals(btn_Forward)) nextMonth();
-			if(e.getSource().equals(btn_Backward)) previousMonth();
 			
+			if(e.getSource().equals(btn_Forward)) nextMonth();
+			if(e.getSource().equals(btn_Backward)) previousMonth();	
+		}
+		public void mouseReleased (MouseEvent e) { // 마우스가 눌렸다가 때어질때 발생하는 리스너 ((라벨))
+			if(e.isPopupTrigger()) {// 만약 우클릭(팝업트리거 발동)을 했다면 프레임에 해당 좌표에 팝업메뉴 호출
+
+				if(e.getComponent().getClass().equals(JLabel.class)) {  // 라벨 우클릭
+					JLabel event = (JLabel)e.getSource();
+					
+					if(event.getText().equals("") == false) { // 만약 클릭한 라벨의 텍스트 값이 널값이 아니라면 인식
+						getPopupMenu("label").show(panel_Calendar, e.getX() + e.getComponent().getX() ,
+								e.getY() + e.getComponent().getY());
+					}
+				}
+				else if(e.getComponent().getClass().equals(JButton.class)) { // 버튼 우클릭
+					getPopupMenu("button").show(panel_Calendar, e.getX() , e.getY());
+				}
+				
+			}
 		}
 		
 	}
