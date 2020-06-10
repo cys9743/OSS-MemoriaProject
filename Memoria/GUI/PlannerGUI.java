@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
 import java.awt.BorderLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -20,26 +22,22 @@ import javax.swing.AbstractListModel;
 import javax.swing.border.LineBorder;
 import javax.swing.border.BevelBorder;
 import java.awt.Font;
+import java.util.Calendar;
 import java.util.Date;
 public class PlannerGUI {
 	
 
 	private JFrame frmMemoriaplanner;
+	private String one;
+	private String two;
+	private JLabel first = new JLabel();
+	private JLabel second = new JLabel();
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
-		SimpleDateFormat format2 = new SimpleDateFormat ( "yyyy년 MM월dd일 HH시mm분ss초");
-				
-		Date time = new Date();
-				
-		String time1 = format1.format(time);
-		String time2 = format2.format(time);
-				
-		System.out.println(time1);
-		System.out.println(time2);
+		
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -53,6 +51,7 @@ public class PlannerGUI {
 		});
 	}
 
+
 	/**
 	 * Create the application.
 	 */
@@ -60,10 +59,51 @@ public class PlannerGUI {
 		initialize();
 	}
 
+
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		Calendar t=Calendar.getInstance();
+		int year = t.get(Calendar.YEAR);
+		int month = t.get(Calendar.MONTH)+1;
+		int date = t.get(Calendar.DATE);
+		int amPm = t.get(Calendar.AM_PM);
+		int hour = t.get(Calendar.HOUR);
+		int min = t.get(Calendar.MINUTE);
+		int sec = t.get(Calendar.SECOND);
+		int msec = t.get(Calendar.MILLISECOND);
+		String ampm=amPm==Calendar.AM? "AM":"PM";
+		int day = t.get(Calendar.DAY_OF_WEEK);
+		String sday = null;
+		switch(day) {
+		case 1:
+			sday="Sun";
+			break;
+		case 2:
+		    sday="Mon";
+		    break;
+		case 3:
+			sday="Tues";
+			break;
+		case 4:
+			sday="Wednes";
+		    break;
+		case 5:
+			sday="Thurs";
+	        break;
+		case 6:
+			sday="Fri";
+	        break;
+		case 7:
+			sday="Satur";
+	        break;
+		}
+			try {
+				Thread.sleep(100);
+			} catch(Exception e) {}
+
+
 		frmMemoriaplanner = new JFrame();
 		frmMemoriaplanner.getContentPane().setBackground(Color.DARK_GRAY);
 		frmMemoriaplanner.getContentPane().setForeground(Color.DARK_GRAY);
@@ -73,7 +113,7 @@ public class PlannerGUI {
 		frmMemoriaplanner.setType(Type.UTILITY);
 		frmMemoriaplanner.setTitle("Memoria_Planner");
 		frmMemoriaplanner.setBounds(100, 100, 400, 530);
-		frmMemoriaplanner.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		frmMemoriaplanner.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmMemoriaplanner.getContentPane().setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Daliy Plan");
@@ -138,5 +178,32 @@ public class PlannerGUI {
 		lblNewLabel_1_1.setForeground(Color.WHITE);
 		lblNewLabel_1_1.setBounds(8, 37, 35, 15);
 		frmMemoriaplanner.getContentPane().add(lblNewLabel_1_1);
+		
+		JLabel lblNewLabel_2 = new JLabel();
+		lblNewLabel_2.setFont(new Font("DialogInput", Font.BOLD, 12));
+		lblNewLabel_2.setForeground(Color.WHITE);
+		lblNewLabel_2.setBounds(237, 433, 139, 27);
+		frmMemoriaplanner.getContentPane().add(lblNewLabel_2);
+		second.setOpaque(true);
+		second.setBackground(new Color(0,0,0,0));
+		second.setBounds(85,170,300,50);
+		second.setForeground(Color.black);
+		first.setOpaque(true);
+		first.setBackground(new Color(0,0,0,0));
+		first.setBounds(60,120,320,50);
+		first.setForeground(Color.black);
+		one=(year+"."+month+"."+date+" "+sday+"day");
+		two=(ampm+" "+hour+"시"+min+"분"+sec+"초");
+		lblNewLabel_2.setText(one);
+		
+		JLabel lblNewLabel_2_1 = new JLabel();
+		lblNewLabel_2_1.setText(two);
+		lblNewLabel_2_1.setForeground(Color.WHITE);
+		lblNewLabel_2_1.setFont(new Font("HY그래픽M", Font.BOLD, 12));
+		lblNewLabel_2_1.setBounds(267, 454, 105, 27);
+		frmMemoriaplanner.getContentPane().add(lblNewLabel_2_1);
 	}
+
+
 }
+
