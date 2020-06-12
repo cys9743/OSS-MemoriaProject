@@ -233,8 +233,8 @@ public class MainGUI {
 				btn_Backward.setText("12월");
 			}
 			if(label_Month.getText().equals("12월")) { 
-				btn_Forward.setText("11월"); 
-				btn_Backward.setText("1월");
+				btn_Forward.setText("1월"); 
+				btn_Backward.setText("11월");
 			}
 		} catch(Exception e)				{			//'월' 값이 13 이상으로 올라갈경우 예외(오류)발생 이를 인식하여 년도를 넘기고 '월'값을 변경
 			calMonth = 1;
@@ -242,7 +242,6 @@ public class MainGUI {
 			cal.set(Calendar.DAY_OF_MONTH, 1);
 			clearCal();
 			showCal();
-			btn_Forward.setText("2월");
 			label_Month.setText(calMonth+"월");
 			calYear++;
 			label_Year.setText(calYear+"");
@@ -253,8 +252,8 @@ public class MainGUI {
 				btn_Backward.setText("12월");
 			}
 			if(label_Month.getText().equals("12월")) { 
-				btn_Forward.setText("11월"); 
-				btn_Backward.setText("1월");
+				btn_Forward.setText("1월"); 
+				btn_Backward.setText("11월");
 			}
 		}
 
@@ -270,8 +269,6 @@ public class MainGUI {
 			clearCal();
 			showCal();
 			label_Month.setText(calMonth+"월");
-			btn_Backward.setText("11월");
-			btn_Forward.setText("1월");
 			label_Year.setText(calYear+"");
 			
 			if(label_Month.getText().equals("1월")) { 
@@ -279,8 +276,8 @@ public class MainGUI {
 				btn_Backward.setText("12월");
 			}
 			if(label_Month.getText().equals("12월")) { 
-				btn_Forward.setText("11월"); 
-				btn_Backward.setText("1월");
+				btn_Forward.setText("1월"); 
+				btn_Backward.setText("11월");
 			}
 		}
 		else {
@@ -298,8 +295,8 @@ public class MainGUI {
 				btn_Backward.setText("12월");
 			}
 			if(label_Month.getText().equals("12월")) { 
-				btn_Forward.setText("11월"); 
-				btn_Backward.setText("1월");
+				btn_Forward.setText("1월"); 
+				btn_Backward.setText("11월");
 			}
 		}
 
