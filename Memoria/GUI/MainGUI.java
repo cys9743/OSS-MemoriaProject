@@ -46,14 +46,14 @@ public class MainGUI {
 	
 
 	
-	JButton btn_Backward = new JButton((cal.get(Calendar.MONTH)+1)-1+"월");	
+	JButton btn_Backward = new JButton(cal.get(Calendar.MONTH)+"월");	
 	JButton btn_Forward = new JButton((cal.get(Calendar.MONTH)+1+1)+"월");
-	JLabel label_Month = new JLabel(cal.get(Calendar.MONTH)+"월");
+	JLabel label_Month = new JLabel((cal.get(Calendar.MONTH)+1)+"월");
 	
 	JPopupMenu popupMenuLabel = new JPopupMenu();
 	JPopupMenu popupMenuButton = new JPopupMenu();
 	
-	
+	JLabel label_Year = new JLabel("2020");
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -94,31 +94,26 @@ public class MainGUI {
 				int i =1;
 				for(int w=0; w<6 ; w++){
 					for(int h=0; h<7;h++) {
-						if(i<= calLastDate[calMonth-1])			//해당하는 달의 최대 일까지 반복
-						{
+						if(i<= calLastDate[calMonth-1]){		//해당하는 달의 최대 일까지 반복
 							label_space[w][h].setText(i+"");
 							i++;
-							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))			//'일' 의 값이 0 혹은 음수일경우 빈칸으로 변경
-							{
+							}
+							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))			//'일' 의 값이 0 혹은 음수일경우 빈칸으로 변경{
 								label_space[w][h].setText("");
 							}
 						}	
-					}
-				}
 				break;
-			}
+			}			
 			
-			case 1:							//시작 요일이 월요일일 경우
+			case 1:			//시작 요일이 월요일일 경우		
 			{
 				int i =0;
 				for(int w=0; w<6 ; w++){
 					for(int h=0; h<7;h++) {
-						if(i<= calLastDate[calMonth-1])
-						{
+						if(i<= calLastDate[calMonth-1]){
 							label_space[w][h].setText(i+"");
 							i++;
-							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
-							{
+							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-")){
 								label_space[w][h].setText("");
 							}
 						}	
@@ -132,12 +127,10 @@ public class MainGUI {
 				int i =-1;
 				for(int w=0; w<6 ; w++){
 					for(int h=0; h<7;h++) {
-						if(i<= calLastDate[calMonth-1])
-						{
+						if(i<= calLastDate[calMonth-1]){
 							label_space[w][h].setText(i+"");
 							i++;
-							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
-							{
+							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-")){
 								label_space[w][h].setText("");
 							}
 						}	
@@ -151,12 +144,10 @@ public class MainGUI {
 				int i =-2;
 				for(int w=0; w<6 ; w++){
 					for(int h=0; h<7;h++) {
-						if(i<= calLastDate[calMonth-1])
-						{
+						if(i<= calLastDate[calMonth-1]){
 							label_space[w][h].setText(i+"");
 							i++;
-							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
-							{
+							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-")){
 								label_space[w][h].setText("");
 							}
 						}	
@@ -170,12 +161,10 @@ public class MainGUI {
 				int i =-3;
 				for(int w=0; w<6 ; w++){
 					for(int h=0; h<7;h++) {
-						if(i<= calLastDate[calMonth-1])
-						{
+						if(i<= calLastDate[calMonth-1]){
 							label_space[w][h].setText(i+"");
 							i++;
-							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
-							{
+							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-")){
 								label_space[w][h].setText("");
 							}
 						}	
@@ -208,11 +197,9 @@ public class MainGUI {
 				int i =-5;
 				for(int w=0; w<6 ; w++){
 					for(int h=0; h<7;h++) {
-						if(i<= calLastDate[calMonth-1])
-						{
+						if(i<= calLastDate[calMonth-1]){
 							label_space[w][h].setText(i+"");
-							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
-							{
+							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-")){
 								label_space[w][h].setText("");
 							}
 						}	
@@ -231,32 +218,89 @@ public class MainGUI {
 		}
 	}
 	public void nextMonth(){			//다음 달로 변경하는 메소드
-		calMonth++;
-		cal.set(Calendar.MONTH, calMonth-1);
-		cal.set(Calendar.DAY_OF_MONTH, 1);
-		clearCal();
-		showCal();
-		btn_Backward.setText(calMonth-1+"월");
-		btn_Forward.setText((calMonth+1)+"월");
-		label_Month.setText(calMonth+"월");
-		
-		if(btn_Forward.getText().equals("13월")) btn_Forward.setText("1월");
-		
+		try {
+			calMonth++;
+			cal.set(Calendar.MONTH, calMonth-1);
+			cal.set(Calendar.DAY_OF_MONTH, 1);
+			clearCal();
+			showCal();
+			btn_Backward.setText(calMonth-1+"월");
+			btn_Forward.setText((calMonth+1)+"월");
+			label_Month.setText(calMonth+"월");
+			if(label_Month.getText().equals("1월")) { 		//년도가 넘어가기전 12월과 1월에 13월 혹은 0 월이 표기되던 문제 해결
+				btn_Forward.setText("2월"); 
+				btn_Backward.setText("12월");
+			}
+			if(label_Month.getText().equals("12월")) { 
+				btn_Forward.setText("11월"); 
+				btn_Backward.setText("1월");
+			}
+		} catch(Exception e)				{			//'월' 값이 13 이상으로 올라갈경우 예외(오류)발생 이를 인식하여 년도를 넘기고 '월'값을 변경
+			calMonth = 1;
+			cal.set(Calendar.MONTH, calMonth-1);
+			cal.set(Calendar.DAY_OF_MONTH, 1);
+			clearCal();
+			showCal();
+			btn_Forward.setText("2월");
+			label_Month.setText(calMonth+"월");
+			calYear++;
+			label_Year.setText(calYear+"");
+			cal.set(Calendar.YEAR, calYear);
+			
+			if(label_Month.getText().equals("1월")) { 	//년도가 넘어가기전 12월과 1월에 13월 혹은 0 월이 표기되던 문제 해결
+				btn_Forward.setText("2월"); 
+				btn_Backward.setText("12월");
+			}
+			if(label_Month.getText().equals("12월")) { 
+				btn_Forward.setText("11월"); 
+				btn_Backward.setText("1월");
+			}
+		}
+		System.out.println(calYear+"년"+calMonth+"월");
 	}
 	
 	public void previousMonth(){			//전 달로 변경하는 메소드
-		calMonth--;
-		System.out.println(calMonth+"dd");
-		cal.set(Calendar.MONTH, calMonth-1);
-		cal.set(Calendar.DAY_OF_MONTH, 1);
-		clearCal();
-		showCal();
-		btn_Backward.setText(calMonth-1+"월");
-		btn_Forward.setText((calMonth+1)+"월");
-		label_Month.setText(calMonth+"월");
-		
-		if(btn_Backward.getText().equals("0월")) btn_Backward.setText("12월");
-
+		if(cal.get(Calendar.MONTH) == 0){		//(위와 다르게 0까지는 예외(오류)가 발생하지 않기때문에 if 문으로 대체) '월' 값이 0이 된경우 (실제로 표기되는 calMonth 값은 -1이 되게 된다.)를 인식하여 년도를 변경하고 '월' 값을 변경함
+			calYear--;
+			calMonth = 12;
+			cal.set(Calendar.YEAR, calYear);
+			cal.set(Calendar.DAY_OF_MONTH, 1);
+			clearCal();
+			showCal();
+			label_Month.setText(calMonth+"월");
+			btn_Backward.setText("11월");
+			btn_Forward.setText("1월");
+			label_Year.setText(calYear+"");
+			
+			if(label_Month.getText().equals("1월")) { 
+				btn_Forward.setText("2월"); 
+				btn_Backward.setText("12월");
+			}
+			if(label_Month.getText().equals("12월")) { 
+				btn_Forward.setText("11월"); 
+				btn_Backward.setText("1월");
+			}
+		}
+		else {
+			calMonth--;
+			cal.set(Calendar.MONTH, calMonth-1);
+			cal.set(Calendar.DAY_OF_MONTH, 1);
+			clearCal();
+			showCal();
+			btn_Backward.setText(calMonth-1+"월");
+			btn_Forward.setText((calMonth+1)+"월");
+			label_Month.setText(calMonth+"월");
+			
+			if(label_Month.getText().equals("1월")) { 
+				btn_Forward.setText("2월"); 
+				btn_Backward.setText("12월");
+			}
+			if(label_Month.getText().equals("12월")) { 
+				btn_Forward.setText("11월"); 
+				btn_Backward.setText("1월");
+			}
+		}
+		System.out.println(calYear+"년"+calMonth+"월");
 	}
 	
 	public JPopupMenu getPopupMenu(String type){ // 팝업메뉴 객체를 반환하는 메소드
@@ -815,7 +859,6 @@ public class MainGUI {
 		label_Month.setBounds(655, 31, 85, 23);
 		panel_South.add(label_Month);
 		
-		JLabel label_Year = new JLabel("2020");
 		label_Year.setFont(new Font("占쏙옙占쏙옙", Font.PLAIN, 20));
 		label_Year.setHorizontalAlignment(SwingConstants.CENTER);
 		label_Year.setBounds(671, 10, 57, 25);
