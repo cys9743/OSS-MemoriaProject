@@ -7,12 +7,17 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.UIManager;
+import javax.swing.filechooser.FileSystemView;
 
 public class DetailGUI {
 
@@ -20,7 +25,10 @@ public class DetailGUI {
 	private JTextField textField_title;
 	private JTextField textField_content;
 	private JLabel label_path;
-	
+	private JButton button_Add_File;
+	private JButton button_delete_file;
+	private JFileChooser chooser; 
+	private int returnChoice;
 	/**
 	 * Launch the application.
 	 */
@@ -36,14 +44,15 @@ public class DetailGUI {
 			}
 		});
 	}
-
 	/**
 	 * Create the application.
 	 */
 	void show() {
 		frame.setVisible(true);
 	}
-	
+	void close() {
+		frame.dispose();
+	}
 	public DetailGUI() {
 		initialize();
 	}
@@ -89,15 +98,29 @@ public class DetailGUI {
 		label_path.setBounds(22, 259, 244, 15);
 		frame.getContentPane().add(label_path);
 		
-		JButton button_Add_File = new JButton("\uD30C\uC77C \uCD94\uAC00");
+		button_Add_File = new JButton("\uD30C\uC77C \uCD94\uAC00");
 		button_Add_File.setFont(new Font("굴림", Font.BOLD, 12));
 		button_Add_File.setBounds(283, 221, 92, 23);
 		frame.getContentPane().add(button_Add_File);
-		
-		JButton button_delete_file = new JButton("\uD30C\uC77C \uC81C\uAC70");
+		button_Add_File.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) { // 파일추가 버튼 리스너
+				returnChoice = chooser.showOpenDialog(null); // 다이얼로그 오픈 
+				
+				if(returnChoice == chooser.APPROVE_OPTION) {
+					frame.dispose();
+					label_path.setText(chooser.getSelectedFile().toString());
+					frame.setVisible(true);
+				}
+				else if(returnChoice == chooser.CANCEL_OPTION) {
+					System.out.println("테스트 메시지 : 취소");
+				}
+			}
+		});
+		button_delete_file = new JButton("\uD30C\uC77C \uC81C\uAC70");
 		button_delete_file.setFont(new Font("굴림", Font.BOLD, 12));
-		button_delete_file.addActionListener(new ActionListener() {
+		button_delete_file.addActionListener(new ActionListener() { // 파일제거 버튼 리스너
 			public void actionPerformed(ActionEvent e) {
+				label_path.setText("비어 있음");
 			}
 		});
 		button_delete_file.setBounds(387, 221, 92, 23);
@@ -238,6 +261,12 @@ public class DetailGUI {
 		label_fileLine.setBackground(Color.GREEN);
 		label_fileLine.setBounds(12, 221, 257, 211);
 		frame.getContentPane().add(label_fileLine);
-
+		
+		// 파일 다이얼로그 세팅
+		chooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+		chooser.setCurrentDirectory(new File("/")); // 현재 사용 디렉터리 지정
+		chooser.setAcceptAllFileFilterUsed(true);
+		chooser.setDialogTitle("메모리아 파일 열기");
+		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // 파일 또는 디렉터리 여는 chooser
 	}
 }
