@@ -73,27 +73,20 @@ public class MainGUI {
 					e.printStackTrace();
 				}
 			}
-		});
-		
-		
+		});	
 	}
-	
 	public void setToday(){				// 오늘의 날짜 설정하는 메소드
 		calYear = cal.get(Calendar.YEAR); 
 		calMonth = cal.get(Calendar.MONTH)+1;
 		calDay = cal.get(Calendar.DAY_OF_MONTH);
 		calDayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
 	}
-	
 	private int startDateOfMonth(Calendar cal) {		// 1일이 시작하는 위치 구하는 메소드
 		
 		int StartingPoint = (cal.get(Calendar.DAY_OF_WEEK)+7-cal.get(Calendar.DAY_OF_MONTH)%7)%7;	//캘린더의 특정 날짜가 무슨요일인지와 몇일인지만 알면 그 달의 시작 요일을 알 수 있다.
 		
 		return StartingPoint;			//0~6까지의 숫자로 일월화수목금토  순서로 시작 요일을 알려준다.
 	}
-	
-
-
 	public void showCal() {			//캘린더를 표시해주는 메소드
 		System.out.println("="+startDateOfMonth(cal));
 		switch(startDateOfMonth(cal))			//시작요일을 구하는 메소드
@@ -113,7 +106,6 @@ public class MainGUI {
 						}	
 				break;
 			}			
-			
 			case 1:			//시작 요일이 월요일일 경우		
 			{
 				int i =0;
@@ -130,7 +122,6 @@ public class MainGUI {
 				}
 				break;
 			}
-				
 			case 2:							//시작 요일이 화요일일 경우
 			{
 				int i =-1;
@@ -147,7 +138,6 @@ public class MainGUI {
 				}
 				break;
 			}
-			
 			case 3:							//시작 요일이 수요일일 경우
 			{
 				int i =-2;
@@ -164,7 +154,6 @@ public class MainGUI {
 				}
 				break;
 			}
-			
 			case 4:							//시작 요일이 목요일일 경우
 			{
 				int i =-3;
@@ -181,7 +170,6 @@ public class MainGUI {
 				}
 				break;
 			}
-			
 			case 5:							//시작 요일이 금요일일 경우
 			{
 				int i =-4;
@@ -199,7 +187,6 @@ public class MainGUI {
 				}
 				break;
 			}
-			
 			case 6:							//시작 요일이 토요일일 경우
 			{
 				int i =-5;
@@ -218,7 +205,6 @@ public class MainGUI {
 			}
 		}
 	}
-	
 	public void clearCal(){				//캘린더의 일자 표시 초기화 시키는 메소드
 		for (int i=0;i<6;i++){
 			for(int j=0;j<7;j++){
@@ -264,9 +250,7 @@ public class MainGUI {
 				btn_Backward.setText("11월");
 			}
 		}
-
 	}
-	
 	public void previousMonth(){			//전 달로 변경하는 메소드
 		if(cal.get(Calendar.MONTH) < 1){		//(위와 다르게 0까지는 예외(오류)가 발생하지 않기때문에 if 문으로 대체) '월' 값이 0이 된경우 (실제로 표기되는 calMonth 값은 -1이 되게 된다.)를 인식하여 년도를 변경하고 '월' 값을 변경함
 			calYear--;
@@ -307,10 +291,7 @@ public class MainGUI {
 				btn_Backward.setText("11월");
 			}
 		}
-
-
 	}
-	
 	public JPopupMenu getPopupMenu(String type){ // 팝업메뉴 객체를 반환하는 메소드
 		
 		if(type.equals("btn"))
@@ -320,12 +301,10 @@ public class MainGUI {
 			return popupMenuLabel;
 		
 	}
-	
 	public MainGUI() { // 생성자
 		detailGUI = new DetailGUI();
 		initialize();
 	}
-
 	private void initialize() {
 		setToday();
 		
@@ -903,6 +882,8 @@ public class MainGUI {
 		// 팝업 메뉴 컴포넌트
 		
 		mntmNewMenuItem_register2 = new JMenuItem("\uB4F1\uB85D(N)"); // 등록 메뉴아이템
+		mntmNewMenuItem_register2.addActionListener(ml);
+		
 		JMenuItem mntmNewMenuItem_fix = new JMenuItem("수정(F)"); // 수정 메뉴아이템
 		JMenuItem mntmNewMenuItem_remove = new JMenuItem("삭제(R)"); // 삭제 메뉴아이템
 		
@@ -931,20 +912,21 @@ public class MainGUI {
 			
 			if(e.getSource().equals(btn_Forward)) nextMonth();
 			if(e.getSource().equals(btn_Backward)) previousMonth();	
-			if(e.getSource().equals(mntmNewMenuItem_open)) {
+			if(e.getSource().equals(mntmNewMenuItem_open)) {// || mntmN
 				returnChoice = chooser.showOpenDialog(null); // 다이얼로그 오픈 
-				if(returnChoice == chooser.APPROVE_OPTION) {
+				
+				if(returnChoice == chooser.APPROVE_OPTION) { // 파일을 제대로 열었을 시
+					detailGUI.close();
 					detailGUI.setLocationText(chooser.getSelectedFile().toString());
 					detailGUI.show();
 				}
-				else if(returnChoice == chooser.CANCEL_OPTION) {
-					System.out.println("테스트");
+				else if(returnChoice == chooser.CANCEL_OPTION) { // 취소 버튼을 눌렀을 시
+					System.out.println("테스트메시지 : 취소");
 				}
 			}
-			if(e.getSource().equals(mntmNewMenuItem_register2)){
+			if(e.getSource().equals(mntmNewMenuItem_register2)){ // 팝업 메뉴에서 등록 버튼 눌렀을 시
 				detailGUI.show();
 			}
-			
 		}
 		public void mouseReleased (MouseEvent e) { // 마우스가 눌렸다가 때어질때 발생하는 리스너 ((라벨))
 			if(e.isPopupTrigger()) {// 만약 우클릭(팝업트리거 발동)을 했다면 프레임에 해당 좌표에 팝업메뉴 호출
@@ -960,10 +942,8 @@ public class MainGUI {
 				else if(e.getComponent().getClass().equals(JButton.class)) { // 버튼 우클릭
 					getPopupMenu("button").show(panel_Calendar, e.getX() , e.getY());
 				}
-				
 			}
 		}
-		
 	}
 }
 
