@@ -19,7 +19,8 @@ public class DetailGUI {
 	private JFrame frame;
 	private JTextField textField_title;
 	private JTextField textField_content;
-
+	private JLabel label_path;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -39,10 +40,16 @@ public class DetailGUI {
 	/**
 	 * Create the application.
 	 */
+	void show() {
+		frame.setVisible(true);
+	}
+	
 	public DetailGUI() {
 		initialize();
 	}
-
+	void setLocationText(String fileLocation) { // 파일 경로를 입력받아 경로를 표시하는 라벨의 텍스트를 변경하는 메소드
+		label_path.setText(fileLocation);
+	}
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -77,7 +84,7 @@ public class DetailGUI {
 		label_text_path.setBounds(22, 234, 92, 15);
 		frame.getContentPane().add(label_text_path);
 		
-		JLabel label_path = new JLabel("C:\\ProgramFile\\test.txt");
+		label_path = new JLabel("C:\\ProgramFile\\test.txt");
 		label_path.setFont(new Font("새굴림", Font.PLAIN, 12));
 		label_path.setBounds(22, 259, 244, 15);
 		frame.getContentPane().add(label_path);
@@ -231,5 +238,6 @@ public class DetailGUI {
 		label_fileLine.setBackground(Color.GREEN);
 		label_fileLine.setBounds(12, 221, 257, 211);
 		frame.getContentPane().add(label_fileLine);
+
 	}
 }

@@ -8,10 +8,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -24,6 +26,7 @@ import javax.swing.JScrollBar;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
+import javax.swing.filechooser.FileSystemView;
 
 public class MainGUI {
 	
@@ -36,6 +39,8 @@ public class MainGUI {
 	JLabel[][] label_space = new JLabel[6][7];
 	
 	MyListener ml = new MyListener();
+	
+	DetailGUI detailGUI;
 
 	
 	int calYear; 			//표시할 년도 설정
@@ -50,6 +55,9 @@ public class MainGUI {
 	JButton btn_Forward = new JButton((cal.get(Calendar.MONTH)+1+1)+"월");
 	JLabel label_Month = new JLabel((cal.get(Calendar.MONTH)+1)+"월");
 	
+	JMenuItem mntmNewMenuItem_open;
+	JMenuItem mntmNewMenuItem_register2;
+	
 	JPopupMenu popupMenuLabel = new JPopupMenu();
 	JPopupMenu popupMenuButton = new JPopupMenu();
 	
@@ -60,7 +68,6 @@ public class MainGUI {
 			public void run() {
 				try {
 					MainGUI window = new MainGUI();
-					Database db = new Database();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -315,8 +322,8 @@ public class MainGUI {
 	}
 	
 	public MainGUI() { // 생성자
+		detailGUI = new DetailGUI();
 		initialize();
-		showCal();
 	}
 
 	private void initialize() {
@@ -883,8 +890,9 @@ public class MainGUI {
 		JMenu mnNewMenu = new JMenu("\uD30C\uC77C(F)"); // 파일 메뉴
 		menuBar.add(mnNewMenu);
 		
-		JMenuItem mntmNewMenuItem_register = new JMenuItem("\uB4F1\uB85D(N)"); // 등록 메뉴아이템
-		mnNewMenu.add(mntmNewMenuItem_register);
+		mntmNewMenuItem_open = new JMenuItem("\uB4F1\uB85D(N)"); // 등록 메뉴아이템
+		mntmNewMenuItem_open.addActionListener(ml);
+		mnNewMenu.add(mntmNewMenuItem_open);
 		
 		JMenu mnNewMenu_1 = new JMenu("\uC124\uC815(S)"); // 설정 메뉴
 		menuBar.add(mnNewMenu_1);
@@ -894,33 +902,49 @@ public class MainGUI {
 		
 		// 팝업 메뉴 컴포넌트
 		
-
-		JMenuItem mntmNewMenuItem_register2 = new JMenuItem("\uB4F1\uB85D(N)"); // 등록 메뉴아이템
+		mntmNewMenuItem_register2 = new JMenuItem("\uB4F1\uB85D(N)"); // 등록 메뉴아이템
 		JMenuItem mntmNewMenuItem_fix = new JMenuItem("수정(F)"); // 수정 메뉴아이템
 		JMenuItem mntmNewMenuItem_remove = new JMenuItem("삭제(R)"); // 삭제 메뉴아이템
 		
 		popupMenuButton.add(mntmNewMenuItem_remove);
 		popupMenuButton.add(mntmNewMenuItem_fix);
-
+		
 		popupMenuLabel.add(mntmNewMenuItem_register2);
-		
-
-	
-		
-
 		//JMenuItem 
-	   
-		
-		
 	}
 	
 	class MyListener extends MouseAdapter implements ActionListener {			//모든 리스너 클래스
-
-		@Override
+		// 파일 다이얼로그 관련 필드
+		JFileChooser chooser; 
+		int returnChoice;
+		
+		//MyListener 생성자
+		MyListener(){
+			// 파일 다이얼로그 세팅
+			chooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+			chooser.setCurrentDirectory(new File("/")); // 현재 사용 디렉터리 지정
+			chooser.setAcceptAllFileFilterUsed(true);
+			chooser.setDialogTitle("메모리아 파일 열기");
+			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // 파일 또는 디렉터리 여는 chooser
+		}
 		public void actionPerformed(ActionEvent e) {
 			
 			if(e.getSource().equals(btn_Forward)) nextMonth();
 			if(e.getSource().equals(btn_Backward)) previousMonth();	
+			if(e.getSource().equals(mntmNewMenuItem_open)) {
+				returnChoice = chooser.showOpenDialog(null); // 다이얼로그 오픈 
+				if(returnChoice == chooser.APPROVE_OPTION) {
+					detailGUI.setLocationText(chooser.getSelectedFile().toString());
+					detailGUI.show();
+				}
+				else if(returnChoice == chooser.CANCEL_OPTION) {
+					System.out.println("테스트");
+				}
+			}
+			if(e.getSource().equals(mntmNewMenuItem_register2)){
+				detailGUI.show();
+			}
+			
 		}
 		public void mouseReleased (MouseEvent e) { // 마우스가 눌렸다가 때어질때 발생하는 리스너 ((라벨))
 			if(e.isPopupTrigger()) {// 만약 우클릭(팝업트리거 발동)을 했다면 프레임에 해당 좌표에 팝업메뉴 호출
