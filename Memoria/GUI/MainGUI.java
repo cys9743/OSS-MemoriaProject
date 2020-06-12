@@ -87,6 +87,7 @@ public class MainGUI {
 
 
 	public void showCal() {			//캘린더를 표시해주는 메소드
+		System.out.println("="+startDateOfMonth(cal));
 		switch(startDateOfMonth(cal))			//시작요일을 구하는 메소드
 		{
 			case 0:							//시작 요일이 일요일일 경우
@@ -178,8 +179,7 @@ public class MainGUI {
 				int i =-4;
 				for(int w=0; w<6 ; w++){
 					for(int h=0; h<7;h++) {
-						if(i<= calLastDate[calMonth-1])
-						{
+						if(i<= calLastDate[calMonth-1]){
 							label_space[w][h].setText(i+"");
 							i++;
 							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
@@ -199,6 +199,7 @@ public class MainGUI {
 					for(int h=0; h<7;h++) {
 						if(i<= calLastDate[calMonth-1]){
 							label_space[w][h].setText(i+"");
+							i++;
 							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-")){
 								label_space[w][h].setText("");
 							}
@@ -256,13 +257,14 @@ public class MainGUI {
 				btn_Backward.setText("1월");
 			}
 		}
-		System.out.println(calYear+"년"+calMonth+"월");
+
 	}
 	
 	public void previousMonth(){			//전 달로 변경하는 메소드
-		if(cal.get(Calendar.MONTH) == 0){		//(위와 다르게 0까지는 예외(오류)가 발생하지 않기때문에 if 문으로 대체) '월' 값이 0이 된경우 (실제로 표기되는 calMonth 값은 -1이 되게 된다.)를 인식하여 년도를 변경하고 '월' 값을 변경함
+		if(cal.get(Calendar.MONTH) < 1){		//(위와 다르게 0까지는 예외(오류)가 발생하지 않기때문에 if 문으로 대체) '월' 값이 0이 된경우 (실제로 표기되는 calMonth 값은 -1이 되게 된다.)를 인식하여 년도를 변경하고 '월' 값을 변경함
 			calYear--;
 			calMonth = 12;
+			cal.set(Calendar.MONTH, calMonth-1);
 			cal.set(Calendar.YEAR, calYear);
 			cal.set(Calendar.DAY_OF_MONTH, 1);
 			clearCal();
@@ -300,7 +302,8 @@ public class MainGUI {
 				btn_Backward.setText("1월");
 			}
 		}
-		System.out.println(calYear+"년"+calMonth+"월");
+
+
 	}
 	
 	public JPopupMenu getPopupMenu(String type){ // 팝업메뉴 객체를 반환하는 메소드
