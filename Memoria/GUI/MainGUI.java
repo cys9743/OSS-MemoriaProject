@@ -60,6 +60,7 @@ public class MainGUI {
 			public void run() {
 				try {
 					MainGUI window = new MainGUI();
+					Database db = new Database();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
