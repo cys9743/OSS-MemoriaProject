@@ -1,21 +1,25 @@
 package Memoria.GUI;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.awt.event.ActionEvent;
 import java.awt.Color;
-import javax.swing.SwingConstants;
+import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.File;
+import java.text.DecimalFormat;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileSystemView;
 
@@ -29,6 +33,16 @@ public class DetailGUI {
 	private JButton button_delete_file;
 	private JFileChooser chooser; 
 	private int returnChoice;
+	private JTextField textField_addContentYear;
+	private JTextField textField_deadLineYear;
+	private JTextField textField_addContentMonth;
+	private JTextField textField_deadLineMonth;
+	private JTextField textField_addContentDay;
+	private JTextField textField_deadLineDay;
+	private JOptionPane op = new JOptionPane();
+	
+	MyListener ml = new MyListener();
+	
 	/**
 	 * Launch the application.
 	 */
@@ -47,6 +61,8 @@ public class DetailGUI {
 	/**
 	 * Create the application.
 	 */
+	
+	
 	void show() {
 		frame.setVisible(true);
 	}
@@ -65,7 +81,7 @@ public class DetailGUI {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 721, 612);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JLabel label_title = new JLabel("\uC81C\uBAA9");
@@ -198,20 +214,9 @@ public class DetailGUI {
 		frame.getContentPane().add(label_text_deadLine);
 		
 		JComboBox comboBox_star = new JComboBox();
+		comboBox_star.setModel(new DefaultComboBoxModel(new String[] {"(0)", "☆ (1)", "★ (2)", "★☆ (3)", "★★ (4)", "★★☆ (5)", "★★★ (6)", "★★★☆ (7)", "★★★★ (8)", "★★★★☆ (9)", "★★★★★ (10)"}));
 		comboBox_star.setBounds(283, 306, 156, 21);
 		frame.getContentPane().add(comboBox_star);
-		
-		JComboBox comboBox_addContentYear = new JComboBox();
-		comboBox_addContentYear.setBounds(12, 467, 57, 21);
-		frame.getContentPane().add(comboBox_addContentYear);
-		
-		JComboBox comboBox_addContentMonth = new JComboBox();
-		comboBox_addContentMonth.setBounds(112, 467, 57, 21);
-		frame.getContentPane().add(comboBox_addContentMonth);
-		
-		JComboBox comboBox_addContentDay = new JComboBox();
-		comboBox_addContentDay.setBounds(211, 467, 57, 21);
-		frame.getContentPane().add(comboBox_addContentDay);
 		
 		JLabel label_text_addContentYear = new JLabel("년");
 		label_text_addContentYear.setFont(new Font("새굴림", Font.PLAIN, 12));
@@ -233,27 +238,15 @@ public class DetailGUI {
 		label_text_deadLineDay.setBounds(280, 526, 19, 15);
 		frame.getContentPane().add(label_text_deadLineDay);
 		
-		JComboBox comboBox_deadLineDay = new JComboBox();
-		comboBox_deadLineDay.setBounds(211, 523, 57, 21);
-		frame.getContentPane().add(comboBox_deadLineDay);
-		
 		JLabel label_text_deadLineMonth = new JLabel("월");
 		label_text_deadLineMonth.setFont(new Font("새굴림", Font.PLAIN, 12));
 		label_text_deadLineMonth.setBounds(181, 526, 19, 15);
 		frame.getContentPane().add(label_text_deadLineMonth);
 		
-		JComboBox comboBox_deadLineMonth = new JComboBox();
-		comboBox_deadLineMonth.setBounds(112, 523, 57, 21);
-		frame.getContentPane().add(comboBox_deadLineMonth);
-		
 		JLabel label_text_deadLineYear = new JLabel("년");
 		label_text_deadLineYear.setFont(new Font("새굴림", Font.PLAIN, 12));
 		label_text_deadLineYear.setBounds(77, 527, 19, 15);
 		frame.getContentPane().add(label_text_deadLineYear);
-		
-		JComboBox comboBox_deadLineYear = new JComboBox();
-		comboBox_deadLineYear.setBounds(12, 523, 57, 21);
-		frame.getContentPane().add(comboBox_deadLineYear);
 		
 		JLabel label_fileLine = new JLabel("");
 		label_fileLine.setHorizontalAlignment(SwingConstants.CENTER);
@@ -262,11 +255,104 @@ public class DetailGUI {
 		label_fileLine.setBounds(12, 221, 257, 211);
 		frame.getContentPane().add(label_fileLine);
 		
+		textField_addContentYear = new JTextField();
+		textField_addContentYear.setBounds(12, 467, 57, 21);
+		frame.getContentPane().add(textField_addContentYear);
+		textField_addContentYear.addKeyListener(ml);
+		
+		textField_deadLineYear = new JTextField();
+		textField_deadLineYear.setColumns(10);
+		textField_deadLineYear.setBounds(12, 523, 57, 21);
+		frame.getContentPane().add(textField_deadLineYear);
+		textField_deadLineYear.addKeyListener(ml);
+		
+		textField_addContentMonth = new JTextField();
+		textField_addContentMonth.setColumns(10);
+		textField_addContentMonth.setBounds(112, 467, 57, 21);
+		frame.getContentPane().add(textField_addContentMonth);
+		textField_addContentMonth.addKeyListener(ml);
+
+		textField_deadLineMonth = new JTextField();
+		textField_deadLineMonth.setColumns(10);
+		textField_deadLineMonth.setBounds(112, 523, 57, 21);
+		frame.getContentPane().add(textField_deadLineMonth);
+		textField_deadLineMonth.addKeyListener(ml);
+
+		textField_addContentDay = new JTextField();
+		textField_addContentDay.setColumns(10);
+		textField_addContentDay.setBounds(212, 468, 57, 21);
+		frame.getContentPane().add(textField_addContentDay);
+		textField_addContentDay.addKeyListener(ml);
+
+		textField_deadLineDay = new JTextField();
+		textField_deadLineDay.setColumns(10);
+		textField_deadLineDay.setBounds(212, 520, 57, 21);
+		frame.getContentPane().add(textField_deadLineDay);
+		textField_deadLineDay.addKeyListener(ml);
+
 		// 파일 다이얼로그 세팅
 		chooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 		chooser.setCurrentDirectory(new File("/")); // 현재 사용 디렉터리 지정
 		chooser.setAcceptAllFileFilterUsed(true);
 		chooser.setDialogTitle("메모리아 파일 열기");
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // 파일 또는 디렉터리 여는 chooser
+	}
+	
+	class MyListener implements KeyListener{			//모든 리스너 클래스
+		// 파일 다이얼로그 관련 필드
+		JFileChooser chooser; 
+		int returnChoice;
+		
+		@Override
+		public void keyPressed(KeyEvent e) {
+	
+		}
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			if(e.getKeyChar() > '9' || e.getKeyChar() == '-' || e.getKeyChar() == ' ') {
+				e.consume();
+			}
+			if (e.getComponent() == textField_deadLineYear && ((JTextField)e.getSource()).getText().length() >= 4){			//년도 입력 4글자 및 숫자로 제한
+				e.consume();
+			}
+			if (e.getComponent() == textField_deadLineMonth && ((JTextField)e.getSource()).getText().length() >= 2){			//월 입력 2글자 및 숫자로 제한
+				e.consume();
+				int n = Integer.parseInt(((JTextField)e.getSource()).getText());
+				if(n > 12) {
+					((JTextField)e.getSource()).setText("12");
+				}
+			}
+			if (e.getComponent() == textField_deadLineDay && ((JTextField)e.getSource()).getText().length() >= 2){			//일 입력 2글자 및 숫자로 제한
+				e.consume();
+				int n = Integer.parseInt(((JTextField)e.getSource()).getText());
+				if(n > 31 || ((JTextField)e.getSource()).getText().length() >= 2) {
+					((JTextField)e.getSource()).setText("31");
+				}
+			}
+			
+			if (e.getComponent() == textField_addContentYear && ((JTextField)e.getSource()).getText().length() >= 4){			//년도 입력 4글자 및 숫자로 제한
+				e.consume();
+			}
+			if (e.getComponent() == textField_addContentMonth && ((JTextField)e.getSource()).getText().length() >= 2){			//월 입력 2글자 및 숫자로 제한
+				e.consume();
+				int n = Integer.parseInt(((JTextField)e.getSource()).getText());
+				if(n > 12) {
+					((JTextField)e.getSource()).setText("12");
+				}
+			}
+			if (e.getComponent() == textField_addContentDay && ((JTextField)e.getSource()).getText().length() >= 2){			//일 입력 2글자 및 숫자로 제한
+				e.consume();
+				int n = Integer.parseInt(((JTextField)e.getSource()).getText());
+				if(n > 31 || ((JTextField)e.getSource()).getText().length() >= 2) {
+					((JTextField)e.getSource()).setText("31");
+				}
+			}
+		}
 	}
 }

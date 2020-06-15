@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -41,15 +43,14 @@ public class MainGUI {
 	MyListener ml = new MyListener();
 	
 	DetailGUI detailGUI;
-
+	
+	Font f1 = new Font("HY헤드라인M",Font.PLAIN, 13);		//캘린더 날짜 (숫자) 폰트
 	
 	int calYear; 			//표시할 년도 설정
 	int calMonth;			//표시할 달 설정 (+1 해줘야함)
 	int calDay;			//표시할 일 설정
 	int calDayOfWeek;			//표시할 요일
 	final int calLastDate[] = {31,28,31,30,31,30,31,31,30,31,30,31};			//0~11 (1~12) 월 의 마지막 일 
-	
-
 	
 	JButton btn_Backward = new JButton(cal.get(Calendar.MONTH)+"월");	
 	JButton btn_Forward = new JButton((cal.get(Calendar.MONTH)+1+1)+"월");
@@ -75,136 +76,80 @@ public class MainGUI {
 			}
 		});	
 	}
+	
 	public void setToday(){				// 오늘의 날짜 설정하는 메소드
 		calYear = cal.get(Calendar.YEAR); 
 		calMonth = cal.get(Calendar.MONTH)+1;
 		calDay = cal.get(Calendar.DAY_OF_MONTH);
 		calDayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
 	}
+	
 	private int startDateOfMonth(Calendar cal) {		// 1일이 시작하는 위치 구하는 메소드
 		
 		int StartingPoint = (cal.get(Calendar.DAY_OF_WEEK)+7-cal.get(Calendar.DAY_OF_MONTH)%7)%7;	//캘린더의 특정 날짜가 무슨요일인지와 몇일인지만 알면 그 달의 시작 요일을 알 수 있다.
 		
 		return StartingPoint;			//0~6까지의 숫자로 일월화수목금토  순서로 시작 요일을 알려준다.
 	}
-	public void showCal() {			//캘린더를 표시해주는 메소드
-		System.out.println("="+startDateOfMonth(cal));
+	
+	public void setCal(int i) {			//캘린더에 날짜(dayOfMonth)를 표시해주는 메소드
+		for(int w=0; w<6 ; w++){
+			for(int h=0; h<7;h++) {
+				if(i<= calLastDate[calMonth-1]){		//해당하는 달의 최대 일까지 반복
+					label_space[w][h].setText(i+"");
+					label_space[w][h].setFont(f1);
+					i++;
+				}
+				if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))			//'일' 의 값이 0 혹은 음수일경우 빈칸으로 변경{
+					label_space[w][h].setText("");
+			}
+		}	
+	}
+	
+	public void showCal() {			//캘린더에 어디에 날짜를 표시할지 정해주는 메소드
 		switch(startDateOfMonth(cal))			//시작요일을 구하는 메소드
 		{
 			case 0:							//시작 요일이 일요일일 경우
-			{
-				int i =1;
-				for(int w=0; w<6 ; w++){
-					for(int h=0; h<7;h++) {
-						if(i<= calLastDate[calMonth-1]){		//해당하는 달의 최대 일까지 반복
-							label_space[w][h].setText(i+"");
-							i++;
-							}
-							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))			//'일' 의 값이 0 혹은 음수일경우 빈칸으로 변경{
-								label_space[w][h].setText("");
-							}
-						}	
-				break;
-			}			
+				setCal(1);
+				break;		
 			case 1:			//시작 요일이 월요일일 경우		
-			{
-				int i =0;
-				for(int w=0; w<6 ; w++){
-					for(int h=0; h<7;h++) {
-						if(i<= calLastDate[calMonth-1]){
-							label_space[w][h].setText(i+"");
-							i++;
-							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-")){
-								label_space[w][h].setText("");
-							}
-						}	
-					}
-				}
+				setCal(0);
 				break;
-			}
 			case 2:							//시작 요일이 화요일일 경우
-			{
-				int i =-1;
-				for(int w=0; w<6 ; w++){
-					for(int h=0; h<7;h++) {
-						if(i<= calLastDate[calMonth-1]){
-							label_space[w][h].setText(i+"");
-							i++;
-							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-")){
-								label_space[w][h].setText("");
-							}
-						}	
-					}
-				}
+				setCal(-1);
 				break;
-			}
 			case 3:							//시작 요일이 수요일일 경우
-			{
-				int i =-2;
-				for(int w=0; w<6 ; w++){
-					for(int h=0; h<7;h++) {
-						if(i<= calLastDate[calMonth-1]){
-							label_space[w][h].setText(i+"");
-							i++;
-							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-")){
-								label_space[w][h].setText("");
-							}
-						}	
-					}
-				}
+				setCal(-2);
 				break;
-			}
 			case 4:							//시작 요일이 목요일일 경우
-			{
-				int i =-3;
-				for(int w=0; w<6 ; w++){
-					for(int h=0; h<7;h++) {
-						if(i<= calLastDate[calMonth-1]){
-							label_space[w][h].setText(i+"");
-							i++;
-							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-")){
-								label_space[w][h].setText("");
-							}
-						}	
-					}
-				}
+				setCal(-3);
 				break;
-			}
 			case 5:							//시작 요일이 금요일일 경우
-			{
-				int i =-4;
-				for(int w=0; w<6 ; w++){
-					for(int h=0; h<7;h++) {
-						if(i<= calLastDate[calMonth-1]){
-							label_space[w][h].setText(i+"");
-							i++;
-							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-"))
-							{
-								label_space[w][h].setText("");
-							}
-						}	
-					}
-				}
+				setCal(-4);
 				break;
-			}
 			case 6:							//시작 요일이 토요일일 경우
-			{
-				int i =-5;
-				for(int w=0; w<6 ; w++){
-					for(int h=0; h<7;h++) {
-						if(i<= calLastDate[calMonth-1]){
-							label_space[w][h].setText(i+"");
-							i++;
-							if (label_space[w][h].getText().equals("0") || label_space[w][h].getText().contains("-")){
-								label_space[w][h].setText("");
-							}
-						}	
-					}
-				}
+				setCal(-5);
 				break;
+		}
+		disableCal();
+	}
+	
+	public void disableCal() {			//캘린더에 날짜들을 비활성화, 활성화 시키는 메소드
+		for(int i=0; i<6 ; i++) {
+			for(int j=0; j<7 ; j++) {
+				if(label_space[i][j].getText().isEmpty()) {
+					label_space[i][j].setBackground(new Color(200,200,200));
+					label_space[i][j].setOpaque(true);
+					label_space[i][j].disable();
+				}
+				else {
+					label_space[i][j].setBackground(Color.WHITE);
+					label_space[i][j].setOpaque(false);
+					label_space[i][j].enable();
+				}
 			}
 		}
 	}
+	
 	public void clearCal(){				//캘린더의 일자 표시 초기화 시키는 메소드
 		for (int i=0;i<6;i++){
 			for(int j=0;j<7;j++){
@@ -212,6 +157,7 @@ public class MainGUI {
 			}
 		}
 	}
+	
 	public void nextMonth(){			//다음 달로 변경하는 메소드
 		try {
 			calMonth++;
@@ -230,7 +176,7 @@ public class MainGUI {
 				btn_Forward.setText("1월"); 
 				btn_Backward.setText("11월");
 			}
-		} catch(Exception e)				{			//'월' 값이 13 이상으로 올라갈경우 예외(오류)발생 이를 인식하여 년도를 넘기고 '월'값을 변경
+		} catch(Exception e){			//'월' 값이 13 이상으로 올라갈경우 예외(오류)발생 이를 인식하여 년도를 넘기고 '월'값을 변경
 			calMonth = 1;
 			cal.set(Calendar.MONTH, calMonth-1);
 			cal.set(Calendar.DAY_OF_MONTH, 1);
@@ -250,7 +196,9 @@ public class MainGUI {
 				btn_Backward.setText("11월");
 			}
 		}
+		disableCal();
 	}
+	
 	public void previousMonth(){			//전 달로 변경하는 메소드
 		if(cal.get(Calendar.MONTH) < 1){		//(위와 다르게 0까지는 예외(오류)가 발생하지 않기때문에 if 문으로 대체) '월' 값이 0이 된경우 (실제로 표기되는 calMonth 값은 -1이 되게 된다.)를 인식하여 년도를 변경하고 '월' 값을 변경함
 			calYear--;
@@ -291,7 +239,9 @@ public class MainGUI {
 				btn_Backward.setText("11월");
 			}
 		}
+		disableCal();
 	}
+	
 	public JPopupMenu getPopupMenu(String type){ // 팝업메뉴 객체를 반환하는 메소드
 		
 		if(type.equals("btn"))
@@ -304,7 +254,9 @@ public class MainGUI {
 	public MainGUI() { // 생성자
 		detailGUI = new DetailGUI();
 		initialize();
+		showCal();
 	}
+	
 	private void initialize() {
 		setToday();
 		
@@ -334,7 +286,7 @@ public class MainGUI {
 		JLabel label_Sunday = new JLabel("일");
 		label_Sunday.setBorder(new LineBorder(Color.GRAY));
 		label_Sunday.setForeground(Color.RED);
-		label_Sunday.setFont(new Font("占쏙옙占쏙옙", Font.BOLD, 17));
+		label_Sunday.setFont(new Font("HY중고딕", Font.BOLD, 15));
 		label_Sunday.setHorizontalAlignment(SwingConstants.CENTER);
 		label_Sunday.setBackground(SystemColor.activeCaption);
 		label_Sunday.setBounds(0, 0, 159, 26);
@@ -345,7 +297,7 @@ public class MainGUI {
 		label_Monday.setOpaque(true);
 		label_Monday.setBorder(new LineBorder(Color.GRAY));
 		label_Monday.setBackground(SystemColor.activeCaption);
-		label_Monday.setFont(new Font("占쏙옙占쏙옙", Font.BOLD, 17));
+		label_Monday.setFont(new Font("HY중고딕", Font.BOLD, 15));
 		label_Monday.setHorizontalAlignment(SwingConstants.CENTER);
 		label_Monday.setBounds(159, 0, 159, 26);
 		panel_Calendar.add(label_Monday);
@@ -354,7 +306,7 @@ public class MainGUI {
 		label_Tuesday.setOpaque(true);
 		label_Tuesday.setBorder(new LineBorder(Color.GRAY));
 		label_Tuesday.setBackground(SystemColor.activeCaption);
-		label_Tuesday.setFont(new Font("占쏙옙占쏙옙", Font.BOLD, 17));
+		label_Tuesday.setFont(new Font("HY중고딕", Font.BOLD, 15));
 		label_Tuesday.setHorizontalAlignment(SwingConstants.CENTER);
 		label_Tuesday.setBounds(318, 0, 159, 26);
 		panel_Calendar.add(label_Tuesday);
@@ -363,35 +315,35 @@ public class MainGUI {
 		label_Wednesday.setOpaque(true);
 		label_Wednesday.setBorder(new LineBorder(Color.GRAY));
 		label_Wednesday.setBackground(SystemColor.activeCaption);
-		label_Wednesday.setFont(new Font("占쏙옙占쏙옙", Font.BOLD, 17));
+		label_Wednesday.setFont(new Font("HY중고딕", Font.BOLD, 15));
 		label_Wednesday.setHorizontalAlignment(SwingConstants.CENTER);
 		label_Wednesday.setBounds(477, 0, 159, 26);
 		panel_Calendar.add(label_Wednesday);
 		
 		JLabel label_Thursday = new JLabel("\uBAA9");
 		label_Thursday.setOpaque(true);
+		label_Thursday.setFont(new Font("HY중고딕", Font.BOLD, 15));
 		label_Thursday.setBorder(new LineBorder(Color.GRAY));
 		label_Thursday.setBackground(SystemColor.activeCaption);
-		label_Thursday.setFont(new Font("占쏙옙占쏙옙", Font.BOLD, 17));
 		label_Thursday.setHorizontalAlignment(SwingConstants.CENTER);
 		label_Thursday.setBounds(636, 0, 159, 26);
 		panel_Calendar.add(label_Thursday);
 		
 		JLabel label_Friday = new JLabel("\uAE08");
 		label_Friday.setOpaque(true);
+		label_Friday.setFont(new Font("HY중고딕", Font.BOLD, 15));
 		label_Friday.setBorder(new LineBorder(Color.GRAY));
 		label_Friday.setBackground(SystemColor.activeCaption);
-		label_Friday.setFont(new Font("占쏙옙占쏙옙", Font.BOLD, 17));
 		label_Friday.setHorizontalAlignment(SwingConstants.CENTER);
 		label_Friday.setBounds(795, 0, 159, 26);
 		panel_Calendar.add(label_Friday);
 		
 		JLabel lbld = new JLabel("토");
 		lbld.setOpaque(true);
+		lbld.setFont(new Font("HY중고딕", Font.BOLD, 15));
 		lbld.setBorder(new LineBorder(Color.GRAY));
 		lbld.setBackground(SystemColor.activeCaption);
 		lbld.setForeground(SystemColor.textHighlight);
-		lbld.setFont(new Font("占쏙옙占쏙옙", Font.BOLD, 17));
 		lbld.setHorizontalAlignment(SwingConstants.CENTER);
 		lbld.setBounds(954, 0, 159, 26);
 		panel_Calendar.add(lbld);
@@ -894,7 +846,7 @@ public class MainGUI {
 		//JMenuItem 
 	}
 	
-	class MyListener extends MouseAdapter implements ActionListener {			//모든 리스너 클래스
+	class MyListener extends MouseAdapter implements ActionListener{			//모든 리스너 클래스
 		// 파일 다이얼로그 관련 필드
 		JFileChooser chooser; 
 		int returnChoice;
@@ -943,7 +895,7 @@ public class MainGUI {
 					getPopupMenu("button").show(panel_Calendar, e.getX() , e.getY());
 				}
 			}
-		}
+		}		
 	}
 }
 
