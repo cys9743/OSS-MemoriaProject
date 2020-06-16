@@ -52,6 +52,13 @@ public class MainGUI {
 	int calDayOfWeek;			//표시할 요일
 	final int calLastDate[] = {31,28,31,30,31,30,31,31,30,31,30,31};			//0~11 (1~12) 월 의 마지막 일 
 	
+	int todayYear = cal.get(Calendar.YEAR);
+	int todayMonth = cal.get(Calendar.MONTH)+1;
+	int todayDayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
+	int todayDayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+	
+	JButton btn_today = new JButton("Today");
+	
 	JButton btn_Backward = new JButton(cal.get(Calendar.MONTH)+"월");	
 	JButton btn_Forward = new JButton((cal.get(Calendar.MONTH)+1+1)+"월");
 	JLabel label_Month = new JLabel((cal.get(Calendar.MONTH)+1)+"월");
@@ -105,7 +112,38 @@ public class MainGUI {
 		}	
 	}
 	
-	public void showCal() {			//캘린더에 어디에 날짜를 표시할지 정해주는 메소드
+	public void showToday() {			//버튼을 누를경우 월, 년도를 이동해서 오늘을 표시해주는 메소드
+		Calendar cal = Calendar.getInstance();
+		showCal(cal);
+		btn_Backward.setText(todayMonth-1+"월");
+		btn_Forward.setText((todayMonth+1)+"월");
+		label_Month.setText(todayMonth+"월");
+		label_Year.setText(todayYear+"");
+		for(int w=0; w<6 ; w++){
+			for(int h=0; h<7;h++){
+				if(label_space[w][h].getText().equals(todayDayOfMonth+"")){	
+					label_space[w][h].setOpaque(true);
+					label_space[w][h].setBackground(new Color(255, 255, 180));
+				}
+			}	
+		}
+	}
+	
+	public void showToday_auto() {
+		if(label_Month.getText().equals(todayMonth+"월") && label_Year.getText().equals(todayYear+"")) {
+			System.out.print(todayYear);
+			for(int w=0; w<6 ; w++){
+				for(int h=0; h<7;h++){
+					if(label_space[w][h].getText().equals(todayDayOfMonth+"")){	
+						label_space[w][h].setOpaque(true);
+						label_space[w][h].setBackground(new Color(255, 255, 180));
+					}
+				}	
+			}
+		}
+	}
+	
+	public void showCal(Calendar cal) {			//캘린더에 어디에 날짜를 표시할지 정해주는 메소드
 		switch(startDateOfMonth(cal))			//시작요일을 구하는 메소드
 		{
 			case 0:							//시작 요일이 일요일일 경우
@@ -131,6 +169,7 @@ public class MainGUI {
 				break;
 		}
 		disableCal();
+		showToday_auto();
 	}
 	
 	public void disableCal() {			//캘린더에 날짜들을 비활성화, 활성화 시키는 메소드
@@ -164,7 +203,7 @@ public class MainGUI {
 			cal.set(Calendar.MONTH, calMonth-1);
 			cal.set(Calendar.DAY_OF_MONTH, 1);
 			clearCal();
-			showCal();
+			showCal(cal);
 			btn_Backward.setText(calMonth-1+"월");
 			btn_Forward.setText((calMonth+1)+"월");
 			label_Month.setText(calMonth+"월");
@@ -176,12 +215,13 @@ public class MainGUI {
 				btn_Forward.setText("1월"); 
 				btn_Backward.setText("11월");
 			}
+			
 		} catch(Exception e){			//'월' 값이 13 이상으로 올라갈경우 예외(오류)발생 이를 인식하여 년도를 넘기고 '월'값을 변경
 			calMonth = 1;
 			cal.set(Calendar.MONTH, calMonth-1);
 			cal.set(Calendar.DAY_OF_MONTH, 1);
 			clearCal();
-			showCal();
+			showCal(cal);
 			label_Month.setText(calMonth+"월");
 			calYear++;
 			label_Year.setText(calYear+"");
@@ -197,6 +237,7 @@ public class MainGUI {
 			}
 		}
 		disableCal();
+		showToday_auto();
 	}
 	
 	public void previousMonth(){			//전 달로 변경하는 메소드
@@ -207,7 +248,7 @@ public class MainGUI {
 			cal.set(Calendar.YEAR, calYear);
 			cal.set(Calendar.DAY_OF_MONTH, 1);
 			clearCal();
-			showCal();
+			showCal(cal);
 			label_Month.setText(calMonth+"월");
 			label_Year.setText(calYear+"");
 			
@@ -225,7 +266,7 @@ public class MainGUI {
 			cal.set(Calendar.MONTH, calMonth-1);
 			cal.set(Calendar.DAY_OF_MONTH, 1);
 			clearCal();
-			showCal();
+			showCal(cal);
 			btn_Backward.setText(calMonth-1+"월");
 			btn_Forward.setText((calMonth+1)+"월");
 			label_Month.setText(calMonth+"월");
@@ -240,6 +281,7 @@ public class MainGUI {
 			}
 		}
 		disableCal();
+		showToday_auto();
 	}
 	
 	public JPopupMenu getPopupMenu(String type){ // 팝업메뉴 객체를 반환하는 메소드
@@ -254,7 +296,7 @@ public class MainGUI {
 	public MainGUI() { // 생성자
 		detailGUI = new DetailGUI();
 		initialize();
-		showCal();
+		showCal(cal);
 	}
 	
 	private void initialize() {
@@ -812,6 +854,11 @@ public class MainGUI {
 		btn_Forward.setBounds(752, 20, 68, 44);
 		panel_South.add(btn_Forward);
 		
+	
+		btn_today.setBounds(665, 67, 69, 23);
+		panel_South.add(btn_today);
+		btn_today.addActionListener(ml);
+		
 		//Main 메뉴바 컴포넌트
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -864,6 +911,7 @@ public class MainGUI {
 			
 			if(e.getSource().equals(btn_Forward)) nextMonth();
 			if(e.getSource().equals(btn_Backward)) previousMonth();	
+			if(e.getSource().equals(btn_today)) showToday();
 			if(e.getSource().equals(mntmNewMenuItem_open)) {// || mntmN
 				returnChoice = chooser.showOpenDialog(null); // 다이얼로그 오픈 
 				
