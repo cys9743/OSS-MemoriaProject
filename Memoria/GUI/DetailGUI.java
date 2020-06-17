@@ -101,6 +101,7 @@ public class DetailGUI {
 		textField_deadLineDay.setText("");
 		label_path.setText("비어있음");
 		label_fileSize.setText("");
+		label_fileKind.setText("");
 		label_lastModify.setText("");
 	}
 	
@@ -191,6 +192,9 @@ public class DetailGUI {
 		button_delete_file.addActionListener(new ActionListener() { // 파일제거 버튼 리스너
 			public void actionPerformed(ActionEvent e) {
 				label_path.setText("비어 있음");
+				label_fileSize.setText("");
+				label_fileKind.setText("");
+				label_lastModify.setText("");
 			}
 		});
 		button_delete_file.setBounds(387, 221, 92, 23);
