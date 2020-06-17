@@ -941,6 +941,7 @@ public class MainGUI {
 				}
 			}
 			if(e.getSource().equals(mntmNewMenuItem_register2)){ // 팝업 메뉴에서 등록 버튼 눌렀을 시
+				detailGUI.InitComponents();
 				detailGUI.show();
 			}
 			}
