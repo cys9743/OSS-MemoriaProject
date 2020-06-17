@@ -1,6 +1,7 @@
 package Memoria.GUI;
 
 import java.awt.Color;
+
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.SystemColor;
@@ -71,17 +72,28 @@ public class MainGUI {
 	
 	JLabel label_Year = new JLabel("2020");
 	
-	public static void main(String[] args) {
+	Database database;				// 데이터베이스
+	
+	public static void main(String[] args) {			//////메인 메소드
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					MainGUI window = new MainGUI();
 					window.frame.setVisible(true);
+					if(window.detailGUI.getVisible()) {
+						
+					}
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});	
+	}
+
+	
+	public void getContentsInfo() { 		// DB에서 콘텐츠 정보 받아오는 메소드
+		
 	}
 	
 	public void setToday(){				// 오늘의 날짜 설정하는 메소드
@@ -295,6 +307,8 @@ public class MainGUI {
 	}
 	public MainGUI() { // 생성자
 		detailGUI = new DetailGUI();
+		database = new Database(); // 데이터베이스 객체생성
+		
 		initialize();
 		showCal(cal);
 	}
@@ -896,7 +910,9 @@ public class MainGUI {
 	class MyListener extends MouseAdapter implements ActionListener{			//모든 리스너 클래스
 		// 파일 다이얼로그 관련 필드
 		JFileChooser chooser; 
+		
 		int returnChoice;
+
 		
 		//MyListener 생성자
 		MyListener(){
@@ -917,7 +933,7 @@ public class MainGUI {
 				
 				if(returnChoice == chooser.APPROVE_OPTION) { // 파일을 제대로 열었을 시
 					detailGUI.close();
-					detailGUI.setLocationText(chooser.getSelectedFile().toString());
+
 					detailGUI.show();
 				}
 				else if(returnChoice == chooser.CANCEL_OPTION) { // 취소 버튼을 눌렀을 시
@@ -927,7 +943,7 @@ public class MainGUI {
 			if(e.getSource().equals(mntmNewMenuItem_register2)){ // 팝업 메뉴에서 등록 버튼 눌렀을 시
 				detailGUI.show();
 			}
-		}
+			}
 		public void mouseReleased (MouseEvent e) { // 마우스가 눌렸다가 때어질때 발생하는 리스너 ((라벨))
 			if(e.isPopupTrigger()) {// 만약 우클릭(팝업트리거 발동)을 했다면 프레임에 해당 좌표에 팝업메뉴 호출
 

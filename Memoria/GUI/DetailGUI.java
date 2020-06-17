@@ -9,6 +9,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -29,6 +31,9 @@ public class DetailGUI {
 	private JTextField textField_title;
 	private JTextField textField_content;
 	private JLabel label_path;
+	private JLabel label_fileSize;
+	private JLabel label_lastModify;
+	private JLabel label_fileKind;
 	private JButton button_Add_File;
 	private JButton button_delete_file;
 	private JFileChooser chooser; 
@@ -39,9 +44,13 @@ public class DetailGUI {
 	private JTextField textField_deadLineMonth;
 	private JTextField textField_addContentDay;
 	private JTextField textField_deadLineDay;
-	private JOptionPane op = new JOptionPane();
+	private JComboBox comboBox_star;
+	private JOptionPane op;
 	
-	MyListener ml = new MyListener();
+	
+	Database database;
+	Contents contents;
+	MyListener ml;
 	
 	/**
 	 * Launch the application.
@@ -62,7 +71,6 @@ public class DetailGUI {
 	 * Create the application.
 	 */
 	
-	
 	void show() {
 		frame.setVisible(true);
 	}
@@ -75,10 +83,37 @@ public class DetailGUI {
 	void setLocationText(String fileLocation) { // 파일 경로를 입력받아 경로를 표시하는 라벨의 텍스트를 변경하는 메소드
 		label_path.setText(fileLocation);
 	}
+	Contents getContents(){			//콘텐츠 클래스를 반환하는 메소드
+		return contents;
+	}
+	
+	boolean getVisible() {
+		return this.frame.isVisible();
+	}
+	void InitComponents() {
+		textField_title.setText("");
+		textField_content.setText("");
+		textField_addContentYear.setText("");
+		textField_addContentMonth.setText("");
+		textField_addContentDay.setText("");	
+		textField_deadLineYear.setText("");
+		textField_deadLineMonth.setText("");
+		textField_deadLineDay.setText("");
+		label_path.setText("비어있음");
+		label_fileSize.setText("");
+		label_lastModify.setText("");
+	}
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		// 객체 생성
+		op = new JOptionPane();
+		ml = new MyListener();
+		contents = new Contents();
+		database = new Database();
+		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 721, 612);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -109,7 +144,7 @@ public class DetailGUI {
 		label_text_path.setBounds(22, 234, 92, 15);
 		frame.getContentPane().add(label_text_path);
 		
-		label_path = new JLabel("C:\\ProgramFile\\test.txt");
+		label_path = new JLabel("비어있음");
 		label_path.setFont(new Font("새굴림", Font.PLAIN, 12));
 		label_path.setBounds(22, 259, 244, 15);
 		frame.getContentPane().add(label_path);
@@ -121,10 +156,29 @@ public class DetailGUI {
 		button_Add_File.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) { // 파일추가 버튼 리스너
 				returnChoice = chooser.showOpenDialog(null); // 다이얼로그 오픈 
-				
+				String filepath;
+				int index;
+				File myfile;
+				String extension;
+				SimpleDateFormat simpleDateFormat;
+				Date lastmodifiedDate;
 				if(returnChoice == chooser.APPROVE_OPTION) {
 					frame.dispose();
-					label_path.setText(chooser.getSelectedFile().toString());
+					//파일 경로 설정
+					filepath = chooser.getSelectedFile().toString();
+					label_path.setText(filepath);
+					//확장자 라벨 설정
+					index = filepath.lastIndexOf(".");
+					extension = filepath.substring(index + 1);
+					label_fileKind.setText(extension);
+					//파일 크기 설정
+					myfile = new File(filepath);
+					label_fileSize.setText(Long.toString(myfile.length()) + " Bytes");
+					//파일 수정 날짜 설정
+					simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss aa");
+					lastmodifiedDate = new Date(myfile.lastModified());
+					simpleDateFormat.format(lastmodifiedDate);
+					label_lastModify.setText(simpleDateFormat.format(lastmodifiedDate));
 					frame.setVisible(true);
 				}
 				else if(returnChoice == chooser.CANCEL_OPTION) {
@@ -162,17 +216,17 @@ public class DetailGUI {
 		label_text_fileSize.setBounds(22, 334, 135, 15);
 		frame.getContentPane().add(label_text_fileSize);
 		
-		JLabel label_fileKind = new JLabel(".txt");
+		label_fileKind = new JLabel("");
 		label_fileKind.setFont(new Font("새굴림", Font.PLAIN, 12));
 		label_fileKind.setBounds(22, 309, 51, 15);
 		frame.getContentPane().add(label_fileKind);
 		
-		JLabel label_fileSize = new JLabel("5 KB");
+		label_fileSize = new JLabel("");
 		label_fileSize.setFont(new Font("새굴림", Font.PLAIN, 12));
 		label_fileSize.setBounds(22, 359, 244, 15);
 		frame.getContentPane().add(label_fileSize);
 		
-		JLabel label_lastModify = new JLabel("2020\uB144 4\uC6D4 29\uC77C \uC624\uD6C4 01\uC2DC 35\uBD84");
+		label_lastModify = new JLabel("");
 		label_lastModify.setFont(new Font("새굴림", Font.PLAIN, 12));
 		label_lastModify.setBounds(22, 409, 210, 15);
 		frame.getContentPane().add(label_lastModify);
@@ -191,8 +245,13 @@ public class DetailGUI {
 		
 		JButton button_apply = new JButton("확인");
 		button_apply.setFont(new Font("굴림", Font.BOLD, 12));
-		button_apply.addActionListener(new ActionListener() {
+		button_apply.addActionListener(new ActionListener() {   				// 적용버튼 눌렀을경우
 			public void actionPerformed(ActionEvent e) {
+				contents.setContents();
+				database.registerContents(contents.getTitle(), contents.getText(),contents.getPriority(),contents.getRegisterDate(),contents.getLastDate(),contents.getFileLink());
+				InitComponents();
+				frame.dispose();
+
 			}
 		});
 		button_apply.setBounds(607, 540, 85, 23);
@@ -213,7 +272,7 @@ public class DetailGUI {
 		label_text_deadLine.setBounds(12, 498, 135, 15);
 		frame.getContentPane().add(label_text_deadLine);
 		
-		JComboBox comboBox_star = new JComboBox();
+		comboBox_star = new JComboBox();
 		comboBox_star.setModel(new DefaultComboBoxModel(new String[] {"(0)", "☆ (1)", "★ (2)", "★☆ (3)", "★★ (4)", "★★☆ (5)", "★★★ (6)", "★★★☆ (7)", "★★★★ (8)", "★★★★☆ (9)", "★★★★★ (10)"}));
 		comboBox_star.setBounds(283, 306, 156, 21);
 		frame.getContentPane().add(comboBox_star);
@@ -296,7 +355,48 @@ public class DetailGUI {
 		chooser.setAcceptAllFileFilterUsed(true);
 		chooser.setDialogTitle("메모리아 파일 열기");
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // 파일 또는 디렉터리 여는 chooser
+		
+		
+
 	}
+	class Contents{ 		//콘텐츠의 내용을 담는 클래스
+		private String title;
+		private String text;
+		private int priority;
+		private String registerDate;
+		private String lastDate;
+		private String fileLink;
+		
+		public void setContents(){ 			// DetailGUI의 컴포넌트에서 값을 파싱하는 메소드 
+			this.title = textField_title.getText();
+			this.text = textField_content.getText();
+			this.priority = comboBox_star.getItemCount() ;
+			this.registerDate = textField_addContentYear.getText()+textField_addContentMonth.getText()+textField_addContentDay.getText();	
+			this.lastDate = textField_deadLineYear.getText()+textField_deadLineMonth.getText()+textField_deadLineDay.getText();
+			this.fileLink = label_path.getText();
+		}
+		
+		public String getTitle() {
+			return title;
+		}
+		public String getText() {
+			return text;
+		}
+		public int getPriority() {
+			return priority;
+		}
+		public String getRegisterDate() {
+			return registerDate;
+		}
+		public String getLastDate() {
+			return lastDate;
+		}
+		public String getFileLink() {
+			return fileLink;
+		}
+		
+	}
+
 	
 	class MyListener implements KeyListener{			//모든 리스너 클래스
 		// 파일 다이얼로그 관련 필드
