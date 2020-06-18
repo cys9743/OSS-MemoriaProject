@@ -267,13 +267,13 @@ public class DetailGUI {
 					System.out.println("빈칸금지");
 				}
 				else {
-				contents.setContents();
-				database.registerContents(contents.getTitle(), contents.getText(),contents.getPriority(),contents.getRegisterDate(),contents.getLastDate(),contents.getFileLink());
-				InitComponents();
-				frame.dispose();
+					contents.setContents();
+					database.registerContents(contents.getTitle(), contents.getText(),contents.getPriority(),contents.getRegisterDate(),contents.getLastDate(),contents.getFileLink());
+					InitComponents();
+					frame.dispose();
+					}
 				}
-			}
-		});
+			});
 		button_apply.setBounds(607, 540, 85, 23);
 		frame.getContentPane().add(button_apply);
 		

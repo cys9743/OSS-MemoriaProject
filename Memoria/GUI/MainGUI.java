@@ -1,20 +1,20 @@
 package Memoria.GUI;
 
 import java.awt.Color;
-
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import javax.swing.AbstractListModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -25,7 +25,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JScrollBar;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
@@ -72,8 +71,11 @@ public class MainGUI {
 	JPopupMenu popupMenuButton = new JPopupMenu();
 	
 	JLabel label_Year = new JLabel("2020");
+	JList list_searchlist = new JList();
 	
 	Database database;				// 데이터베이스
+	
+	
 	
 	public static void main(String[] args) {			//////메인 메소드
 		EventQueue.invokeLater(new Runnable() {
@@ -92,7 +94,7 @@ public class MainGUI {
 		});	
 	}
 
-	
+
 	public void getContentsInfo() { 		// DB에서 콘텐츠 정보 받아오는 메소드
 		
 	}
@@ -157,6 +159,7 @@ public class MainGUI {
 	}
 	
 	public void showCal(Calendar cal) {			//캘린더에 어디에 날짜를 표시할지 정해주는 메소드
+		getList();
 		switch(startDateOfMonth(cal))			//시작요일을 구하는 메소드
 		{
 			case 0:							//시작 요일이 일요일일 경우
@@ -307,6 +310,16 @@ public class MainGUI {
 		
 	}
 	
+	public void getList() {			//불러온 db를 출력해주는 메소드
+		database.dbTitle.clear();
+		database.searchTitle();
+		DefaultListModel listModel = new DefaultListModel();
+		for(int i =0 ; i<database.dbTitle.size();i++) {
+			listModel.addElement(database.dbTitle.get(i));
+		}
+		list_searchlist.setModel(listModel);			//searchList에 listModel을 설정
+	}
+	
 
 	
 	public MainGUI() { // 생성자
@@ -315,6 +328,8 @@ public class MainGUI {
 		
 		initialize();
 		showCal(cal);
+		getList();
+
 	}
 	
 	private void initialize() {
@@ -814,27 +829,15 @@ public class MainGUI {
 		panel_Calendar.add(label_space[5][6]);
 		
 		JPanel panel_Search = new JPanel();
-		panel_Search.setBounds(0, 0, 232, 610);
+		panel_Search.setBounds(0, 26, 232, 584);
 		frame.getContentPane().add(panel_Search);
-		panel_Search.setLayout(null);
+		panel_Search.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		textField_searchField = new JTextField();
-		textField_searchField.setBorder(new LineBorder(Color.GRAY));
-		textField_searchField.setBounds(0, 0, 231, 26);
-		textField_searchField.setHorizontalAlignment(SwingConstants.CENTER);
-		textField_searchField.setText("\uAC80\uC0C9..");
-		textField_searchField.setToolTipText("");
-		panel_Search.add(textField_searchField);
-		textField_searchField.setColumns(10);
 		
-		JList list_searchlist = new JList();
+		list_searchlist.setVisibleRowCount(12);
 		list_searchlist.setBorder(new LineBorder(Color.GRAY));
-		list_searchlist.setBounds(0, 25, 231, 585);
+
 		panel_Search.add(list_searchlist);
-		
-		JScrollBar scrollBar_searchList = new JScrollBar();
-		scrollBar_searchList.setBounds(215, 25, 17, 585);
-		panel_Search.add(scrollBar_searchList);
 		
 		JPanel panel_South = new JPanel();
 		panel_South.setBounds(0, 608, 1344, 100);
@@ -875,6 +878,15 @@ public class MainGUI {
 	
 		btn_today.setBounds(665, 67, 69, 23);
 		panel_South.add(btn_today);
+		
+		textField_searchField = new JTextField();
+		textField_searchField.setBounds(0, 0, 232, 26);
+		frame.getContentPane().add(textField_searchField);
+		textField_searchField.setBorder(new LineBorder(Color.GRAY));
+		textField_searchField.setHorizontalAlignment(SwingConstants.CENTER);
+		textField_searchField.setText("\uAC80\uC0C9..");
+		textField_searchField.setToolTipText("");
+		textField_searchField.setColumns(10);
 		btn_today.addActionListener(ml);
 		
 		//Main 메뉴바 컴포넌트

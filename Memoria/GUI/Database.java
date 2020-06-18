@@ -5,13 +5,18 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class Database {
 
 	private String JDBC_DRIVER =  "com.mysql.cj.jdbc.Driver"; // Mysql 드라이버
 	private final String DB_URL = "jdbc:mysql://localhost:3306/memoria?serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false&autoreconnect=true";// 3306포트에 localhost 아이피 주소를 가진다.
 	private final String DB_USER = "root"; // DB에 접속할 ID
+	//DOKKU
 	private final String DB_PASSWORD = "root"; // DB에 접속할 비밀번호.
+	//land1!4$7&2@
+	
+	ArrayList <String> dbTitle = new ArrayList<>();
 	
 	private Connection connection;
 	private Statement statement;
@@ -60,7 +65,6 @@ public class Database {
 				return false;
 			}
 			else {
-				setId();
 				statement.executeUpdate(sql_insert_contents);
 				System.out.println("쿼리 삽입 성공");
 				return true;
@@ -71,6 +75,9 @@ public class Database {
 		}
 		return false;
 	}
+	
+	//ALTER TABLE contents MODIFY ID INT NOT NULL AUTO_INCREMENT; mysql에서 실행시 ID 값이 자동으로 증가하게 바뀜
+	
 	
 	public void setId() { // 데이터베이스의 id값을 자동으로 초기화해주는 메소드 
 		String sql_init_id ="ALTER TABLE `contents` AUTO_INCREMENT=1;";
@@ -86,6 +93,23 @@ public class Database {
 			e.printStackTrace();
 		}
 	}
+	
+	 public void searchTitle(){			//등록한 제목들을 불러오는 메소드
+         try{
+        	 	String sql;
+        	 	ResultSet result;
+                 sql = "SELECT TITLE FROM contents";
+                 result = statement.executeQuery(sql);
+                 
+                 while(result.next()) {
+                	 dbTitle.add(result.getString("title"));
+                 }
+         }catch(Exception e){
+                e.printStackTrace();
+                System.out.println("DB 테이블 title 불러오기 실패 : Database.searchTitle()");
+         }
+   }//end searchTitle();
+	
 
 
 	public void closeDB() {//DB 커넥션, 스테이트먼트, 리설트셋 CLOSE()
