@@ -47,11 +47,16 @@ public class DetailGUI {
 	private JComboBox comboBox_star;
 	private JOptionPane op;
 	
+	JButton button_cancel = new JButton("취소");
 	
 	Database database;
 	Contents contents;
 	MyListener ml;
+	MainGUI mainGUI;
 	
+	int selectYear;
+	int selectMonth;
+	int selectDayOfMonth;
 	/**
 	 * Launch the application.
 	 */
@@ -70,6 +75,12 @@ public class DetailGUI {
 	/**
 	 * Create the application.
 	 */
+	
+	void firstOpen() {
+		textField_addContentYear.setText(selectYear+"");
+		textField_addContentMonth.setText(selectMonth+"");
+		textField_addContentDay.setText(selectDayOfMonth+"");
+	}
 	
 	void show() {
 		frame.setVisible(true);
@@ -183,7 +194,6 @@ public class DetailGUI {
 					frame.setVisible(true);
 				}
 				else if(returnChoice == chooser.CANCEL_OPTION) {
-					System.out.println("테스트 메시지 : 취소");
 				}
 			}
 		});
@@ -251,19 +261,26 @@ public class DetailGUI {
 		button_apply.setFont(new Font("굴림", Font.BOLD, 12));
 		button_apply.addActionListener(new ActionListener() {   				// 적용버튼 눌렀을경우
 			public void actionPerformed(ActionEvent e) {
+				if(textField_title.getText().isEmpty() || textField_content.getText().isEmpty() || textField_deadLineDay.getText().isEmpty() || textField_deadLineMonth.getText().isEmpty()
+						|| textField_deadLineDay.getText().isEmpty() || textField_deadLineYear.getText().isEmpty() || textField_addContentDay.getText().isEmpty() || textField_addContentDay.getText().isEmpty()
+						|| textField_addContentMonth.getText().isEmpty() || textField_addContentYear.getText().isEmpty()) {
+					System.out.println("빈칸금지");
+				}
+				else {
 				contents.setContents();
 				database.registerContents(contents.getTitle(), contents.getText(),contents.getPriority(),contents.getRegisterDate(),contents.getLastDate(),contents.getFileLink());
 				InitComponents();
 				frame.dispose();
-
+				}
 			}
 		});
 		button_apply.setBounds(607, 540, 85, 23);
 		frame.getContentPane().add(button_apply);
 		
-		JButton button_cancel = new JButton("\uCDE8\uC18C");
+
 		button_cancel.setFont(new Font("굴림", Font.BOLD, 12));
 		button_cancel.setBounds(510, 540, 85, 23);
+		button_cancel.addActionListener(ml);
 		frame.getContentPane().add(button_cancel);
 		
 		JLabel label_text_addContent = new JLabel("컨텐츠 등록 날짜");
@@ -402,7 +419,7 @@ public class DetailGUI {
 	}
 
 	
-	class MyListener implements KeyListener{			//모든 리스너 클래스
+	class MyListener implements KeyListener, ActionListener{			//모든 리스너 클래스
 		// 파일 다이얼로그 관련 필드
 		JFileChooser chooser; 
 		int returnChoice;
@@ -456,6 +473,13 @@ public class DetailGUI {
 				if(n > 31 || ((JTextField)e.getSource()).getText().length() >= 2) {
 					((JTextField)e.getSource()).setText("31");
 				}
+			}
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			if(e.getSource().equals(button_cancel)) {		//취소버튼 누를경우
+				frame.dispose();
 			}
 		}
 	}

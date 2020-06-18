@@ -57,6 +57,7 @@ public class MainGUI {
 	int todayMonth = cal.get(Calendar.MONTH)+1;
 	int todayDayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
 	int todayDayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+
 	
 	JButton btn_today = new JButton("Today");
 	
@@ -305,6 +306,9 @@ public class MainGUI {
 			return popupMenuLabel;
 		
 	}
+	
+
+	
 	public MainGUI() { // 생성자
 		detailGUI = new DetailGUI();
 		database = new Database(); // 데이터베이스 객체생성
@@ -907,6 +911,8 @@ public class MainGUI {
 		//JMenuItem 
 	}
 	
+
+	
 	class MyListener extends MouseAdapter implements ActionListener{			//모든 리스너 클래스
 		// 파일 다이얼로그 관련 필드
 		JFileChooser chooser; 
@@ -933,18 +939,15 @@ public class MainGUI {
 				
 				if(returnChoice == chooser.APPROVE_OPTION) { // 파일을 제대로 열었을 시
 					detailGUI.close();
-
 					detailGUI.show();
-				}
-				else if(returnChoice == chooser.CANCEL_OPTION) { // 취소 버튼을 눌렀을 시
-					System.out.println("테스트메시지 : 취소");
 				}
 			}
 			if(e.getSource().equals(mntmNewMenuItem_register2)){ // 팝업 메뉴에서 등록 버튼 눌렀을 시
 				detailGUI.InitComponents();
 				detailGUI.show();
+				detailGUI.firstOpen();
 			}
-			}
+		}
 		public void mouseReleased (MouseEvent e) { // 마우스가 눌렸다가 때어질때 발생하는 리스너 ((라벨))
 			if(e.isPopupTrigger()) {// 만약 우클릭(팝업트리거 발동)을 했다면 프레임에 해당 좌표에 팝업메뉴 호출
 
@@ -954,6 +957,9 @@ public class MainGUI {
 					if(event.getText().equals("") == false) { // 만약 클릭한 라벨의 텍스트 값이 널값이 아니라면 인식
 						getPopupMenu("label").show(panel_Calendar, e.getX() + e.getComponent().getX() ,
 								e.getY() + e.getComponent().getY());
+						detailGUI.selectYear = calYear;
+						detailGUI.selectMonth = calMonth;
+						detailGUI.selectDayOfMonth = Integer.parseInt(event.getText());
 					}
 				}
 				else if(e.getComponent().getClass().equals(JButton.class)) { // 버튼 우클릭
