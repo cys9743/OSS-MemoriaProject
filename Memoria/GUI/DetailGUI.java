@@ -278,7 +278,6 @@ public class DetailGUI {
 					InitComponents();
 					frame.dispose();
 					}
-				mainGUI.getList();
 				}
 			});
 		
