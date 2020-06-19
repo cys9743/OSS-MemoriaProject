@@ -76,7 +76,34 @@ public class Database {
 		}
 		return false;
 	}
-	
+	public ResultSet getContentsResultSet ( int thisYear, int thisMonth) { // 해당년도와 월에 맞춰서 캘린더에 존재할 수 있는 콘텐츠들을 가져오는 메소드
+		String previousDate = null;
+		String nextDate = null;
+		String date = null;
+		// 20201200 20210100
+		if(Integer.valueOf(thisMonth) == 12 ) {
+			previousDate = String.valueOf(thisYear) + "1100";
+			nextDate = String.valueOf(thisYear+1) + "0100";
+			date = String.valueOf((thisYear + thisMonth + "00"));
+		}
+		else if(Integer.valueOf(thisMonth) < 10 && Integer.valueOf(thisMonth) != 12 ) {
+			previousDate = String.valueOf(thisYear) + "1100";
+			nextDate = String.valueOf(thisYear) + "0" + Integer.valueOf(thisMonth) + "00";
+			date = String.valueOf((thisYear + "0" +thisMonth + "00"));
+		}
+		String sql_select_Contents = "SELECT * \r\n" + 
+				"FROM memoria.contents\r\n" + 
+				"WHERE " +previousDate +">R_DATE AND R_DATE >"+nextDate+"\r\n" + 
+				"OR L_DATE > " + date + " AND R_DATE < " + date + ";";
+		try {
+			
+			return resultset = statement.executeQuery(sql_select_Contents);
+		} catch (SQLException e) {
+			System.out.println("DB콘텐츠 셀렉트 오류 : Database.getContets() ");
+			e.printStackTrace();
+		}
+		return resultset;
+	}
 	//ALTER TABLE contents MODIFY ID INT NOT NULL AUTO_INCREMENT; mysql에서 실행시 ID 값이 자동으로 증가하게 바뀜
 	
 	
