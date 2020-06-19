@@ -119,13 +119,16 @@ public class DetailGUI {
 	/**
 	 * Initialize the contents of the frame.
 	 */
+
+	
+	
 	private void initialize() {
 		// 객체 생성
 		op = new JOptionPane();
 		ml = new MyListener();
 		contents = new Contents();
 		database = new Database();
-		
+				
 		frame = new JFrame();
 		frame.setBounds(100, 100, 721, 612);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -272,8 +275,11 @@ public class DetailGUI {
 					InitComponents();
 					frame.dispose();
 					}
+				mainGUI.getList();
 				}
 			});
+		
+	
 		button_apply.setBounds(607, 540, 85, 23);
 		frame.getContentPane().add(button_apply);
 		

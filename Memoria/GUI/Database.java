@@ -18,6 +18,7 @@ public class Database {
 	
 	ArrayList <String> dbTitle = new ArrayList<>();
 	
+	MainGUI mainGUI;
 	private Connection connection;
 	private Statement statement;
 	private ResultSet resultset;
@@ -79,15 +80,13 @@ public class Database {
 	//ALTER TABLE contents MODIFY ID INT NOT NULL AUTO_INCREMENT; mysql에서 실행시 ID 값이 자동으로 증가하게 바뀜
 	
 	
-	public void setId() { // 데이터베이스의 id값을 자동으로 초기화해주는 메소드 
-		String sql_init_id ="ALTER TABLE `contents` AUTO_INCREMENT=1;";
-		String sql_init_id2="SET @COUNT = 0;";
-		String sql_init_id3="UPDATE `contents` SET ID = @COUNT:=@COUNT+1;";
+	public void clearContents() { // 데이터베이스를 초기화해주는 메소드 
+		String sql_init_id ="ALTER TABLE contents AUTO_INCREMENT=1;";
+		String sql_init_id2="DELETE FROM contents";
 				
 		try {
+			statement.executeUpdate(sql_init_id2);
 			statement.executeUpdate(sql_init_id);
-			statement.executeQuery(sql_init_id2);
-			statement.executeUpdate(sql_init_id3);
 		} catch (SQLException e) {
 			System.out.println("DB 테이블 id애트리뷰트 초기화 오류 : Database.SetId()");
 			e.printStackTrace();
@@ -104,6 +103,9 @@ public class Database {
                  while(result.next()) {
                 	 dbTitle.add(result.getString("title"));
                  }
+         }catch(NullPointerException e){
+        	 System.out.println("serachTitle() : 등록되있는 컨탠츠가 없습니다.");
+        	 
          }catch(Exception e){
                 e.printStackTrace();
                 System.out.println("DB 테이블 title 불러오기 실패 : Database.searchTitle()");

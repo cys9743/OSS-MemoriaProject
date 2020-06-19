@@ -7,15 +7,20 @@ import java.awt.GridLayout;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import javax.swing.AbstractListModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -26,6 +31,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileSystemView;
@@ -41,6 +47,7 @@ public class MainGUI {
 	JLabel[][] label_space = new JLabel[6][7];
 	
 	MyListener ml = new MyListener();
+	KeyListener kl = new KeyListener();
 	
 	DetailGUI detailGUI;
 	
@@ -72,10 +79,12 @@ public class MainGUI {
 	
 	JLabel label_Year = new JLabel("2020");
 	JList list_searchlist = new JList();
+	JMenuItem mntm_clear = new JMenuItem("모든 컨탠츠 초기화(A)");
 	
 	Database database;				// 데이터베이스
 	
-	
+	DefaultListModel listModel = new DefaultListModel();
+
 	
 	public static void main(String[] args) {			//////메인 메소드
 		EventQueue.invokeLater(new Runnable() {
@@ -146,7 +155,6 @@ public class MainGUI {
 	
 	public void showToday_auto() {
 		if(label_Month.getText().equals(todayMonth+"월") && label_Year.getText().equals(todayYear+"")) {
-			System.out.print(todayYear);
 			for(int w=0; w<6 ; w++){
 				for(int h=0; h<7;h++){
 					if(label_space[w][h].getText().equals(todayDayOfMonth+"")){	
@@ -309,11 +317,23 @@ public class MainGUI {
 			return popupMenuLabel;
 		
 	}
+	public void checkList() {			//검색을 해서 리스트에 표현해주는 메소드
+		list_searchlist.removeAll();
+		DefaultListModel dm = new DefaultListModel();
+		dm.clear();
+		for(int i =0 ; i<database.dbTitle.size();i++) {
+			if(listModel.get(i).toString().contains(textField_searchField.getText()) && !(listModel.get(i).toString().isEmpty())) {		//리스트모델에있는 리스트들이 검색 텍스트필드에있는 문자가 포함될경우 그리고 텍스트필드가 빈칸이 아닐경우
+				dm.addElement(database.dbTitle.get(i));							//데이터 베이스에서 가져온 제목들을 가져와서 리스트모델에 넣어준다.
+			}
+		}
+		list_searchlist.setModel(dm);				//리스트의 모델을 설정해준다
+		if(textField_searchField.getText().isEmpty()) getList();		//만약 검색 텍스트 필드가 비어있을경우 모든 리스트를 불러온다.
+	}
 	
-	public void getList() {			//불러온 db를 출력해주는 메소드
+	public void getList() {			//불러온 db에서 title을 불러와서 리스트에 출력해주는 메소드
 		database.dbTitle.clear();
+		listModel.clear();
 		database.searchTitle();
-		DefaultListModel listModel = new DefaultListModel();
 		for(int i =0 ; i<database.dbTitle.size();i++) {
 			listModel.addElement(database.dbTitle.get(i));
 		}
@@ -334,7 +354,8 @@ public class MainGUI {
 	
 	private void initialize() {
 		setToday();
-		
+		list_searchlist.setBorder(new LineBorder(new Color(105, 105, 105)));
+
 		SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
 		SimpleDateFormat format2 = new SimpleDateFormat ( "yyyy년 MM월dd일 HH시mm분ss초");
 				
@@ -350,10 +371,11 @@ public class MainGUI {
 		frame.setBounds(100, 100, 1360, 768);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		panel_Calendar.setBorder(new LineBorder(new Color(128, 128, 128)));
 		
 		
 		
-		panel_Calendar.setBounds(231, 0, 1113, 610);
+		panel_Calendar.setBounds(231, 0, 1113, 609);
 		frame.getContentPane().add(panel_Calendar);
 		panel_Calendar.setLayout(null);
 		panel_Calendar.addMouseListener(ml);
@@ -829,18 +851,19 @@ public class MainGUI {
 		panel_Calendar.add(label_space[5][6]);
 		
 		JPanel panel_Search = new JPanel();
-		panel_Search.setBounds(0, 26, 232, 584);
+		panel_Search.setBorder(new LineBorder(new Color(105, 105, 105)));
+		panel_Search.setBounds(0, 49, 232, 560);
 		frame.getContentPane().add(panel_Search);
 		panel_Search.setLayout(new GridLayout(0, 1, 0, 0));
-		
+	
 		
 		list_searchlist.setVisibleRowCount(12);
-		list_searchlist.setBorder(new LineBorder(Color.GRAY));
 
 		panel_Search.add(list_searchlist);
 		
 		JPanel panel_South = new JPanel();
-		panel_South.setBounds(0, 608, 1344, 100);
+		panel_South.setBorder(new LineBorder(new Color(128, 128, 128)));
+		panel_South.setBounds(0, 609, 1345, 98);
 		frame.getContentPane().add(panel_South);
 		panel_South.setLayout(null);
 		
@@ -855,6 +878,7 @@ public class MainGUI {
 		JLabel label_filesize = new JLabel("\uD30C\uC77C \uD06C\uAE30 :");
 		label_filesize.setBounds(12, 60, 307, 15);
 		panel_South.add(label_filesize);
+		label_Month.setFont(new Font("굴림", Font.BOLD, 16));
 		
 
 		label_Month.setHorizontalAlignment(SwingConstants.CENTER);
@@ -865,28 +889,46 @@ public class MainGUI {
 		label_Year.setHorizontalAlignment(SwingConstants.CENTER);
 		label_Year.setBounds(671, 10, 57, 25);
 		panel_South.add(label_Year);
+		btn_Backward.setBackground(new Color(255, 192, 203));
 		
 
 		btn_Backward.setBounds(574, 20, 69, 44);
 		panel_South.add(btn_Backward);
 		btn_Backward.addActionListener(ml);
+		btn_Forward.setBackground(new Color(135, 206, 235));
 		
 		btn_Forward.addActionListener(ml);
 		btn_Forward.setBounds(752, 20, 68, 44);
 		panel_South.add(btn_Forward);
+		btn_today.setBackground(new Color(255, 248, 220));
 		
 	
 		btn_today.setBounds(665, 67, 69, 23);
 		panel_South.add(btn_today);
 		
 		textField_searchField = new JTextField();
+		textField_searchField.setText("검색...");
+		textField_searchField.setFocusTraversalPolicyProvider(true);
+		textField_searchField.setIgnoreRepaint(true);
 		textField_searchField.setBounds(0, 0, 232, 26);
 		frame.getContentPane().add(textField_searchField);
-		textField_searchField.setBorder(new LineBorder(Color.GRAY));
+		textField_searchField.setBorder(new LineBorder(new Color(0, 0, 0), 2));
 		textField_searchField.setHorizontalAlignment(SwingConstants.CENTER);
-		textField_searchField.setText("\uAC80\uC0C9..");
 		textField_searchField.setToolTipText("");
 		textField_searchField.setColumns(10);
+		textField_searchField.addKeyListener(kl);
+		textField_searchField.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if(textField_searchField.getText().equals("검색..."))
+				textField_searchField.setText("");
+			}
+		});
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBorder(new LineBorder(new Color(105, 105, 105)));
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"이름 순", "등록일 순", "마감일 순", "중요도 순"}));
+		comboBox.setBounds(0, 24, 232, 26);
+		frame.getContentPane().add(comboBox);
 		btn_today.addActionListener(ml);
 		
 		//Main 메뉴바 컴포넌트
@@ -908,6 +950,10 @@ public class MainGUI {
 		JMenuItem mntmSetcolor = new JMenuItem("\uC0C9\uC0C1\uC124\uC815(C)"); // 색상변경 메뉴아이템
 		mnNewMenu_1.add(mntmSetcolor);
 		
+		mnNewMenu_1.add(mntm_clear);
+		mntm_clear.addActionListener(ml);
+		
+		
 		// 팝업 메뉴 컴포넌트
 		
 		mntmNewMenuItem_register2 = new JMenuItem("\uB4F1\uB85D(N)"); // 등록 메뉴아이템
@@ -923,7 +969,13 @@ public class MainGUI {
 		//JMenuItem 
 	}
 	
-
+	class KeyListener extends KeyAdapter{	
+		public void keyReleased(KeyEvent e) {		//키보드 키를 눌렀다가 땟을때 실행됨
+			if(e.getSource().equals(textField_searchField)) {
+				checkList();
+			}
+		}
+	}
 	
 	class MyListener extends MouseAdapter implements ActionListener{			//모든 리스너 클래스
 		// 파일 다이얼로그 관련 필드
@@ -942,10 +994,13 @@ public class MainGUI {
 			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // 파일 또는 디렉터리 여는 chooser
 		}
 		public void actionPerformed(ActionEvent e) {
-			
 			if(e.getSource().equals(btn_Forward)) nextMonth();
 			if(e.getSource().equals(btn_Backward)) previousMonth();	
 			if(e.getSource().equals(btn_today)) showToday();
+			if(e.getSource().equals(mntm_clear)) {
+				database.clearContents();
+				getList();
+			}
 			if(e.getSource().equals(mntmNewMenuItem_open)) {// || mntmN
 				returnChoice = chooser.showOpenDialog(null); // 다이얼로그 오픈 
 				
@@ -978,7 +1033,13 @@ public class MainGUI {
 					getPopupMenu("button").show(panel_Calendar, e.getX() , e.getY());
 				}
 			}
-		}		
+			
+			
+		}
+		public void mouseCliked(MouseEvent e) {
+		}
+		public void mouseEntered(MouseEvent e) {
+		}
 	}
 }
 
