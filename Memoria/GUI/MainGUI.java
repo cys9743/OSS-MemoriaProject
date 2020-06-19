@@ -2,6 +2,7 @@ package Memoria.GUI;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.SystemColor;
@@ -14,6 +15,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -40,11 +43,13 @@ public class MainGUI {
 	
 	private JFrame frame;
 	private JTextField textField_searchField;
+	
 	Calendar cal = Calendar.getInstance();
 
 	JPanel panel_Calendar = new JPanel();
 	
 	JLabel[][] label_space = new JLabel[6][7];
+	private JLabel[] label_contentsTitle = new JLabel[100]; // 캘린더에 표시될 콘텐츠 라벨의 최대개수
 	
 	MyListener ml = new MyListener();
 	KeyListener kl = new KeyListener();
@@ -102,12 +107,68 @@ public class MainGUI {
 			}
 		});	
 	}
+	public void setContentsToCalendar(String title, int index, int h){   	// 켈린더 라벨에 콘텐츠 라벨을 부착하는 메소드
 
-
-	public void getContentsInfo() { 		// DB에서 콘텐츠 정보 받아오는 메소드
+			if(label_space[h/7][h%7].getText() != "") { 		//만약 캘린더에 라벨에 숫자가 표시되어있지 않으면 실행안함
+			label_contentsTitle[index] = new JLabel(title);
+			label_contentsTitle[index].setBounds(label_space[h/7][h%7].getX(),label_space[h/7][h%7].getY(), 6, 97);
+			label_space[h/7][h%7].add(label_contentsTitle[index]);
+			}
+	}
+	public int installContents(ResultSet resultSet) {		// 이번달에 표시할 수 있는 컨텐츠들을 가져와서 주기에 따라 캘린더에 컨텐츠를 표시하는 메소드
+		int labelIndex = 0;
+		int r_date = 0;
+		int l_date = 0;
+		int extraDate = 0;
+		int resultDay = 0;
+		String todaydate = "";
+		int w = 0;
+		int h = -1;
+		int cnt = 0;
+		String title = "";
 		
+		try {
+			while(resultSet.next()) {	
+				cnt = 0;
+				extraDate = 0;
+				title = resultSet.getString("TITLE");
+				r_date = Integer.valueOf(resultSet.getString("R_DATE"));
+				l_date = Integer.valueOf(resultSet.getString("L_DATE"));
+				
+				if(calMonth <= 10)								
+					todaydate = String.valueOf(todayYear) + "0" + String.valueOf(calMonth);
+				else
+					todaydate = todaydate = String.valueOf(todayYear) + String.valueOf(calMonth);
+				
+					for (int i = calMonth ; i > Integer.valueOf(String.valueOf(r_date).substring(4, 6)); i--) {   // 만약 불러온 컨텐츠의 등록날짜가 지난 달에 속한다면 그 날짜와의 차이를 구한다.
+						extraDate += (100 - calLastDate[i]);	// 여기서의 extraDate는 등록된 컨텐츠의 등록된 시점부터 해당하는 달의 마지막 날짜를 각각 100에서 빼서 더한 값이다.
+					}
+					resultDay = (r_date - ((Integer.valueOf(todaydate) * 100 - extraDate)) - 1);  // resultDay = 콘텐츠에 등록일수와 이번달 1일의 차이값 
+					extraDate = (l_date - Integer.valueOf(todaydate) * 100); // 여기서의 extraDate는 이번달의 등록된 콘텐츠에 대한 마감일 D-day이다.
+	
+					while( resultDay <= calLastDate[calMonth] && extraDate > 0 ) {			// 이번달의 마지막 날 까지 resultDay를 증가시킨다.
+						cnt++;
+						if(resultDay >= 0 ) {
+							h = startDateOfMonth(cal) + resultDay;			//이번 달의 시작일과 resultDay를 더해서 GUI에 표시할 콘텐츠의 등록일을 구한다.
+							if(cnt == 1 || cnt == 8 || cnt == 16 || (cnt % 30) == 0 && resultDay != 0) { 	// 콘텐츠 등록날로부터 기억 주기 (당일, 7일 후, 8일 후, 이후 30일 지날때마다 쭉..)가 되면
+								setContentsToCalendar(title, labelIndex, h);  			// 컨텐츠 라벨을 캘린더 라벨에 배치하는 메소드
+								labelIndex ++;
+							}
+							extraDate--;
+							h++;
+						}
+						resultDay++;	
+					}
+					labelIndex++;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return labelIndex;
 	}
 	
+
 	public void setToday(){				// 오늘의 날짜 설정하는 메소드
 		calYear = cal.get(Calendar.YEAR); 
 		calMonth = cal.get(Calendar.MONTH)+1;
@@ -217,6 +278,7 @@ public class MainGUI {
 		for (int i=0;i<6;i++){
 			for(int j=0;j<7;j++){
 				label_space[i][j].setText("");
+				label_space[i][j].removeAll();    	// 등록된 컨텐츠를 없애는 명령
 			}
 		}
 	}
@@ -228,6 +290,7 @@ public class MainGUI {
 			cal.set(Calendar.DAY_OF_MONTH, 1);
 			clearCal();
 			showCal(cal);
+			installContents(database.getContentsResultSet(calYear, calMonth)); 
 			btn_Backward.setText(calMonth-1+"월");
 			btn_Forward.setText((calMonth+1)+"월");
 			label_Month.setText(calMonth+"월");
@@ -246,6 +309,7 @@ public class MainGUI {
 			cal.set(Calendar.DAY_OF_MONTH, 1);
 			clearCal();
 			showCal(cal);
+			installContents(database.getContentsResultSet(calYear, calMonth)); 
 			label_Month.setText(calMonth+"월");
 			calYear++;
 			label_Year.setText(calYear+"");
@@ -273,6 +337,7 @@ public class MainGUI {
 			cal.set(Calendar.DAY_OF_MONTH, 1);
 			clearCal();
 			showCal(cal);
+			installContents(database.getContentsResultSet(calYear, calMonth)); 
 			label_Month.setText(calMonth+"월");
 			label_Year.setText(calYear+"");
 			
@@ -291,6 +356,7 @@ public class MainGUI {
 			cal.set(Calendar.DAY_OF_MONTH, 1);
 			clearCal();
 			showCal(cal);
+			installContents(database.getContentsResultSet(calYear, calMonth)); 
 			btn_Backward.setText(calMonth-1+"월");
 			btn_Forward.setText((calMonth+1)+"월");
 			label_Month.setText(calMonth+"월");
@@ -348,6 +414,7 @@ public class MainGUI {
 		
 		initialize();
 		showCal(cal);
+		installContents(database.getContentsResultSet(todayYear, calMonth)); 
 		getList();
 
 	}
@@ -451,6 +518,7 @@ public class MainGUI {
 			{
 				label_space[i][j] = new JLabel("");			//맨위의 필드에서 생성해준 라벨들을 여기서 초기화 (안하면 에러뜸)
 				label_space[i][j].addMouseListener(ml);
+				label_space[i][j].setLayout(new FlowLayout(FlowLayout.CENTER, 150 ,5));
 			}
 		}
 		
