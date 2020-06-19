@@ -24,6 +24,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileSystemView;
+import javax.swing.JCheckBox;
 
 public class DetailGUI {
 
@@ -57,6 +58,8 @@ public class DetailGUI {
 	int selectYear;
 	int selectMonth;
 	int selectDayOfMonth;
+	private JTextField textField_deadLineHour;
+	private JTextField textField_deadLineMinute;
 	/**
 	 * Launch the application.
 	 */
@@ -374,6 +377,41 @@ public class DetailGUI {
 		textField_deadLineDay.setColumns(10);
 		textField_deadLineDay.setBounds(212, 520, 57, 21);
 		frame.getContentPane().add(textField_deadLineDay);
+		
+		JLabel label_text_notification = new JLabel("마감전 알림");
+		label_text_notification.setFont(new Font("굴림", Font.BOLD, 12));
+		label_text_notification.setBounds(283, 337, 135, 15);
+		frame.getContentPane().add(label_text_notification);
+		
+		JComboBox comboBox_notification = new JComboBox();
+		comboBox_notification.setModel(new DefaultComboBoxModel(new String[] {"하루전", "1시간전", "10분전", "1분전", "10초전", "없음"}));
+		comboBox_notification.setBounds(283, 359, 156, 21);
+		frame.getContentPane().add(comboBox_notification);
+		
+		JCheckBox checkBox_notification = new JCheckBox("기억주기 자동 알림");
+		checkBox_notification.setSelected(true);
+		checkBox_notification.setBounds(283, 401, 156, 23);
+		frame.getContentPane().add(checkBox_notification);
+		
+		textField_deadLineHour = new JTextField();
+		textField_deadLineHour.setColumns(10);
+		textField_deadLineHour.setBounds(311, 520, 57, 21);
+		frame.getContentPane().add(textField_deadLineHour);
+		
+		JLabel label_text_deadLineHour = new JLabel("시");
+		label_text_deadLineHour.setFont(new Font("새굴림", Font.PLAIN, 12));
+		label_text_deadLineHour.setBounds(379, 526, 19, 15);
+		frame.getContentPane().add(label_text_deadLineHour);
+		
+		textField_deadLineMinute = new JTextField();
+		textField_deadLineMinute.setColumns(10);
+		textField_deadLineMinute.setBounds(410, 520, 57, 21);
+		frame.getContentPane().add(textField_deadLineMinute);
+		
+		JLabel label_text_deadLineMinute = new JLabel("분");
+		label_text_deadLineMinute.setFont(new Font("새굴림", Font.PLAIN, 12));
+		label_text_deadLineMinute.setBounds(478, 526, 19, 15);
+		frame.getContentPane().add(label_text_deadLineMinute);
 		textField_deadLineDay.addKeyListener(ml);
 
 		// 파일 다이얼로그 세팅
