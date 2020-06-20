@@ -33,9 +33,12 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
 import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileSystemView;
 
@@ -52,6 +55,7 @@ public class MainGUI {
 	private JLabel[] label_contentsTitle = new JLabel[100]; // 캘린더에 표시될 콘텐츠 라벨의 최대개수
 	
 	MyListener ml = new MyListener();
+	MyContentsListener cl = new MyContentsListener();
 	KeyListener kl = new KeyListener();
 	
 	DetailGUI detailGUI;
@@ -80,7 +84,7 @@ public class MainGUI {
 	JMenuItem mntmNewMenuItem_register2;
 	
 	JPopupMenu popupMenuLabel = new JPopupMenu();
-	JPopupMenu popupMenuButton = new JPopupMenu();
+	JPopupMenu popupMenuComponents = new JPopupMenu();
 	
 	JLabel label_Year = new JLabel("2020");
 	JList list_searchlist = new JList();
@@ -108,11 +112,13 @@ public class MainGUI {
 		});	
 	}
 	public void setContentsToCalendar(String title, int index, int h){   	// 켈린더 라벨에 콘텐츠 라벨을 부착하는 메소드
-
+			int location = label_space[h/7][h%7].getComponentCount() * 25;
 			if(label_space[h/7][h%7].getText() != "") { 		//만약 캘린더에 라벨에 숫자가 표시되어있지 않으면 실행안함
 			label_contentsTitle[index] = new JLabel(title);
-			label_contentsTitle[index].setBounds(label_space[h/7][h%7].getX(),label_space[h/7][h%7].getY(), 6, 97);
+			label_contentsTitle[index].setBounds(10,20 + location, 135, 20);
+			label_contentsTitle[index].setOpaque(true);
 			label_space[h/7][h%7].add(label_contentsTitle[index]);
+			label_contentsTitle[index].addMouseListener(ml);
 			}
 	}
 	public int installContents(ResultSet resultSet) {		// 이번달에 표시할 수 있는 컨텐츠들을 가져와서 주기에 따라 캘린더에 컨텐츠를 표시하는 메소드
@@ -152,6 +158,12 @@ public class MainGUI {
 							h = startDateOfMonth(cal) + resultDay;			//이번 달의 시작일과 resultDay를 더해서 GUI에 표시할 콘텐츠의 등록일을 구한다.
 							if(cnt == 1 || cnt == 8 || cnt == 16 || (cnt % 30) == 0 && resultDay != 0) { 	// 콘텐츠 등록날로부터 기억 주기 (당일, 7일 후, 8일 후, 이후 30일 지날때마다 쭉..)가 되면
 								setContentsToCalendar(title, labelIndex, h);  			// 컨텐츠 라벨을 캘린더 라벨에 배치하는 메소드
+								if(cnt == 1)
+									label_contentsTitle[labelIndex].setBackground(Color.RED);
+								else if(cnt % 30 == 0)
+									label_contentsTitle[labelIndex].setBackground(Color.BLUE);
+								else 
+									label_contentsTitle[labelIndex].setBackground(Color.GRAY);
 								labelIndex ++;
 							}
 							extraDate--;
@@ -278,6 +290,7 @@ public class MainGUI {
 		for (int i=0;i<6;i++){
 			for(int j=0;j<7;j++){
 				label_space[i][j].setText("");
+				new JScrollPane(label_space[i][j]);
 				label_space[i][j].removeAll();    	// 등록된 컨텐츠를 없애는 명령
 			}
 		}
@@ -376,8 +389,8 @@ public class MainGUI {
 	
 	public JPopupMenu getPopupMenu(String type){ // 팝업메뉴 객체를 반환하는 메소드
 		
-		if(type.equals("btn"))
-			return popupMenuButton;
+		if(type.equals("label_components"))
+			return popupMenuComponents;
 		
 		else
 			return popupMenuLabel;
@@ -518,7 +531,7 @@ public class MainGUI {
 			{
 				label_space[i][j] = new JLabel("");			//맨위의 필드에서 생성해준 라벨들을 여기서 초기화 (안하면 에러뜸)
 				label_space[i][j].addMouseListener(ml);
-				label_space[i][j].setLayout(new FlowLayout(FlowLayout.CENTER, 150 ,5));
+				label_space[i][j].setLayout(null);
 			}
 		}
 		
@@ -1030,8 +1043,8 @@ public class MainGUI {
 		JMenuItem mntmNewMenuItem_fix = new JMenuItem("수정(F)"); // 수정 메뉴아이템
 		JMenuItem mntmNewMenuItem_remove = new JMenuItem("삭제(R)"); // 삭제 메뉴아이템
 		
-		popupMenuButton.add(mntmNewMenuItem_remove);
-		popupMenuButton.add(mntmNewMenuItem_fix);
+		popupMenuComponents.add(mntmNewMenuItem_remove);
+		popupMenuComponents.add(mntmNewMenuItem_fix);
 		
 		popupMenuLabel.add(mntmNewMenuItem_register2);
 		//JMenuItem 
@@ -1042,6 +1055,18 @@ public class MainGUI {
 			if(e.getSource().equals(textField_searchField)) {
 				checkList();
 			}
+		}
+	}
+	class MyContentsListener extends MouseAdapter{
+		
+		
+		public void mouseRelased (MouseEvent e) {
+			
+			if(e.isPopupTrigger()) {
+				System.out.println("아아");
+				getPopupMenu("label_components").show(panel_Calendar, e.getX() + e.getComponent().getX() ,
+						e.getY() + e.getComponent().getY());
+			};
 		}
 	}
 	
@@ -1084,21 +1109,24 @@ public class MainGUI {
 			}
 		}
 		public void mouseReleased (MouseEvent e) { // 마우스가 눌렸다가 때어질때 발생하는 리스너 ((라벨))
+			System.out.println("22");
 			if(e.isPopupTrigger()) {// 만약 우클릭(팝업트리거 발동)을 했다면 프레임에 해당 좌표에 팝업메뉴 호출
-
+				
 				if(e.getComponent().getClass().equals(JLabel.class)) {  // 라벨 우클릭
 					JLabel event = (JLabel)e.getSource();
-					
-					if(event.getText().equals("") == false) { // 만약 클릭한 라벨의 텍스트 값이 널값이 아니라면 인식
+					System.out.println(event.getParent().getClass().getName());
+					if(event.getText().equals("") == false  &&  event.getParent().getClass().getName().equals("javax.swing.JPanel")) { // 만약 클릭한 라벨의 텍스트 값이 널값이 아니라면 인식
 						getPopupMenu("label").show(panel_Calendar, e.getX() + e.getComponent().getX() ,
 								e.getY() + e.getComponent().getY());
 						detailGUI.selectYear = calYear;
 						detailGUI.selectMonth = calMonth;
 						detailGUI.selectDayOfMonth = Integer.parseInt(event.getText());
 					}
-				}
-				else if(e.getComponent().getClass().equals(JButton.class)) { // 버튼 우클릭
-					getPopupMenu("button").show(panel_Calendar, e.getX() , e.getY());
+					else if(event.getText().equals("") == false)
+					{
+						getPopupMenu("label_components").show(panel_Calendar, event.getParent().getX() + e.getX()  + e.getComponent().getX(),
+								e.getY() + event.getParent().getY() + e.getComponent().getY());
+					} 
 				}
 			}
 			
