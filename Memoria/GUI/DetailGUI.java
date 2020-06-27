@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -123,6 +125,23 @@ public class DetailGUI {
 	 * Initialize the contents of the frame.
 	 */
 
+	
+	public void setDetail() {
+		
+		textField_title.setText(database.dbTitle);
+		textField_content.setText(database.dbText);
+		System.out.println(database.db_r_date);
+		textField_addContentYear.setText(database.db_r_date.substring(0,4));
+		textField_addContentMonth.setText(database.db_r_date.substring(4,6));
+		textField_addContentDay.setText(database.db_r_date.substring(6,8));	
+		textField_deadLineYear.setText(database.db_l_date.substring(0,4));
+		textField_deadLineMonth.setText(database.db_l_date.substring(4,6));
+		textField_deadLineDay.setText(database.db_l_date.substring(6,8));
+		label_path.setText("");
+		label_fileSize.setText("");
+		label_fileKind.setText("");
+		label_lastModify.setText("");
+	}
 	
 	
 	private void initialize() {
@@ -434,7 +453,7 @@ public class DetailGUI {
 		public void setContents(){ 			// DetailGUI의 컴포넌트에서 값을 파싱하는 메소드 
 			this.title = textField_title.getText();
 			this.text = textField_content.getText();
-			this.priority = comboBox_star.getItemCount() ;
+			this.priority = comboBox_star.getItemCount()-1;
 			this.registerDate = textField_addContentYear.getText()+textField_addContentMonth.getText()+textField_addContentDay.getText();	
 			this.lastDate = textField_deadLineYear.getText()+textField_deadLineMonth.getText()+textField_deadLineDay.getText();
 			this.fileLink = label_path.getText();
@@ -462,7 +481,7 @@ public class DetailGUI {
 	}
 
 	
-	class MyListener implements KeyListener, ActionListener{			//모든 리스너 클래스
+	class MyListener extends MouseAdapter implements KeyListener, ActionListener{			//모든 리스너 클래스
 		// 파일 다이얼로그 관련 필드
 		JFileChooser chooser; 
 		int returnChoice;
@@ -524,6 +543,10 @@ public class DetailGUI {
 			if(e.getSource().equals(button_cancel)) {		//취소버튼 누를경우
 				frame.dispose();
 			}
+		}
+		
+		public void mouseCliked(MouseEvent e) {
+		
 		}
 	}
 }
