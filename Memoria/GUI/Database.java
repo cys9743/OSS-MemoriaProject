@@ -79,6 +79,22 @@ public class Database {
 		}
 		return false;
 	}
+	public boolean removeContents(String title) {		//받아온 문자열에 해당하는 콘텐츠를 DB에서 삭제하는 메소드. 정상삭제하면 TRUE 실패나 오류는 FALSE.
+		try {	
+			
+			String sql_remove_selected_contents = "DELETE FROM memoria.contents WHERE " // 가져온 타이틀에 해당하는 콘텐츠를 삭제하는 쿼리문
+					+ "TITLE='" + title +"';";
+			
+				statement.executeUpdate(sql_remove_selected_contents);
+				setId();
+				System.out.println(title + "컨텐츠  삭제 성공");
+				return true;
+		}catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("DB콘텐츠 삭제 오류 : Database.removeContents() ");
+		}
+		return false;
+	}
 	public ResultSet getContentsResultSet ( int thisYear, int thisMonth) { // 해당년도와 월에 맞춰서 캘린더에 존재할 수 있는 콘텐츠들을 가져오는 메소드
 		String previousDate = null;
 		String nextDate = null;

@@ -81,6 +81,8 @@ public class MainGUI {
 	
 	JMenuItem mntmNewMenuItem_open;
 	JMenuItem mntmNewMenuItem_register2;
+	JMenuItem mntmNewMenuItem_fix;
+	JMenuItem mntmNewMenuItem_remove;
 	
 	JPopupMenu popupMenuLabel = new JPopupMenu();
 	JPopupMenu popupMenuComponents = new JPopupMenu();
@@ -92,6 +94,8 @@ public class MainGUI {
 	Database database;				// 데이터베이스
 	
 	DefaultListModel listModel = new DefaultListModel();
+	
+	String tempTitle;		// 사용자가 클릭한 컨텐츠의 이름을 임시저장하는 변수
 
 	
 	public static void main(String[] args) {			//////메인 메소드
@@ -418,7 +422,14 @@ public class MainGUI {
 		list_searchlist.setModel(listModel);			//searchList에 listModel을 설정
 	}
 	
-
+	// 사용자가 클릭한 컨텐츠의 이름을 임시저장하는 메소드
+	public void setContentsTitle(String tempTitle){
+		this.tempTitle = tempTitle;
+	}
+	// 사용자가 클릭한 컨텐츠의 이름을 반환하는 메소드
+	public String getContentsTitle() {
+		return tempTitle;
+	}
 	
 	public MainGUI() { // 생성자
 		detailGUI = new DetailGUI();
@@ -1039,8 +1050,11 @@ public class MainGUI {
 		mntmNewMenuItem_register2 = new JMenuItem("\uB4F1\uB85D(N)"); // 등록 메뉴아이템
 		mntmNewMenuItem_register2.addActionListener(ml);
 		
-		JMenuItem mntmNewMenuItem_fix = new JMenuItem("수정(F)"); // 수정 메뉴아이템
-		JMenuItem mntmNewMenuItem_remove = new JMenuItem("삭제(R)"); // 삭제 메뉴아이템
+		mntmNewMenuItem_fix = new JMenuItem("수정(F)"); // 수정 메뉴아이템
+		mntmNewMenuItem_fix.addActionListener(ml);
+		
+		mntmNewMenuItem_remove = new JMenuItem("삭제(R)"); // 삭제 메뉴아이템
+		mntmNewMenuItem_remove.addActionListener(ml);
 		
 		popupMenuComponents.add(mntmNewMenuItem_remove);
 		popupMenuComponents.add(mntmNewMenuItem_fix);
@@ -1106,6 +1120,12 @@ public class MainGUI {
 				detailGUI.show();
 				detailGUI.firstOpen();
 			}
+			if(e.getSource().equals(mntmNewMenuItem_fix)){ // 팝업 메뉴에서 수정 버튼 눌렀을 시
+				System.out.println("수정버튼 테스트");
+			}
+			if(e.getSource().equals(mntmNewMenuItem_remove)){ // 팝업 메뉴에서 제거 버튼 눌렀을 시
+				database.removeContents(getContentsTitle());
+			}
 		}
 		public void mouseReleased (MouseEvent e) { // 마우스가 눌렸다가 때어질때 발생하는 리스너 ((라벨))
 			System.out.println("22");
@@ -1121,10 +1141,12 @@ public class MainGUI {
 						detailGUI.selectMonth = calMonth;
 						detailGUI.selectDayOfMonth = Integer.parseInt(event.getText());
 					}
-					else if(event.getText().equals("") == false)
+					else if(event.getText().equals("") == false)	// (우)클릭한 라벨이 컨텐츠일 경우
 					{
 						getPopupMenu("label_components").show(panel_Calendar, event.getParent().getX() + e.getX()  + e.getComponent().getX(),
 								e.getY() + event.getParent().getY() + e.getComponent().getY());
+						setContentsTitle(event.getText()); // 임시로 우측클릭한 라벨의 title을 저장하기 위한 메소드.
+						
 					} 
 				}
 			}
