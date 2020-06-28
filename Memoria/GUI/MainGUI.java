@@ -166,7 +166,10 @@ public class MainGUI {
 								else if((extraDate - resultDay) < 0) // 마지막으로 표기된 라벨이 마지막이 되었을 경우
 									label_contentsTitle[labelIndex].setBackground(Color.BLUE);
 								else // 등록일과 마감일 사이의 경우
+								{
+									if(label_contentsTitle[labelIndex] != null)
 									label_contentsTitle[labelIndex].setBackground(Color.GRAY);
+								}
 								labelIndex ++;
 							}
 							extraDate--;
@@ -1085,6 +1088,7 @@ public class MainGUI {
 	
 	class MyListener extends MouseAdapter implements ActionListener{			//모든 리스너 클래스
 		// 파일 다이얼로그 관련 필드
+		JLabel event;
 		JFileChooser chooser; 
 		
 		int returnChoice;
@@ -1100,6 +1104,7 @@ public class MainGUI {
 			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // 파일 또는 디렉터리 여는 chooser
 		}
 		public void actionPerformed(ActionEvent e) {
+			
 			if(e.getSource().equals(btn_Forward)) nextMonth();
 			if(e.getSource().equals(btn_Backward)) previousMonth();	
 			if(e.getSource().equals(btn_today)) showToday();
@@ -1121,7 +1126,9 @@ public class MainGUI {
 				detailGUI.firstOpen();
 			}
 			if(e.getSource().equals(mntmNewMenuItem_fix)){ // 팝업 메뉴에서 수정 버튼 눌렀을 시
-				System.out.println("수정버튼 테스트");
+				detailGUI.setComponents(
+						database.getSeletedContentsInfo(event.getText()));
+				detailGUI.show();
 			}
 			if(e.getSource().equals(mntmNewMenuItem_remove)){ // 팝업 메뉴에서 제거 버튼 눌렀을 시
 				database.removeContents(getContentsTitle());
@@ -1132,7 +1139,7 @@ public class MainGUI {
 			if(e.isPopupTrigger()) {// 만약 우클릭(팝업트리거 발동)을 했다면 프레임에 해당 좌표에 팝업메뉴 호출
 				
 				if(e.getComponent().getClass().equals(JLabel.class)) {  // 라벨 우클릭
-					JLabel event = (JLabel)e.getSource();
+					event = (JLabel)e.getSource();
 					System.out.println(event.getParent().getClass().getName());
 					if(event.getText().equals("") == false  &&  event.getParent().getClass().getName().equals("javax.swing.JPanel")) { // 만약 클릭한 라벨의 텍스트 값이 널값이 아니라면 인식
 						getPopupMenu("label").show(panel_Calendar, e.getX() + e.getComponent().getX() ,

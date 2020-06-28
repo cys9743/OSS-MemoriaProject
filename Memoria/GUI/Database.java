@@ -41,7 +41,6 @@ public class Database {
 			e.printStackTrace();
 		}
 	}
-	
 	public boolean registerContents(String title, String text, int priority, String registerDate, String lastDate, String fileLink ) {//DB에서 콘텐츠를 조회하고 존재하면 FALSE 리턴, 존재하지 않으면 매개변수 DB에 삽입하고 TRUE 리턴, 나머지 안되는경우에도 FALSE
 		try {	
 
@@ -124,8 +123,17 @@ public class Database {
 		return resultset;
 	}
 	//ALTER TABLE contents MODIFY ID INT NOT NULL AUTO_INCREMENT; mysql에서 실행시 ID 값이 자동으로 증가하게 바뀜
-	
-	
+	public ResultSet getSeletedContentsInfo(String title) {
+		try {	
+			String sql_search_selected_contents = "SELECT * FROM memoria.contents WHERE " // 완전히 
+					+ "TITLE='" + title + "';";
+			return resultset = statement.executeQuery(sql_search_selected_contents);
+		}catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("DB콘텐츠 검색 오류 : Database.getSelectedContentsInfo()");
+		}
+		return resultset;
+	}
 	public void clearContents() { // 데이터베이스를 초기화해주는 메소드 
 		String sql_init_id2="DELETE FROM contents";
 				

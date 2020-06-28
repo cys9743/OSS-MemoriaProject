@@ -8,6 +8,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -101,9 +103,57 @@ public class DetailGUI {
 		return contents;
 	}
 	
+	public void setComponents(ResultSet resultSet) {
+			try {
+				resultSet.next();
+				textField_title.setText(resultSet.getString("TITLE"));
+				textField_content.setText(resultSet.getString("TEXT"));
+				comboBox_star.setSelectedIndex(Integer.parseInt(resultSet.getString("PRIORITY")) - 1);
+				
+				textField_addContentYear.setText(resultSet.getString("R_DATE").substring(0, 4));
+				textField_addContentMonth.setText(resultSet.getString("R_DATE").substring(4, 6));
+				textField_addContentDay.setText(resultSet.getString("R_DATE").substring(6, 8));
+				
+				textField_deadLineYear.setText(resultSet.getString("L_DATE").substring(0, 4));
+				textField_deadLineMonth.setText(resultSet.getString("L_DATE").substring(4, 6));
+				textField_deadLineDay.setText(resultSet.getString("L_DATE").substring(6, 8));
+				
+				setFileInfo(resultSet.getString("F_LINK"));
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
 	boolean getVisible() {
 		return this.frame.isVisible();
 	}
+	
+	public void setFileInfo(String filepath) {
+		System.out.println(filepath);
+		int index;
+		File myfile;
+		String extension;
+		SimpleDateFormat simpleDateFormat;
+		Date lastmodifiedDate;
+
+		label_path.setText(filepath);
+		//확장자 라벨 설정
+		index = filepath.lastIndexOf(".");
+		extension = filepath.substring(index + 1);
+		label_fileKind.setText(extension);
+		//파일 크기 설정
+		myfile = new File(filepath);
+		label_fileSize.setText(Long.toString(myfile.length()) + " Bytes");
+		//파일 수정 날짜 설정
+		simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss aa");
+		lastmodifiedDate = new Date(myfile.lastModified());
+		simpleDateFormat.format(lastmodifiedDate);
+		label_lastModify.setText(simpleDateFormat.format(lastmodifiedDate));
+	
+	}
+	
+	
 	void InitComponents() {
 		textField_title.setText("");
 		textField_content.setText("");
@@ -175,28 +225,12 @@ public class DetailGUI {
 			public void actionPerformed(ActionEvent e) { // 파일추가 버튼 리스너
 				returnChoice = chooser.showOpenDialog(null); // 다이얼로그 오픈 
 				String filepath;
-				int index;
-				File myfile;
-				String extension;
-				SimpleDateFormat simpleDateFormat;
-				Date lastmodifiedDate;
+
 				if(returnChoice == chooser.APPROVE_OPTION) {
 					frame.dispose();
 					//파일 경로 설정
 					filepath = chooser.getSelectedFile().toString();
-					label_path.setText(filepath);
-					//확장자 라벨 설정
-					index = filepath.lastIndexOf(".");
-					extension = filepath.substring(index + 1);
-					label_fileKind.setText(extension);
-					//파일 크기 설정
-					myfile = new File(filepath);
-					label_fileSize.setText(Long.toString(myfile.length()) + " Bytes");
-					//파일 수정 날짜 설정
-					simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss aa");
-					lastmodifiedDate = new Date(myfile.lastModified());
-					simpleDateFormat.format(lastmodifiedDate);
-					label_lastModify.setText(simpleDateFormat.format(lastmodifiedDate));
+					setFileInfo(filepath);
 					frame.setVisible(true);
 				}
 				else if(returnChoice == chooser.CANCEL_OPTION) {
