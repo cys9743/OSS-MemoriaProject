@@ -37,9 +37,12 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileSystemView;
 
 public class MainGUI {
@@ -83,9 +86,12 @@ public class MainGUI {
 	JMenuItem mntmNewMenuItem_register2;
 	JMenuItem mntmNewMenuItem_fix;
 	JMenuItem mntmNewMenuItem_remove;
+	JMenuItem mntmNewMenuItem_fix_list;
+	JMenuItem mntmNewMenuItem_remove_list;
 	
 	JPopupMenu popupMenuLabel = new JPopupMenu();
 	JPopupMenu popupMenuComponents = new JPopupMenu();
+	JPopupMenu popupMenuList = new JPopupMenu();
 	
 	JLabel label_Year = new JLabel("2020");
 	JList list_searchlist = new JList();
@@ -426,6 +432,7 @@ public class MainGUI {
 		
 		if(type.equals("label_components"))
 			return popupMenuComponents;
+		else if (type.equals("list")) return popupMenuList;
 		else
 			return popupMenuLabel;
 	}
@@ -464,7 +471,8 @@ public class MainGUI {
 		dm.clear();
 		for(int i =0 ; i<database.list_dbTitle.size();i++) {
 			if(listModel.get(i).toString().contains(textField_searchField.getText()) && !(listModel.get(i).toString().isEmpty())) {		//리스트모델에있는 리스트들이 검색 텍스트필드에있는 문자가 포함될경우 그리고 텍스트필드가 빈칸이 아닐경우
-				dm.addElement(database.list_dbTitle.get(i));							//데이터 베이스에서 가져온 제목들을 가져와서 리스트모델에 넣어준다.
+				dm.addElement(database.list_dbTitle.get(i));//데이터 베이스에서 가져온 제목들을 가져와서 리스트모델에 넣어준다.
+				
 			}
 		}
 		list_searchlist.setModel(dm);				//리스트의 모델을 설정해준다
@@ -474,7 +482,9 @@ public class MainGUI {
 	private void initialize() {
 		setToday();
 		list_searchlist.setBorder(new LineBorder(new Color(105, 105, 105)));
-
+		list_searchlist.addMouseListener(ml);
+		list_searchlist.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
 		SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
 		SimpleDateFormat format2 = new SimpleDateFormat ( "yyyy년 MM월dd일 HH시mm분ss초");
 				
@@ -975,9 +985,6 @@ public class MainGUI {
 		panel_Search.setBounds(0, 49, 232, 560);
 		frame.getContentPane().add(panel_Search);
 		panel_Search.setLayout(new GridLayout(0, 1, 0, 0));
-	
-		
-		list_searchlist.setVisibleRowCount(12);
 
 		panel_Search.add(list_searchlist);
 		
@@ -1079,10 +1086,20 @@ public class MainGUI {
 		mntmNewMenuItem_remove = new JMenuItem("삭제(R)"); // 삭제 메뉴아이템
 		mntmNewMenuItem_remove.addActionListener(ml);
 		
+		mntmNewMenuItem_fix_list = new JMenuItem("수정(F)"); // 수정 메뉴아이템
+		mntmNewMenuItem_fix_list.addActionListener(ml);
+		
+		mntmNewMenuItem_remove_list = new JMenuItem("삭제(R)"); // 삭제 메뉴아이템
+		mntmNewMenuItem_remove_list.addActionListener(ml);
+		
 		popupMenuComponents.add(mntmNewMenuItem_remove);
 		popupMenuComponents.add(mntmNewMenuItem_fix);
 		
 		popupMenuLabel.add(mntmNewMenuItem_register2);
+		
+		popupMenuList.add(mntmNewMenuItem_fix_list);
+		popupMenuList.add(mntmNewMenuItem_remove_list);
+
 		//JMenuItem 
 	}
 	class MyContentsListener extends MouseAdapter{
@@ -1091,7 +1108,7 @@ public class MainGUI {
 		public void mouseRelased (MouseEvent e) {
 			
 			if(e.isPopupTrigger()) {
-				System.out.println("아아");
+
 				getPopupMenu("label_components").show(panel_Calendar, e.getX() + e.getComponent().getX() ,
 						e.getY() + e.getComponent().getY());
 			};
@@ -1111,6 +1128,7 @@ public class MainGUI {
 		// 파일 다이얼로그 관련 필드
 		JLabel event;
 		JLabel event_parents;
+		JList event_list;
 		JFileChooser chooser; 
 		JLabel label_temp;
 		int returnChoice;
@@ -1154,10 +1172,18 @@ public class MainGUI {
 			if(e.getSource().equals(mntmNewMenuItem_remove)){ // 팝업 메뉴에서 제거 버튼 눌렀을 시
 				database.removeContents(getContentsTitle());
 			}
+			
+			if(e.getSource().equals(mntmNewMenuItem_fix_list)){ // 팝업 메뉴에서 수정 버튼 눌렀을 시
+				detailGUI.setComponents(
+						database.getSeletedContentsInfo(event_list.getSelectedValue().toString()));
+				detailGUI.show();
+			}
+			if(e.getSource().equals(mntmNewMenuItem_remove_list)){ // 팝업 메뉴에서 제거 버튼 눌렀을 시
+				database.removeContents(event_list.getSelectedValue().toString());
+				getList();
+			}
 		}
 		public void mouseReleased (MouseEvent e) { // 마우스가 눌렸다가 때어질때 발생하는 리스너 ((라벨))
-			System.out.println("22");
-            
             if(e.getComponent().getClass().equals(JLabel.class)) {
                 event = (JLabel)e.getSource();
                 
@@ -1199,11 +1225,30 @@ public class MainGUI {
 					} 
 				}
 			}
+			
+
+			if(e.getComponent().equals(list_searchlist) && !(e.isPopupTrigger())) {	// 리스트 선택 후 더블클릭시 불러옴
+				if(e.getClickCount() == 2) {
+					event_list = (JList)e.getSource();
+					detailGUI.setComponents(
+							database.getSeletedContentsInfo(event_list.getSelectedValue().toString()));
+					detailGUI.show();
+					list_searchlist.clearSelection();
+				}
+			}
+			else if (e.getComponent().equals(list_searchlist) && e.isPopupTrigger() && !(((JList)e.getSource()).isSelectionEmpty())) {	//리스트우클릭시 수정 제거섵=ㄴ택
+				getPopupMenu("list").show(list_searchlist, e.getX() + e.getComponent().getX() ,
+						e.getY() + e.getComponent().getY());
+
+			}
+
 		}
 		public void mouseCliked(MouseEvent e) {
+		
 		}
 		public void mouseEntered(MouseEvent e) {
 		}
+
 	}
 }
 
