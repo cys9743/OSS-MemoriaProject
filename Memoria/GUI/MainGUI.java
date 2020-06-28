@@ -1,6 +1,7 @@
 package Memoria.GUI;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -33,7 +34,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
@@ -72,7 +72,6 @@ public class MainGUI {
 	int todayMonth = cal.get(Calendar.MONTH)+1;
 	int todayDayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
 	int todayDayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
-
 	
 	JButton btn_today = new JButton("Today");
 	
@@ -158,11 +157,11 @@ public class MainGUI {
 							h = startDateOfMonth(cal) + resultDay;			//이번 달의 시작일과 resultDay를 더해서 GUI에 표시할 콘텐츠의 등록일을 구한다.
 							if(cnt == 1 || cnt == 8 || cnt == 16 || (cnt % 30) == 0 && resultDay != 0) { 	// 콘텐츠 등록날로부터 기억 주기 (당일, 7일 후, 8일 후, 이후 30일 지날때마다 쭉..)가 되면
 								setContentsToCalendar(title, labelIndex, h);  			// 컨텐츠 라벨을 캘린더 라벨에 배치하는 메소드
-								if(cnt == 1)
+								if(cnt == 1) // 라벨이 처음 표기된 경우
 									label_contentsTitle[labelIndex].setBackground(Color.RED);
-								else if(cnt % 30 == 0)
+								else if((extraDate - resultDay) < 0) // 마지막으로 표기된 라벨이 마지막이 되었을 경우
 									label_contentsTitle[labelIndex].setBackground(Color.BLUE);
-								else 
+								else // 등록일과 마감일 사이의 경우
 									label_contentsTitle[labelIndex].setBackground(Color.GRAY);
 								labelIndex ++;
 							}
@@ -290,7 +289,7 @@ public class MainGUI {
 		for (int i=0;i<6;i++){
 			for(int j=0;j<7;j++){
 				label_space[i][j].setText("");
-				new JScrollPane(label_space[i][j]);
+				
 				label_space[i][j].removeAll();    	// 등록된 컨텐츠를 없애는 명령
 			}
 		}
@@ -546,8 +545,8 @@ public class MainGUI {
 		label_space[0][0].setFont(new Font("占쏙옙占쏙옙", Font.PLAIN, 14));
 		label_space[0][0].setBackground(new Color(255, 255, 255));
 		label_space[0][0].setBounds(0, 26, 159, 97);
-		panel_Calendar.add(label_space[0][0]);
-		label_space[0][0].addMouseListener(ml);
+		panel_Calendar.add(label_space[0][0]);	
+		
 		
 		label_space[0][1].setOpaque(true);
 		label_space[0][1].setBorder(new LineBorder(Color.GRAY));
@@ -556,7 +555,7 @@ public class MainGUI {
 		label_space[0][1].setFont(new Font("占쏙옙占쏙옙", Font.PLAIN, 14));
 		label_space[0][1].setBackground(Color.WHITE);
 		label_space[0][1].setBounds(159, 26, 159, 97);
-		panel_Calendar.add(label_space[0][1]);
+		panel_Calendar.add(label_space[0][1]);	
 		
 		label_space[0][2].setOpaque(true);
 		label_space[0][2].setBorder(new LineBorder(Color.GRAY));
