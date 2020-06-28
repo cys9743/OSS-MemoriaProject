@@ -56,6 +56,7 @@ public class MainGUI {
 	
 	MyListener ml = new MyListener();
 	MyContentsListener cl = new MyContentsListener();
+	KeyListener kl = new KeyListener();
 	
 	DetailGUI detailGUI;
 	
@@ -89,7 +90,7 @@ public class MainGUI {
 	JLabel label_Year = new JLabel("2020");
 	JList list_searchlist = new JList();
 	JMenuItem mntm_clear = new JMenuItem("모든 컨탠츠 초기화(A)");
-	
+	DefaultListModel listModel = new DefaultListModel();
 	Database database;				// 데이터베이스
 	String tempTitle;		// 사용자가 클릭한 컨텐츠의 이름을 임시저장하는 변수
 
@@ -111,13 +112,14 @@ public class MainGUI {
 	}
 	public void setContentsToCalendar(String title, int index, int h){   	// 켈린더 라벨에 콘텐츠 라벨을 부착하는 메소드
 			int location = label_space[h/7][h%7].getComponentCount() * 25;
-			if(label_space[h/7][h%7].getText() != "" && label_space[h/7][h%7].getComponentCount() < 3) { 		//만약 캘린더에 라벨에 숫자가 표시되어있지 않으면 실행안함
-			System.out.println(label_space[h/7][h%7].getComponentCount());
+			if(label_space[h/7][h%7].getText() != "") { 		//만약 캘린더에 라벨에 숫자가 표시되어있지 않으면 실행안함
+
 			label_contentsTitle[index] = new JLabel(title);
-			label_contentsTitle[index].setBounds(10,10 + location, 135, 17);
+			label_contentsTitle[index].setBounds(10,20 + location, 135, 20);
 			label_contentsTitle[index].setOpaque(true);
 			label_space[h/7][h%7].add(label_contentsTitle[index]);
 			label_contentsTitle[index].addMouseListener(ml);
+
 			}
 	}
 	public int installContents(ResultSet resultSet) {		// 이번달에 표시할 수 있는 컨텐츠들을 가져와서 주기에 따라 캘린더에 컨텐츠를 표시하는 메소드
@@ -156,27 +158,15 @@ public class MainGUI {
 						if(resultDay >= 0 ) {
 							h = startDateOfMonth(cal) + resultDay;			//이번 달의 시작일과 resultDay를 더해서 GUI에 표시할 콘텐츠의 등록일을 구한다.
 							if(cnt == 1 || cnt == 8 || cnt == 16 || (cnt % 30) == 0 && resultDay != 0) { 	// 콘텐츠 등록날로부터 기억 주기 (당일, 7일 후, 8일 후, 이후 30일 지날때마다 쭉..)가 되면
-								if(label_space[h/7][h%7].getComponentCount() < 3) {
-									setContentsToCalendar(title, labelIndex, h);  			// 컨텐츠 라벨을 캘린더 라벨에 배치하는 메소드
-									if(cnt == 1) // 라벨이 처음 표기된 경우
-										label_contentsTitle[labelIndex].setBackground(Color.RED);
-									else if((extraDate - resultDay) < 0) // 마지막으로 표기된 라벨이 마지막이 되었을 경우
-										label_contentsTitle[labelIndex].setBackground(Color.BLUE);
-									else // 등록일과 마감일 사이의 경우
-									{
-										if(label_contentsTitle[labelIndex] != null)
-										label_contentsTitle[labelIndex].setBackground(Color.GRAY);
-									}
-								}
-								else if(label_space[h/7][h%7].getComponentCount() == 3){			// 부착할 라벨이 이미 3개의 컴포넌트를 갖고 있는 경우 (더보기)라벨을 부착 
-										label_contentsTitle[labelIndex] = new JLabel("더보기");
-										label_contentsTitle[labelIndex].setBounds(2, 80, 155, 15);
-										label_contentsTitle[labelIndex].setOpaque(true);
-										label_contentsTitle[labelIndex].setBorder(new LineBorder(new Color(105, 105, 105)));
-										label_contentsTitle[labelIndex].setHorizontalAlignment(SwingConstants.CENTER);
-										label_space[h/7][h%7].add(label_contentsTitle[labelIndex]);
-										label_contentsTitle[labelIndex].addMouseListener(ml);
-										setContentsTitle(title);
+								setContentsToCalendar(title, labelIndex, h);  			// 컨텐츠 라벨을 캘린더 라벨에 배치하는 메소드
+								if(cnt == 1) // 라벨이 처음 표기된 경우
+									label_contentsTitle[labelIndex].setBackground(Color.RED);
+								else if((extraDate - resultDay) < 0) // 마지막으로 표기된 라벨이 마지막이 되었을 경우
+									label_contentsTitle[labelIndex].setBackground(Color.BLUE);
+								else // 등록일과 마감일 사이의 경우
+								{
+									if(label_contentsTitle[labelIndex] != null)
+									label_contentsTitle[labelIndex].setBackground(Color.GRAY);
 								}
 								labelIndex ++;
 							}
@@ -253,6 +243,7 @@ public class MainGUI {
 		}
 	}
 	public void showCal(Calendar cal) {			//캘린더에 어디에 날짜를 표시할지 정해주는 메소드
+		getList();
 		switch(startDateOfMonth(cal))			//시작요일을 구하는 메소드
 		{
 			case 0:							//시작 요일이 일요일일 경우
@@ -421,7 +412,32 @@ public class MainGUI {
 		initialize();
 		showCal(cal);
 		installContents(database.getContentsResultSet(todayYear, calMonth)); 
+		getList();
 	}
+	
+	public void getList() {			//불러온 db에서 title을 불러와서 리스트에 출력해주는 메소드
+		database.list_dbTitle.clear();
+		listModel.clear();
+		database.searchTitle();
+		for(int i =0 ; i<database.list_dbTitle.size();i++) {
+			listModel.addElement(database.list_dbTitle.get(i));
+		}
+		list_searchlist.setModel(listModel);			//searchList에 listModel을 설정
+	}
+	
+	public void checkList() {			//검색을 해서 리스트에 표현해주는 메소드
+		list_searchlist.removeAll();
+		DefaultListModel dm = new DefaultListModel();
+		dm.clear();
+		for(int i =0 ; i<database.list_dbTitle.size();i++) {
+			if(listModel.get(i).toString().contains(textField_searchField.getText()) && !(listModel.get(i).toString().isEmpty())) {		//리스트모델에있는 리스트들이 검색 텍스트필드에있는 문자가 포함될경우 그리고 텍스트필드가 빈칸이 아닐경우
+				dm.addElement(database.list_dbTitle.get(i));							//데이터 베이스에서 가져온 제목들을 가져와서 리스트모델에 넣어준다.
+			}
+		}
+		list_searchlist.setModel(dm);				//리스트의 모델을 설정해준다
+		if(textField_searchField.getText().isEmpty()) getList();		//만약 검색 텍스트 필드가 비어있을경우 모든 리스트를 불러온다.
+	}
+	
 	private void initialize() {
 		setToday();
 		list_searchlist.setBorder(new LineBorder(new Color(105, 105, 105)));
@@ -987,6 +1003,7 @@ public class MainGUI {
 		textField_searchField.setHorizontalAlignment(SwingConstants.CENTER);
 		textField_searchField.setToolTipText("");
 		textField_searchField.setColumns(10);
+		textField_searchField.addKeyListener(kl);
 		
 		JComboBox comboBox = new JComboBox();
 		comboBox.setBorder(new LineBorder(new Color(105, 105, 105)));
@@ -1045,8 +1062,18 @@ public class MainGUI {
 				getPopupMenu("label_components").show(panel_Calendar, e.getX() + e.getComponent().getX() ,
 						e.getY() + e.getComponent().getY());
 			};
+
 		}
 	}
+	
+	class KeyListener extends KeyAdapter{	
+		public void keyReleased(KeyEvent e) {		//키보드 키를 눌렀다가 땟을때 실행됨
+			if(e.getSource().equals(textField_searchField)) {
+				checkList();
+			}
+		}
+	}
+	
 	class MyListener extends MouseAdapter implements ActionListener{			//모든 리스너 클래스
 		// 파일 다이얼로그 관련 필드
 		JLabel event;
@@ -1070,6 +1097,7 @@ public class MainGUI {
 			if(e.getSource().equals(btn_today)) showToday();
 			if(e.getSource().equals(mntm_clear)) {
 				database.clearContents();
+				getList();
 			}
 			if(e.getSource().equals(mntmNewMenuItem_open)) {// || mntmN
 				returnChoice = chooser.showOpenDialog(null); // 다이얼로그 오픈 
@@ -1095,16 +1123,6 @@ public class MainGUI {
 		}
 		public void mouseReleased (MouseEvent e) { // 마우스가 눌렸다가 때어질때 발생하는 리스너 ((라벨))
 			System.out.println("22");
-			
-			if(e.getComponent().getClass().equals(JLabel.class)) {
-				event = (JLabel)e.getSource();
-				if(event.getText().equals("더보기")) {	
-					System.out.println("테스트");
-				}
-				
-			}
-			
-			
 			if(e.isPopupTrigger()) {// 만약 우클릭(팝업트리거 발동)을 했다면 프레임에 해당 좌표에 팝업메뉴 호출
 				
 				if(e.getComponent().getClass().equals(JLabel.class)) {  // 라벨 우클릭

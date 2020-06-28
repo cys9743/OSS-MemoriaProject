@@ -11,15 +11,17 @@ public class Database {
 
 	private String JDBC_DRIVER =  "com.mysql.cj.jdbc.Driver"; // Mysql 드라이버
 	private final String DB_URL = "jdbc:mysql://localhost:3306/memoria?serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false&autoreconnect=true";// 3306포트에 localhost 아이피 주소를 가진다.
-	private final String DB_USER = "root"; // DB에 접속할 ID
+	private final String DB_USER = "DOKKU"; // DB에 접속할 ID
 	//DOKKU
-	private final String DB_PASSWORD = "root"; // DB에 접속할 비밀번호.
+	private final String DB_PASSWORD = "land1!4$7&2@"; // DB에 접속할 비밀번호.
 	//land1!4$7&2@
 
 	MainGUI mainGUI;
 	private Connection connection;
 	private Statement statement;
 	private ResultSet resultset;
+	
+	ArrayList <String> list_dbTitle = new ArrayList<>();
 	
 	public Database() {
 		try {
@@ -153,6 +155,25 @@ public class Database {
 			e.printStackTrace();
 		}
 	}	 
+	 public void searchTitle(){			//등록한 제목들을 불러오는 메소드
+         try{
+        	 	String sql;
+        	 	ResultSet result;
+                 sql = "SELECT TITLE FROM contents";
+                 result = statement.executeQuery(sql);
+                 
+                 while(result.next()) {
+                	 list_dbTitle.add(result.getString("title"));
+                 }
+         }catch(NullPointerException e){
+        	 System.out.println("serachTitle() : 등록되있는 컨탠츠가 없습니다.");
+        	 
+         }catch(Exception e){
+                e.printStackTrace();
+                System.out.println("DB 테이블 title 불러오기 실패 : Database.searchTitle()");
+         }
+   }//end searchTitle();
+	
 	public void closeDB() {//DB 커넥션, 스테이트먼트, 리설트셋 CLOSE()
 		try {
 			connection.close();
