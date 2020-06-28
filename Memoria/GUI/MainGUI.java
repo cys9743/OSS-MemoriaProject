@@ -111,14 +111,13 @@ public class MainGUI {
 	}
 	public void setContentsToCalendar(String title, int index, int h){   	// 켈린더 라벨에 콘텐츠 라벨을 부착하는 메소드
 			int location = label_space[h/7][h%7].getComponentCount() * 25;
-			if(label_space[h/7][h%7].getText() != "") { 		//만약 캘린더에 라벨에 숫자가 표시되어있지 않으면 실행안함
-
+			if(label_space[h/7][h%7].getText() != "" && label_space[h/7][h%7].getComponentCount() < 3) { 		//만약 캘린더에 라벨에 숫자가 표시되어있지 않으면 실행안함
+			System.out.println(label_space[h/7][h%7].getComponentCount());
 			label_contentsTitle[index] = new JLabel(title);
-			label_contentsTitle[index].setBounds(10,20 + location, 135, 20);
+			label_contentsTitle[index].setBounds(10,10 + location, 135, 17);
 			label_contentsTitle[index].setOpaque(true);
 			label_space[h/7][h%7].add(label_contentsTitle[index]);
 			label_contentsTitle[index].addMouseListener(ml);
-
 			}
 	}
 	public int installContents(ResultSet resultSet) {		// 이번달에 표시할 수 있는 컨텐츠들을 가져와서 주기에 따라 캘린더에 컨텐츠를 표시하는 메소드
@@ -157,15 +156,27 @@ public class MainGUI {
 						if(resultDay >= 0 ) {
 							h = startDateOfMonth(cal) + resultDay;			//이번 달의 시작일과 resultDay를 더해서 GUI에 표시할 콘텐츠의 등록일을 구한다.
 							if(cnt == 1 || cnt == 8 || cnt == 16 || (cnt % 30) == 0 && resultDay != 0) { 	// 콘텐츠 등록날로부터 기억 주기 (당일, 7일 후, 8일 후, 이후 30일 지날때마다 쭉..)가 되면
-								setContentsToCalendar(title, labelIndex, h);  			// 컨텐츠 라벨을 캘린더 라벨에 배치하는 메소드
-								if(cnt == 1) // 라벨이 처음 표기된 경우
-									label_contentsTitle[labelIndex].setBackground(Color.RED);
-								else if((extraDate - resultDay) < 0) // 마지막으로 표기된 라벨이 마지막이 되었을 경우
-									label_contentsTitle[labelIndex].setBackground(Color.BLUE);
-								else // 등록일과 마감일 사이의 경우
-								{
-									if(label_contentsTitle[labelIndex] != null)
-									label_contentsTitle[labelIndex].setBackground(Color.GRAY);
+								if(label_space[h/7][h%7].getComponentCount() < 3) {
+									setContentsToCalendar(title, labelIndex, h);  			// 컨텐츠 라벨을 캘린더 라벨에 배치하는 메소드
+									if(cnt == 1) // 라벨이 처음 표기된 경우
+										label_contentsTitle[labelIndex].setBackground(Color.RED);
+									else if((extraDate - resultDay) < 0) // 마지막으로 표기된 라벨이 마지막이 되었을 경우
+										label_contentsTitle[labelIndex].setBackground(Color.BLUE);
+									else // 등록일과 마감일 사이의 경우
+									{
+										if(label_contentsTitle[labelIndex] != null)
+										label_contentsTitle[labelIndex].setBackground(Color.GRAY);
+									}
+								}
+								else if(label_space[h/7][h%7].getComponentCount() == 3){			// 부착할 라벨이 이미 3개의 컴포넌트를 갖고 있는 경우 (더보기)라벨을 부착 
+										label_contentsTitle[labelIndex] = new JLabel("더보기");
+										label_contentsTitle[labelIndex].setBounds(2, 80, 155, 15);
+										label_contentsTitle[labelIndex].setOpaque(true);
+										label_contentsTitle[labelIndex].setBorder(new LineBorder(new Color(105, 105, 105)));
+										label_contentsTitle[labelIndex].setHorizontalAlignment(SwingConstants.CENTER);
+										label_space[h/7][h%7].add(label_contentsTitle[labelIndex]);
+										label_contentsTitle[labelIndex].addMouseListener(ml);
+										setContentsTitle(title);
 								}
 								labelIndex ++;
 							}
@@ -1084,6 +1095,16 @@ public class MainGUI {
 		}
 		public void mouseReleased (MouseEvent e) { // 마우스가 눌렸다가 때어질때 발생하는 리스너 ((라벨))
 			System.out.println("22");
+			
+			if(e.getComponent().getClass().equals(JLabel.class)) {
+				event = (JLabel)e.getSource();
+				if(event.getText().equals("더보기")) {	
+					System.out.println("테스트");
+				}
+				
+			}
+			
+			
 			if(e.isPopupTrigger()) {// 만약 우클릭(팝업트리거 발동)을 했다면 프레임에 해당 좌표에 팝업메뉴 호출
 				
 				if(e.getComponent().getClass().equals(JLabel.class)) {  // 라벨 우클릭
