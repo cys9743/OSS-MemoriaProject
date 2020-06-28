@@ -15,25 +15,14 @@ public class Database {
 	//DOKKU
 	private final String DB_PASSWORD = "root"; // DB에 접속할 비밀번호.
 	//land1!4$7&2@
-	
-	ArrayList <String> list_dbTitle = new ArrayList<>();
-	static String dbID;
-	static String dbTitle;
-	static String dbText;
-	static String dbStar;
-	static String db_r_date;
-	static String db_l_date;
-	static String db_f_link;
-	
+
 	MainGUI mainGUI;
 	private Connection connection;
 	private Statement statement;
 	private ResultSet resultset;
 	
 	public Database() {
-		
 		try {
-			
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 			statement = connection.createStatement();
@@ -48,11 +37,11 @@ public class Database {
 			e.printStackTrace();
 		}
 	}
-	
 	public boolean registerContents(String title, String text, int priority, String registerDate, String lastDate, String fileLink ) {//DB에서 콘텐츠를 조회하고 존재하면 FALSE 리턴, 존재하지 않으면 매개변수 DB에 삽입하고 TRUE 리턴, 나머지 안되는경우에도 FALSE
 		try {	
+
 			String sql_insert_contents = "INSERT INTO memoria.contents " // 콘텐츠 삽입 UPDATE문
-					+ "VALUES('"+ 0 
+					+ "VALUES('"+ 999
 					+ "','" + title 
 					+ "','" + text 
 					+"','" + priority 
@@ -60,7 +49,7 @@ public class Database {
 					+"','"+ lastDate 
 					+"','"+ fileLink 
 					+ "');";
-			String sql_search_contents = "SELECT id FROM memoria.contents WHERE " // 완전히 중복된 콘텐츠가 있는지 검색하는 쿼리문
+			String sql_search_contents = "SELECT * FROM memoria.contents WHERE " // 완전히 중복된 콘텐츠가 있는지 검색하는 쿼리문
 					+ "TITLE='" + title 
 					+ "'AND TEXT='" + text 
 					+ "'AND PRIORITY='"+ priority 
@@ -73,6 +62,8 @@ public class Database {
 				return false;
 			}
 			else {
+
+				setId();
 				statement.executeUpdate(sql_insert_contents);
 				System.out.println("쿼리 삽입 성공");
 				return true;
@@ -80,6 +71,22 @@ public class Database {
 		}catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("DB콘텐츠 등록 오류 : Database.registerContets() ");
+		}
+		return false;
+	}
+	public boolean removeContents(String title) {		//받아온 문자열에 해당하는 콘텐츠를 DB에서 삭제하는 메소드. 정상삭제하면 TRUE 실패나 오류는 FALSE.
+		try {	
+			
+			String sql_remove_selected_contents = "DELETE FROM memoria.contents WHERE " // 가져온 타이틀에 해당하는 콘텐츠를 삭제하는 쿼리문
+					+ "TITLE='" + title +"';";
+			
+				statement.executeUpdate(sql_remove_selected_contents);
+				setId();
+				System.out.println(title + "컨텐츠  삭제 성공");
+				return true;
+		}catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("DB콘텐츠 삭제 오류 : Database.removeContents() ");
 		}
 		return false;
 	}
@@ -112,67 +119,40 @@ public class Database {
 		return resultset;
 	}
 	//ALTER TABLE contents MODIFY ID INT NOT NULL AUTO_INCREMENT; mysql에서 실행시 ID 값이 자동으로 증가하게 바뀜
-	
-	
+	public ResultSet getSeletedContentsInfo(String title) {
+		try {	
+			String sql_search_selected_contents = "SELECT * FROM memoria.contents WHERE " // 완전히 
+					+ "TITLE='" + title + "';";
+			return resultset = statement.executeQuery(sql_search_selected_contents);
+		}catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("DB콘텐츠 검색 오류 : Database.getSelectedContentsInfo()");
+		}
+		return resultset;
+	}
 	public void clearContents() { // 데이터베이스를 초기화해주는 메소드 
-		String sql_init_id ="ALTER TABLE contents AUTO_INCREMENT=1;";
 		String sql_init_id2="DELETE FROM contents";
 				
 		try {
 			statement.executeUpdate(sql_init_id2);
-			statement.executeUpdate(sql_init_id);
 		} catch (SQLException e) {
 			System.out.println("DB 테이블 id애트리뷰트 초기화 오류 : Database.SetId()");
 			e.printStackTrace();
 		}
-	}//end clearContents();
-	
-	 public void searchTitle(){			//등록한 제목들을 불러오는 메소드
-         try{
-        	 	String sql;
-        	 	ResultSet result;
-                 sql = "SELECT TITLE FROM contents";
-                 result = statement.executeQuery(sql);
-                 
-                 while(result.next()) {
-                	 list_dbTitle.add(result.getString("title"));
-                 }
-         }catch(NullPointerException e){
-        	 System.out.println("serachTitle() : 등록되있는 컨탠츠가 없습니다.");
-        	 
-         }catch(Exception e){
-                e.printStackTrace();
-                System.out.println("DB 테이블 title 불러오기 실패 : Database.searchTitle()");
-         }
-   }//end searchTitle();
-	
-	 public void getDetail(String title){			
-         try{
-        	 	String sql;
-        	 	ResultSet result;
-                 sql = "SELECT * FROM memoria.contents WHERE TITLE="+title+";";
-                 result = statement.executeQuery(sql);
-                 
-                 while(result.next()) {
-                	 dbID = result.getString("ID");
-                	 dbTitle = result.getString("TITLE");
-                	 dbText = result.getString("TEXT");
-                	 dbStar = result.getString("PRIORITY");
-                	 db_r_date = result.getString("R_DATE");
-                	 db_l_date = result.getString("L_DATE");
-                	 db_f_link = result.getString("F_LINK");
-                 }
-         }catch(NullPointerException e){
-        	 System.out.println("getDetail() : 등록되있는 컨탠츠가 없습니다.");
-        	 
-         }catch(Exception e){
-                e.printStackTrace();
-                System.out.println("DB 테이블 title 불러오기 실패 : Database.getDetail()");
-         }
-   }//end getDetail();
-	 
-	 
-
+	}
+	public void setId() { // 데이터베이스의 id값을 자동으로 초기화해주는 메소드 
+		String sql_init_id1 ="ALTER TABLE `contents` AUTO_INCREMENT=1;";
+		String sql_init_id2 ="SET @COUNT = 0;";
+		String sql_init_id3 ="UPDATE `contents` SET ID = @COUNT:=@COUNT+1;";
+		try {
+			statement.executeUpdate(sql_init_id1);
+			statement.executeQuery(sql_init_id2);
+			statement.executeUpdate(sql_init_id3);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}	 
 	public void closeDB() {//DB 커넥션, 스테이트먼트, 리설트셋 CLOSE()
 		try {
 			connection.close();
