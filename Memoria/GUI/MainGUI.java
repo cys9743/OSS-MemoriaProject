@@ -1103,10 +1103,12 @@ public class MainGUI {
 			
 			if(e.getComponent().getClass().equals(JLabel.class)) {
 				String title = ((JLabel)e.getSource()).getText();
+
 				database.getDetail(title);
 				detailGUI.show();
 				detailGUI.InitComponents();
 				detailGUI.setDetail();		
+
 			}
 			
 			
