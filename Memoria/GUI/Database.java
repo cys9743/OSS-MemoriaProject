@@ -16,7 +16,14 @@ public class Database {
 	private final String DB_PASSWORD = "root"; // DB에 접속할 비밀번호.
 	//land1!4$7&2@
 	
-	ArrayList <String> dbTitle = new ArrayList<>();
+	ArrayList <String> list_dbTitle = new ArrayList<>();
+	static String dbID;
+	static String dbTitle;
+	static String dbText;
+	static String dbStar;
+	static String db_r_date;
+	static String db_l_date;
+	static String db_f_link;
 	
 	MainGUI mainGUI;
 	private Connection connection;
@@ -118,7 +125,7 @@ public class Database {
 			System.out.println("DB 테이블 id애트리뷰트 초기화 오류 : Database.SetId()");
 			e.printStackTrace();
 		}
-	}
+	}//end clearContents();
 	
 	 public void searchTitle(){			//등록한 제목들을 불러오는 메소드
          try{
@@ -128,7 +135,7 @@ public class Database {
                  result = statement.executeQuery(sql);
                  
                  while(result.next()) {
-                	 dbTitle.add(result.getString("title"));
+                	 list_dbTitle.add(result.getString("title"));
                  }
          }catch(NullPointerException e){
         	 System.out.println("serachTitle() : 등록되있는 컨탠츠가 없습니다.");
@@ -139,7 +146,32 @@ public class Database {
          }
    }//end searchTitle();
 	
-
+	 public void getDetail(String title){			
+         try{
+        	 	String sql;
+        	 	ResultSet result;
+                 sql = "SELECT * FROM memoria.contents WHERE TITLE="+title+";";
+                 result = statement.executeQuery(sql);
+                 
+                 while(result.next()) {
+                	 dbID = result.getString("ID");
+                	 dbTitle = result.getString("TITLE");
+                	 dbText = result.getString("TEXT");
+                	 dbStar = result.getString("PRIORITY");
+                	 db_r_date = result.getString("R_DATE");
+                	 db_l_date = result.getString("L_DATE");
+                	 db_f_link = result.getString("F_LINK");
+                 }
+         }catch(NullPointerException e){
+        	 System.out.println("getDetail() : 등록되있는 컨탠츠가 없습니다.");
+        	 
+         }catch(Exception e){
+                e.printStackTrace();
+                System.out.println("DB 테이블 title 불러오기 실패 : Database.getDetail()");
+         }
+   }//end getDetail();
+	 
+	 
 
 	public void closeDB() {//DB 커넥션, 스테이트먼트, 리설트셋 CLOSE()
 		try {

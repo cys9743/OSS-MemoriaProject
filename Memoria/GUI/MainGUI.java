@@ -110,9 +110,10 @@ public class MainGUI {
 	public void setContentsToCalendar(String title, int index, int h){   	// 켈린더 라벨에 콘텐츠 라벨을 부착하는 메소드
 
 			if(label_space[h/7][h%7].getText() != "") { 		//만약 캘린더에 라벨에 숫자가 표시되어있지 않으면 실행안함
-			label_contentsTitle[index] = new JLabel(title);
-			label_contentsTitle[index].setBounds(label_space[h/7][h%7].getX(),label_space[h/7][h%7].getY(), 6, 97);
-			label_space[h/7][h%7].add(label_contentsTitle[index]);
+				label_contentsTitle[index] = new JLabel(title);
+				label_contentsTitle[index].setBounds(label_space[h/7][h%7].getX(),label_space[h/7][h%7].getY(), 6, 97);
+				label_space[h/7][h%7].add(label_contentsTitle[index]);
+				label_contentsTitle[index].addMouseListener(ml);
 			}
 	}
 	public int installContents(ResultSet resultSet) {		// 이번달에 표시할 수 있는 컨텐츠들을 가져와서 주기에 따라 캘린더에 컨텐츠를 표시하는 메소드
@@ -383,13 +384,14 @@ public class MainGUI {
 			return popupMenuLabel;
 		
 	}
+	
 	public void checkList() {			//검색을 해서 리스트에 표현해주는 메소드
 		list_searchlist.removeAll();
 		DefaultListModel dm = new DefaultListModel();
 		dm.clear();
-		for(int i =0 ; i<database.dbTitle.size();i++) {
+		for(int i =0 ; i<database.list_dbTitle.size();i++) {
 			if(listModel.get(i).toString().contains(textField_searchField.getText()) && !(listModel.get(i).toString().isEmpty())) {		//리스트모델에있는 리스트들이 검색 텍스트필드에있는 문자가 포함될경우 그리고 텍스트필드가 빈칸이 아닐경우
-				dm.addElement(database.dbTitle.get(i));							//데이터 베이스에서 가져온 제목들을 가져와서 리스트모델에 넣어준다.
+				dm.addElement(database.list_dbTitle.get(i));							//데이터 베이스에서 가져온 제목들을 가져와서 리스트모델에 넣어준다.
 			}
 		}
 		list_searchlist.setModel(dm);				//리스트의 모델을 설정해준다
@@ -397,15 +399,18 @@ public class MainGUI {
 	}
 	
 	public void getList() {			//불러온 db에서 title을 불러와서 리스트에 출력해주는 메소드
-		database.dbTitle.clear();
+		database.list_dbTitle.clear();
 		listModel.clear();
 		database.searchTitle();
-		for(int i =0 ; i<database.dbTitle.size();i++) {
-			listModel.addElement(database.dbTitle.get(i));
+		for(int i =0 ; i<database.list_dbTitle.size();i++) {
+			listModel.addElement(database.list_dbTitle.get(i));
 		}
 		list_searchlist.setModel(listModel);			//searchList에 listModel을 설정
 	}
 	
+	public void getDetail()	{
+		
+	}
 
 	
 	public MainGUI() { // 생성자
@@ -975,7 +980,7 @@ public class MainGUI {
 		panel_South.add(btn_today);
 		
 		textField_searchField = new JTextField();
-		textField_searchField.setText("검색...");
+		textField_searchField.setText("");
 		textField_searchField.setFocusTraversalPolicyProvider(true);
 		textField_searchField.setIgnoreRepaint(true);
 		textField_searchField.setBounds(0, 0, 232, 26);
@@ -985,12 +990,6 @@ public class MainGUI {
 		textField_searchField.setToolTipText("");
 		textField_searchField.setColumns(10);
 		textField_searchField.addKeyListener(kl);
-		textField_searchField.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				if(textField_searchField.getText().equals("검색..."))
-				textField_searchField.setText("");
-			}
-		});
 		
 		JComboBox comboBox = new JComboBox();
 		comboBox.setBorder(new LineBorder(new Color(105, 105, 105)));
@@ -1102,9 +1101,19 @@ public class MainGUI {
 				}
 			}
 			
+			if(e.getComponent().getClass().equals(JLabel.class)) {
+				String title = ((JLabel)e.getSource()).getText();
+				database.getDetail(title);
+				detailGUI.show();
+				detailGUI.InitComponents();
+				detailGUI.setDetail();		
+			}
+			
 			
 		}
 		public void mouseCliked(MouseEvent e) {
+	
+			
 		}
 		public void mouseEntered(MouseEvent e) {
 		}
