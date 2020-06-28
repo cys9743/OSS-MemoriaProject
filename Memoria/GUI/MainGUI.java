@@ -93,6 +93,7 @@ public class MainGUI {
 	DefaultListModel listModel = new DefaultListModel();
 	Database database;				// 데이터베이스
 	String tempTitle;		// 사용자가 클릭한 컨텐츠의 이름을 임시저장하는 변수
+	SelectedPlanGUI selectedPlanGUI;
 
 	public static void main(String[] args) {			//////메인 메소드
 		EventQueue.invokeLater(new Runnable() {
@@ -182,6 +183,23 @@ public class MainGUI {
                                         label_contentsTitle[labelIndex].addMouseListener(ml);
                                         setContentsTitle(title);
 								}
+                                else {
+                                		System.out.println("과연");
+                                		label_contentsTitle[labelIndex] = new JLabel(title);
+                                		label_space[h/7][h%7].add(label_contentsTitle[labelIndex]);
+                                        if(cnt == 1) { 		// 라벨이 처음 표기된 경우
+                                        	System.out.println("색깔 레드");
+                                            label_contentsTitle[labelIndex].setBackground(Color.RED);
+                                        }
+                                        else if((extraDate - resultDay) < 0) // 마지막으로 표기된 라벨이 마지막이 되었을 경우
+                                            label_contentsTitle[labelIndex].setBackground(Color.BLUE);
+                                        else // 등록일과 마감일 사이의 경우
+                                        {
+                                            if(label_contentsTitle[labelIndex] != null)
+                                            label_contentsTitle[labelIndex].setBackground(Color.GRAY);
+                                        }
+                                	
+                                }
 								labelIndex ++;
 							}
 							extraDate--;
@@ -422,6 +440,7 @@ public class MainGUI {
 	public MainGUI() { // 생성자
 		detailGUI = new DetailGUI();
 		database = new Database(); // 데이터베이스 객체생성
+		selectedPlanGUI = new SelectedPlanGUI();
 		
 		initialize();
 		showCal(cal);
@@ -470,7 +489,7 @@ public class MainGUI {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1360, 768);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		frame.getContentPane().setLayout(null);	
 		panel_Calendar.setBorder(new LineBorder(new Color(128, 128, 128)));
 		
 		
@@ -1091,8 +1110,9 @@ public class MainGUI {
 	class MyListener extends MouseAdapter implements ActionListener{			//모든 리스너 클래스
 		// 파일 다이얼로그 관련 필드
 		JLabel event;
+		JLabel event_parents;
 		JFileChooser chooser; 
-		
+		JLabel label_temp;
 		int returnChoice;
 
 		//MyListener 생성자
@@ -1140,7 +1160,18 @@ public class MainGUI {
             
             if(e.getComponent().getClass().equals(JLabel.class)) {
                 event = (JLabel)e.getSource();
-                if(event.getText().equals("더보기")) {    
+                
+                if(event.getText().equals("더보기")) {  // 더보기 라벨 클릭했을시
+                	event_parents = (JLabel) event.getParent();
+                	selectedPlanGUI.setDate(calMonth + " 월 " + event_parents.getText() + " 일 ");
+                	selectedPlanGUI.removeContents();
+                	for(int i = 0 ; i < event.getParent().getComponentCount(); i ++) {
+                		if(i != 3) {		// 더보기 라벨은 제외한다.
+                			label_temp = (JLabel)event_parents.getComponent(i);
+                			selectedPlanGUI.setContents(i, label_temp.getText(), label_temp.getBackground());
+                		}
+                	}
+                	selectedPlanGUI.setVisible(true);
                     System.out.println("테스트");
                 }
                 
