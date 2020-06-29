@@ -44,6 +44,12 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileSystemView;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.MatteBorder;
+import javax.swing.border.TitledBorder;
 
 public class MainGUI {
 	
@@ -79,7 +85,7 @@ public class MainGUI {
 	private int today_label_weight;
 	private int today_label_height;
 	
-	JButton btn_today = new JButton("Today");
+	JButton btn_today = new JButton("오늘로 이동");
 	
 	JButton btn_Backward = new JButton(cal.get(Calendar.MONTH)+"월");	
 	JButton btn_Forward = new JButton((cal.get(Calendar.MONTH)+1+1)+"월");
@@ -142,10 +148,11 @@ public class MainGUI {
             if(label_space[h/7][h%7].getText() != "" && label_space[h/7][h%7].getComponentCount() < 3) {         //만약 캘린더에 라벨에 숫자가 표시되어있지 않으면 실행안함
             System.out.println(label_space[h/7][h%7].getComponentCount());
 			label_contentsTitle[index] = new JLabel(title);
-            label_contentsTitle[index].setBounds(10,10 + location, 135, 17);
+            label_contentsTitle[index].setBounds(17,10 + location, 128, 17);
 			label_contentsTitle[index].setOpaque(true);
 			label_space[h/7][h%7].add(label_contentsTitle[index]);
 			label_contentsTitle[index].addMouseListener(ml);
+    		label_contentsTitle[index].setFont(new Font("맑은 고딕", Font.PLAIN, 15));
 
 			}
 	}
@@ -189,14 +196,19 @@ public class MainGUI {
                                     setContentsToCalendar(title, labelIndex, h);              // 컨텐츠 라벨을 캘린더 라벨에 배치하는 메소드
                                     if(cnt == 1) { 		// 라벨이 처음 표기된 경우
                                     	System.out.println("색깔 레드");
-                                        label_contentsTitle[labelIndex].setBackground(Color.RED);
+                                        label_contentsTitle[labelIndex].setBackground(new Color(255, 69, 0));
+                                        label_contentsTitle[labelIndex].setForeground(Color.white);
                                     }
-                                    else if((extraDate - resultDay) < 0) // 마지막으로 표기된 라벨이 마지막이 되었을 경우
-                                        label_contentsTitle[labelIndex].setBackground(Color.BLUE);
+                                    else if((extraDate - resultDay) < 0) { // 마지막으로 표기된 라벨이 마지막이 되었을 경우
+                                        label_contentsTitle[labelIndex].setBackground(new Color(25, 25, 122));
+                                    	label_contentsTitle[labelIndex].setForeground(Color.white);
+                                    }
                                     else // 등록일과 마감일 사이의 경우
                                     {
-                                        if(label_contentsTitle[labelIndex] != null)
-                                        label_contentsTitle[labelIndex].setBackground(Color.GRAY);
+                                        if(label_contentsTitle[labelIndex] != null) {
+                                            label_contentsTitle[labelIndex].setBackground(new Color(150, 150, 0));
+                                        	label_contentsTitle[labelIndex].setForeground(Color.white);
+                                        }
                                     }
                                 }
                                 else if(label_space[h/7][h%7].getComponentCount() == 3){            // 부착할 라벨이 이미 3개의 컴포넌트를 갖고 있는 경우 (더보기)라벨을 부착 
@@ -204,8 +216,11 @@ public class MainGUI {
                                         label_contentsTitle[labelIndex].setBounds(2, 80, 155, 15);
                                         label_contentsTitle[labelIndex].setOpaque(true);
                                         label_contentsTitle[labelIndex].setBorder(new LineBorder(new Color(105, 105, 105)));
+                                        label_contentsTitle[labelIndex].setBackground(new Color(85, 107, 47));
+                                        label_contentsTitle[labelIndex].setForeground(Color.white);
                                         label_contentsTitle[labelIndex].setHorizontalAlignment(SwingConstants.CENTER);
                                         label_space[h/7][h%7].add(label_contentsTitle[labelIndex]);
+                                		label_contentsTitle[labelIndex].setFont(new Font("맑은 고딕", Font.PLAIN, 14));
                                         label_contentsTitle[labelIndex].addMouseListener(ml);
                                         setContentsTitle(title);
 								}
@@ -215,14 +230,19 @@ public class MainGUI {
                                 		label_space[h/7][h%7].add(label_contentsTitle[labelIndex]);
                                         if(cnt == 1) { 		// 라벨이 처음 표기된 경우
                                         	System.out.println("색깔 레드");
-                                            label_contentsTitle[labelIndex].setBackground(Color.RED);
+                                            label_contentsTitle[labelIndex].setBackground(new Color(255, 69, 0));
+                                            label_contentsTitle[labelIndex].setForeground(Color.white);
                                         }
-                                        else if((extraDate - resultDay) < 0) // 마지막으로 표기된 라벨이 마지막이 되었을 경우
-                                            label_contentsTitle[labelIndex].setBackground(Color.BLUE);
+                                        else if((extraDate - resultDay) < 0) { // 마지막으로 표기된 라벨이 마지막이 되었을 경우
+                                            label_contentsTitle[labelIndex].setBackground(new Color(25, 25, 122));
+                                    		label_contentsTitle[labelIndex].setForeground(Color.white);
+                                        }
                                         else // 등록일과 마감일 사이의 경우
                                         {
-                                            if(label_contentsTitle[labelIndex] != null)
-                                            label_contentsTitle[labelIndex].setBackground(Color.GRAY);
+                                            if(label_contentsTitle[labelIndex] != null) {
+                                            label_contentsTitle[labelIndex].setBackground(new Color(150, 150, 0));
+                                        	label_contentsTitle[labelIndex].setForeground(Color.white);
+                                            }
                                         }
                                 	
                                 }
@@ -336,7 +356,7 @@ public class MainGUI {
 		for(int i=0; i<6 ; i++) {
 			for(int j=0; j<7 ; j++) {
 				if(label_space[i][j].getText().isEmpty()) {
-					label_space[i][j].setBackground(new Color(200,200,200));
+					label_space[i][j].setBackground(new Color(240,240,240));
 					label_space[i][j].setOpaque(true);
 					label_space[i][j].disable();
 				}
@@ -486,6 +506,9 @@ public class MainGUI {
 		for(int i =0 ; i<database.list_dbTitle.size();i++) {
 			listModel.addElement(database.list_dbTitle.get(i));
 		}
+		list_searchlist.setSelectionForeground(Color.WHITE);
+		list_searchlist.setSelectionBackground(new Color(0, 120, 215));
+		list_searchlist.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
 		list_searchlist.setModel(listModel);			//searchList에 listModel을 설정
 	}
 	
@@ -524,6 +547,7 @@ public class MainGUI {
 		frame.setBounds(100, 100, 1360, 768);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);	
+		panel_Calendar.setBackground(SystemColor.textHighlightText);
 		panel_Calendar.setBorder(new LineBorder(new Color(128, 128, 128)));
 		
 		
@@ -536,9 +560,9 @@ public class MainGUI {
 		JLabel label_Sunday = new JLabel("일");
 		label_Sunday.setBorder(new LineBorder(Color.GRAY));
 		label_Sunday.setForeground(Color.RED);
-		label_Sunday.setFont(new Font("HY중고딕", Font.BOLD, 15));
+		label_Sunday.setFont(new Font("맑은 고딕", Font.PLAIN, 17));
 		label_Sunday.setHorizontalAlignment(SwingConstants.CENTER);
-		label_Sunday.setBackground(SystemColor.activeCaption);
+		label_Sunday.setBackground(SystemColor.inactiveCaptionBorder);
 		label_Sunday.setBounds(0, 0, 159, 26);
 		label_Sunday.setOpaque(true); 
 		panel_Calendar.add(label_Sunday);
@@ -546,8 +570,8 @@ public class MainGUI {
 		JLabel label_Monday = new JLabel("\uC6D4");
 		label_Monday.setOpaque(true);
 		label_Monday.setBorder(new LineBorder(Color.GRAY));
-		label_Monday.setBackground(SystemColor.activeCaption);
-		label_Monday.setFont(new Font("HY중고딕", Font.BOLD, 15));
+		label_Monday.setBackground(SystemColor.textHighlightText);
+		label_Monday.setFont(new Font("맑은 고딕", Font.PLAIN, 17));
 		label_Monday.setHorizontalAlignment(SwingConstants.CENTER);
 		label_Monday.setBounds(159, 0, 159, 26);
 		panel_Calendar.add(label_Monday);
@@ -555,8 +579,8 @@ public class MainGUI {
 		JLabel label_Tuesday = new JLabel("\uD654");
 		label_Tuesday.setOpaque(true);
 		label_Tuesday.setBorder(new LineBorder(Color.GRAY));
-		label_Tuesday.setBackground(SystemColor.activeCaption);
-		label_Tuesday.setFont(new Font("HY중고딕", Font.BOLD, 15));
+		label_Tuesday.setBackground(SystemColor.textHighlightText);
+		label_Tuesday.setFont(new Font("맑은 고딕", Font.PLAIN, 17));
 		label_Tuesday.setHorizontalAlignment(SwingConstants.CENTER);
 		label_Tuesday.setBounds(318, 0, 159, 26);
 		panel_Calendar.add(label_Tuesday);
@@ -564,35 +588,35 @@ public class MainGUI {
 		JLabel label_Wednesday = new JLabel("\uC218");
 		label_Wednesday.setOpaque(true);
 		label_Wednesday.setBorder(new LineBorder(Color.GRAY));
-		label_Wednesday.setBackground(SystemColor.activeCaption);
-		label_Wednesday.setFont(new Font("HY중고딕", Font.BOLD, 15));
+		label_Wednesday.setBackground(SystemColor.textHighlightText);
+		label_Wednesday.setFont(new Font("맑은 고딕", Font.PLAIN, 17));
 		label_Wednesday.setHorizontalAlignment(SwingConstants.CENTER);
 		label_Wednesday.setBounds(477, 0, 159, 26);
 		panel_Calendar.add(label_Wednesday);
 		
 		JLabel label_Thursday = new JLabel("\uBAA9");
 		label_Thursday.setOpaque(true);
-		label_Thursday.setFont(new Font("HY중고딕", Font.BOLD, 15));
+		label_Thursday.setFont(new Font("맑은 고딕", Font.PLAIN, 17));
 		label_Thursday.setBorder(new LineBorder(Color.GRAY));
-		label_Thursday.setBackground(SystemColor.activeCaption);
+		label_Thursday.setBackground(SystemColor.textHighlightText);
 		label_Thursday.setHorizontalAlignment(SwingConstants.CENTER);
 		label_Thursday.setBounds(636, 0, 159, 26);
 		panel_Calendar.add(label_Thursday);
 		
 		JLabel label_Friday = new JLabel("\uAE08");
 		label_Friday.setOpaque(true);
-		label_Friday.setFont(new Font("HY중고딕", Font.BOLD, 15));
+		label_Friday.setFont(new Font("맑은 고딕", Font.PLAIN, 17));
 		label_Friday.setBorder(new LineBorder(Color.GRAY));
-		label_Friday.setBackground(SystemColor.activeCaption);
+		label_Friday.setBackground(SystemColor.textHighlightText);
 		label_Friday.setHorizontalAlignment(SwingConstants.CENTER);
 		label_Friday.setBounds(795, 0, 159, 26);
 		panel_Calendar.add(label_Friday);
 		
 		JLabel lbld = new JLabel("토");
 		lbld.setOpaque(true);
-		lbld.setFont(new Font("HY중고딕", Font.BOLD, 15));
+		lbld.setFont(new Font("맑은 고딕", Font.PLAIN, 17));
 		lbld.setBorder(new LineBorder(Color.GRAY));
-		lbld.setBackground(SystemColor.activeCaption);
+		lbld.setBackground(SystemColor.inactiveCaptionBorder);
 		lbld.setForeground(SystemColor.textHighlight);
 		lbld.setHorizontalAlignment(SwingConstants.CENTER);
 		lbld.setBounds(954, 0, 159, 26);
@@ -1013,48 +1037,42 @@ public class MainGUI {
 		panel_Search.add(list_searchlist);
 		
 		JPanel panel_South = new JPanel();
+		panel_South.setBackground(SystemColor.window);
 		panel_South.setBorder(new LineBorder(new Color(128, 128, 128)));
 		panel_South.setBounds(0, 609, 1345, 98);
 		frame.getContentPane().add(panel_South);
 		panel_South.setLayout(null);
-		
-		JLabel label_filename = new JLabel("\uD30C\uC77C \uC774\uB984 :");
-		label_filename.setBounds(12, 10, 307, 15);
-		panel_South.add(label_filename);
-		
-		JLabel label_filetype = new JLabel("\uD30C\uC77C \uD615\uC2DD :");
-		label_filetype.setBounds(12, 35, 307, 15);
-		panel_South.add(label_filetype);
-		
-		JLabel label_filesize = new JLabel("\uD30C\uC77C \uD06C\uAE30 :");
-		label_filesize.setBounds(12, 60, 307, 15);
-		panel_South.add(label_filesize);
-		label_Month.setFont(new Font("굴림", Font.BOLD, 16));
+		label_Month.setFont(new Font("맑은 고딕", Font.PLAIN, 20));
 		
 
 		label_Month.setHorizontalAlignment(SwingConstants.CENTER);
-		label_Month.setBounds(655, 31, 85, 23);
+		label_Month.setBounds(665, 35, 69, 23);
 		panel_South.add(label_Month);
 		
-		label_Year.setFont(new Font("占쏙옙占쏙옙", Font.PLAIN, 20));
+		label_Year.setFont(new Font("Bahnschrift", Font.PLAIN, 22));
 		label_Year.setHorizontalAlignment(SwingConstants.CENTER);
-		label_Year.setBounds(671, 10, 57, 25);
+		label_Year.setBounds(665, 10, 69, 25);
 		panel_South.add(label_Year);
-		btn_Backward.setBackground(new Color(255, 192, 203));
-		
+		btn_Backward.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+		btn_Backward.setBackground(new Color(119, 136, 153));
+		btn_Backward.setForeground(Color.white);
 
 		btn_Backward.setBounds(574, 20, 69, 44);
 		panel_South.add(btn_Backward);
 		btn_Backward.addActionListener(ml);
-		btn_Forward.setBackground(new Color(135, 206, 235));
+		btn_Forward.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+		btn_Forward.setBackground(new Color(255, 255, 240));
+		
 		
 		btn_Forward.addActionListener(ml);
 		btn_Forward.setBounds(752, 20, 68, 44);
 		panel_South.add(btn_Forward);
-		btn_today.setBackground(new Color(255, 248, 220));
+		btn_today.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+		btn_today.setBackground(new Color(85, 107, 47));
+		btn_today.setForeground(Color.white);
 		
 	
-		btn_today.setBounds(665, 67, 69, 23);
+		btn_today.setBounds(574, 67, 246, 23);
 		panel_South.add(btn_today);
 		
 		textField_searchField = new JTextField();
@@ -1070,6 +1088,7 @@ public class MainGUI {
 		textField_searchField.addKeyListener(kl);
 		
 		JComboBox comboBox = new JComboBox();
+		comboBox.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
 		comboBox.setBorder(new LineBorder(new Color(105, 105, 105)));
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"이름 순", "등록일 순", "마감일 순", "중요도 순"}));
 		comboBox.setBounds(0, 24, 232, 26);
@@ -1079,21 +1098,28 @@ public class MainGUI {
 		//Main 메뉴바 컴포넌트
 		
 		JMenuBar menuBar = new JMenuBar();
-		menuBar.setBackground(Color.LIGHT_GRAY);
+		menuBar.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
+		menuBar.setBackground(SystemColor.textHighlightText);
 		frame.setJMenuBar(menuBar);
 		
 		JMenu mnNewMenu = new JMenu("\uD30C\uC77C(F)"); // 파일 메뉴
+		mnNewMenu.setFont(new Font("굴림", Font.PLAIN, 14));
 		menuBar.add(mnNewMenu);
 		
 		mntmNewMenuItem_open = new JMenuItem("\uB4F1\uB85D(N)"); // 등록 메뉴아이템
+		mntmNewMenuItem_open.setFont(new Font("굴림", Font.PLAIN, 13));
+		mntmNewMenuItem_open.setBorder(null);
 		mntmNewMenuItem_open.addActionListener(ml);
 		mnNewMenu.add(mntmNewMenuItem_open);
 		
 		JMenu mnNewMenu_1 = new JMenu("\uC124\uC815(S)"); // 설정 메뉴
+		mnNewMenu_1.setFont(new Font("굴림", Font.PLAIN, 14));
 		menuBar.add(mnNewMenu_1);
 		
 		JMenuItem mntmSetcolor = new JMenuItem("\uC0C9\uC0C1\uC124\uC815(C)"); // 색상변경 메뉴아이템
+		mntmSetcolor.setFont(new Font("굴림", Font.PLAIN, 13));
 		mnNewMenu_1.add(mntmSetcolor);
+		mntm_clear.setFont(new Font("굴림", Font.PLAIN, 13));
 		
 		mnNewMenu_1.add(mntm_clear);
 		mntm_clear.addActionListener(ml);
