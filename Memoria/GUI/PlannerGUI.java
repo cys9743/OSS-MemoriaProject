@@ -29,6 +29,7 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.util.Calendar;
 import java.util.Date;
+import javax.swing.UIManager;
 public class PlannerGUI  {
 	
 
@@ -68,11 +69,18 @@ public class PlannerGUI  {
 		label_contents[index].setFont(new Font("맑은 고딕", Font.PLAIN, 14));
 		label_contents[index].setOpaque(true);
 		label_contents[index].setBackground(color);
-		label_contents[index].setBounds(8, 70 + index * 35, 408, 25);
+		label_contents[index].setBounds(40, 70 + index * 45, 350, 35);
 		label_contents[index].addMouseListener(ml);
+		label_contents[index].setForeground(Color.white);
+		
+		JCheckBox chckbxNewCheckBox = new JCheckBox("");
+		chckbxNewCheckBox.setBackground(new Color(192, 192, 192));
+		chckbxNewCheckBox.setBounds(20, 70 + index * 45, 20, 35);
+		panel_main.add(chckbxNewCheckBox);
+		
 		panel_main.add(label_contents[index]);
 		
-	}
+	}	
 	public void show() {
 		frame.setVisible(true);
 	}
@@ -155,40 +163,15 @@ public class PlannerGUI  {
 		frame.getContentPane().add(panel_main);
 		
 		JLabel label_title = new JLabel("Daliy Plan");
-		label_title.setForeground(Color.WHITE);
+		label_title.setForeground(Color.BLACK);
 		label_title.setBackground(Color.WHITE);
 		label_title.setFont(new Font("Bahnschrift", Font.PLAIN, 21));
 		label_title.setBounds(152, 10, 105, 23);
 		panel_main.add(label_title);
 		
-		JLabel label_sortBy = new JLabel("\uC815\uB82C");
-		label_sortBy.setForeground(Color.WHITE);
-		label_sortBy.setBounds(312, 37, 35, 15);
-	
-		panel_main.add(label_sortBy);
-		
-		JList list = new JList();
-		list.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		
-		list.setModel(new AbstractListModel() {
-			String[] values = new String[] {"\uC911\uC694\uB3C4", "\uC774\uB984", "\uB4F1\uB85D\uC77C\uC790"};
-			
-			public int getSize() {
-				return values.length;
-			}
-			
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-			
-		});
-		list.setToolTipText("");
-		list.setBounds(345, 34, 71, 19);
-		panel_main.add(list);
-		
 		JLabel label_date = new JLabel(Integer.toString(cal.YEAR) + "." + Integer.toString(cal.MONTH) + " . " + Integer.toString(cal.DATE));
 		label_date.setFont(new Font("Bahnschrift", Font.PLAIN, 12));
-		label_date.setForeground(Color.WHITE);
+		label_date.setForeground(Color.BLACK);
 		label_date.setBounds(174, 31, 71, 27);
 		panel_main.add(label_date);
 		second.setOpaque(true);
@@ -205,13 +188,15 @@ public class PlannerGUI  {
 		
 		JLabel label_time = new JLabel();
 		label_time.setText(two);
-		label_time.setForeground(Color.WHITE);
+		label_time.setForeground(Color.BLACK);
 		label_time.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
 		label_time.setBounds(8, 40, 105, 27);
 		panel_main.add(label_time);
-		panel_main.setBackground(SystemColor.inactiveCaption);
+		panel_main.setBackground(Color.WHITE);
 		panel_main.setBounds(0, 0, 423, 561);
 		panel_main.setLayout(null);
+		
+
 		
 	}
 	class MyListener extends MouseAdapter {

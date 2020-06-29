@@ -423,7 +423,6 @@ public class MainGUI {
 		disableCal();
 		showToday_auto();
 	}
-	
 	public void previousMonth(){			//전 달로 변경하는 메소드
 		if(cal.get(Calendar.MONTH) < 1){		//(위와 다르게 0까지는 예외(오류)가 발생하지 않기때문에 if 문으로 대체) '월' 값이 0이 된경우 (실제로 표기되는 calMonth 값은 -1이 되게 된다.)를 인식하여 년도를 변경하고 '월' 값을 변경함
 			calYear--;
@@ -547,6 +546,7 @@ public class MainGUI {
 		frame.setBounds(100, 100, 1360, 768);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);	
+		frame.setLocationRelativeTo(null);
 		panel_Calendar.setBackground(SystemColor.textHighlightText);
 		panel_Calendar.setBorder(new LineBorder(new Color(128, 128, 128)));
 		

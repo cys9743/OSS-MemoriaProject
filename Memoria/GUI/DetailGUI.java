@@ -182,12 +182,15 @@ public class DetailGUI {
 		database = new Database();
 				
 		frame = new JFrame();
+		frame.setBackground(Color.WHITE);
+		frame.getContentPane().setBackground(Color.WHITE);
+		frame.getContentPane().setFont(new Font("맑은 고딕", Font.PLAIN, 12));
 		frame.setBounds(100, 100, 721, 612);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JLabel label_title = new JLabel("\uC81C\uBAA9");
-		label_title.setFont(new Font("굴림", Font.BOLD, 12));
+		label_title.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
 		label_title.setBounds(12, 10, 57, 15);
 		frame.getContentPane().add(label_title);
 		
@@ -197,7 +200,7 @@ public class DetailGUI {
 		textField_title.setColumns(10);
 		
 		JLabel label_content = new JLabel("\uB0B4\uC6A9");
-		label_content.setFont(new Font("굴림", Font.BOLD, 12));
+		label_content.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
 		label_content.setBounds(12, 66, 57, 15);
 		frame.getContentPane().add(label_content);
 		
@@ -207,8 +210,8 @@ public class DetailGUI {
 		frame.getContentPane().add(textField_content);
 		
 		JLabel label_text_path = new JLabel("\uAD00\uB828 \uD30C\uC77C \uACBD\uB85C");
-		label_text_path.setFont(new Font("굴림", Font.BOLD, 12));
-		label_text_path.setBounds(22, 234, 92, 15);
+		label_text_path.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
+		label_text_path.setBounds(22, 234, 103, 15);
 		frame.getContentPane().add(label_text_path);
 		
 		label_path = new JLabel("비어있음");
@@ -217,8 +220,10 @@ public class DetailGUI {
 		frame.getContentPane().add(label_path);
 		
 		button_Add_File = new JButton("\uD30C\uC77C \uCD94\uAC00");
-		button_Add_File.setFont(new Font("굴림", Font.BOLD, 12));
-		button_Add_File.setBounds(283, 221, 92, 23);
+		button_Add_File.setForeground(Color.WHITE);
+		button_Add_File.setBackground(new Color(85, 107, 4));
+		button_Add_File.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
+		button_Add_File.setBounds(283, 221, 103, 23);
 		frame.getContentPane().add(button_Add_File);
 		button_Add_File.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) { // 파일추가 버튼 리스너
@@ -237,7 +242,9 @@ public class DetailGUI {
 			}
 		});
 		button_delete_file = new JButton("\uD30C\uC77C \uC81C\uAC70");
-		button_delete_file.setFont(new Font("굴림", Font.BOLD, 12));
+		button_delete_file.setForeground(Color.WHITE);
+		button_delete_file.setBackground(new Color(85, 107, 47));
+		button_delete_file.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
 		button_delete_file.addActionListener(new ActionListener() { // 파일제거 버튼 리스너
 			public void actionPerformed(ActionEvent e) {
 				label_path.setText("비어 있음");
@@ -246,26 +253,26 @@ public class DetailGUI {
 				label_lastModify.setText("");
 			}
 		});
-		button_delete_file.setBounds(387, 221, 92, 23);
+		button_delete_file.setBounds(398, 221, 103, 23);
 		frame.getContentPane().add(button_delete_file);
 		
 		JLabel label_text_fileKind = new JLabel("\uD30C\uC77C \uC885\uB958");
-		label_text_fileKind.setFont(new Font("굴림", Font.BOLD, 12));
+		label_text_fileKind.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
 		label_text_fileKind.setBounds(22, 284, 92, 15);
 		frame.getContentPane().add(label_text_fileKind);
 		
 		JLabel label_text_lastModify = new JLabel("\uD30C\uC77C \uB9C8\uC9C0\uB9C9 \uC218\uC815 \uB0A0\uC9DC");
-		label_text_lastModify.setFont(new Font("굴림", Font.BOLD, 12));
-		label_text_lastModify.setBounds(22, 384, 135, 15);
+		label_text_lastModify.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
+		label_text_lastModify.setBounds(22, 384, 156, 15);
 		frame.getContentPane().add(label_text_lastModify);
 		
 		JLabel label_text_star = new JLabel("\uC911\uC694\uB3C4");
-		label_text_star.setFont(new Font("굴림", Font.BOLD, 12));
+		label_text_star.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
 		label_text_star.setBounds(283, 284, 135, 15);
 		frame.getContentPane().add(label_text_star);
 		
 		JLabel label_text_fileSize = new JLabel("\uD30C\uC77C\uD06C\uAE30");
-		label_text_fileSize.setFont(new Font("굴림", Font.BOLD, 12));
+		label_text_fileSize.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
 		label_text_fileSize.setBounds(22, 334, 135, 15);
 		frame.getContentPane().add(label_text_fileSize);
 		
@@ -285,11 +292,12 @@ public class DetailGUI {
 		frame.getContentPane().add(label_lastModify);
 		
 		JLabel label_text_img = new JLabel("\uBBF8\uB9AC\uBCF4\uAE30");
-		label_text_img.setFont(new Font("굴림", Font.BOLD, 12));
-		label_text_img.setBounds(547, 225, 92, 15);
+		label_text_img.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+		label_text_img.setBounds(551, 246, 57, 15);
 		frame.getContentPane().add(label_text_img);
 		
 		JLabel label_img = new JLabel("\uC774\uBBF8\uC9C0");
+		label_img.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
 		label_img.setBorder(UIManager.getBorder("PasswordField.border"));
 		label_img.setHorizontalAlignment(SwingConstants.CENTER);
 		label_img.setBackground(new Color(0, 255, 0));
@@ -297,7 +305,9 @@ public class DetailGUI {
 		frame.getContentPane().add(label_img);
 		
 		JButton button_apply = new JButton("확인");
-		button_apply.setFont(new Font("굴림", Font.BOLD, 12));
+		button_apply.setForeground(Color.WHITE);
+		button_apply.setBackground(new Color(85, 107, 4));
+		button_apply.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
 		button_apply.addActionListener(new ActionListener() {   				// 적용버튼 눌렀을경우
 			public void actionPerformed(ActionEvent e) {
 				if(textField_title.getText().isEmpty() || textField_content.getText().isEmpty() || textField_deadLineDay.getText().isEmpty() || textField_deadLineMonth.getText().isEmpty()
@@ -317,20 +327,22 @@ public class DetailGUI {
 	
 		button_apply.setBounds(607, 540, 85, 23);
 		frame.getContentPane().add(button_apply);
+		button_cancel.setForeground(Color.WHITE);
+		button_cancel.setBackground(new Color(85, 107, 4));
 		
 
-		button_cancel.setFont(new Font("굴림", Font.BOLD, 12));
+		button_cancel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
 		button_cancel.setBounds(510, 540, 85, 23);
 		button_cancel.addActionListener(ml);
 		frame.getContentPane().add(button_cancel);
 		
 		JLabel label_text_addContent = new JLabel("컨텐츠 등록 날짜");
-		label_text_addContent.setFont(new Font("굴림", Font.BOLD, 12));
+		label_text_addContent.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
 		label_text_addContent.setBounds(12, 442, 135, 15);
 		frame.getContentPane().add(label_text_addContent);
 		
 		JLabel label_text_deadLine = new JLabel("알림 마감 날짜");
-		label_text_deadLine.setFont(new Font("굴림", Font.BOLD, 12));
+		label_text_deadLine.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
 		label_text_deadLine.setBounds(12, 498, 135, 15);
 		frame.getContentPane().add(label_text_deadLine);
 		
@@ -411,7 +423,7 @@ public class DetailGUI {
 		frame.getContentPane().add(textField_deadLineDay);
 		
 		JLabel label_text_notification = new JLabel("마감전 알림");
-		label_text_notification.setFont(new Font("굴림", Font.BOLD, 12));
+		label_text_notification.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
 		label_text_notification.setBounds(283, 337, 135, 15);
 		frame.getContentPane().add(label_text_notification);
 		
@@ -421,6 +433,7 @@ public class DetailGUI {
 		frame.getContentPane().add(comboBox_notification);
 		
 		JCheckBox checkBox_notification = new JCheckBox("기억주기 자동 알림");
+		checkBox_notification.setBackground(Color.WHITE);
 		checkBox_notification.setSelected(true);
 		checkBox_notification.setBounds(283, 401, 156, 23);
 		frame.getContentPane().add(checkBox_notification);
