@@ -44,6 +44,9 @@ public class SelectedPlanGUI extends JFrame {
 	
 	// SelectePlanGUI 초기화
 	public SelectedPlanGUI() {
+		
+		
+		
 		setBounds(new Rectangle(400, 700, 400, 700));
 		getContentPane().setLayout(null);
 
@@ -65,5 +68,6 @@ public class SelectedPlanGUI extends JFrame {
 		mainPanel.setBounds(0, 68, 384, 593);
 		getContentPane().add(mainPanel);
 		mainPanel.setLayout(null);
+		
 	}
 }

@@ -22,16 +22,19 @@ import javax.swing.AbstractListModel;
 import javax.swing.border.LineBorder;
 import javax.swing.border.BevelBorder;
 import java.awt.Font;
+import java.awt.SystemColor;
 import java.util.Calendar;
 import java.util.Date;
-public class PlannerGUI {
+public class PlannerGUI  {
 	
 
-	private JFrame frmMemoriaplanner;
+	private JFrame frame;
 	private String one;
 	private String two;
 	private JLabel first = new JLabel();
 	private JLabel second = new JLabel();
+	private Calendar cal;
+	private final JPanel panel_main = new JPanel();
 
 	/**
 	 * Launch the application.
@@ -43,15 +46,29 @@ public class PlannerGUI {
 			public void run() {
 				try {
 					PlannerGUI window = new PlannerGUI();
-					window.frmMemoriaplanner.setVisible(true);
+					window.frame.setVisible(true);
+					window.setContents(1,"A",Color.BLACK);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
 	}
-
-
+	public void setContents(int index, String title, Color color){
+		if(index > 2)
+			index--;
+			
+		JCheckBox chckbx_contents = new JCheckBox(title);
+		panel_main.add(chckbx_contents);
+		chckbx_contents.setFont(new Font("ÎßëÏùÄ Í≥†Îîï", Font.PLAIN, 14));
+		chckbx_contents.setBackground(color);
+		chckbx_contents.setBounds(8, 70 + index * 35, 408, 25);
+		
+	}
+	public void show() {
+		frame.setVisible(true);
+	}
+	
 	/**
 	 * Create the application.
 	 */
@@ -64,17 +81,18 @@ public class PlannerGUI {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		Calendar t=Calendar.getInstance();
-		int year = t.get(Calendar.YEAR);
-		int month = t.get(Calendar.MONTH)+1;
-		int date = t.get(Calendar.DATE);
-		int amPm = t.get(Calendar.AM_PM);
-		int hour = t.get(Calendar.HOUR);
-		int min = t.get(Calendar.MINUTE);
-		int sec = t.get(Calendar.SECOND);
-		int msec = t.get(Calendar.MILLISECOND);
+		
+		cal = Calendar.getInstance();
+		int year = cal.get(Calendar.YEAR);
+		int month = cal.get(Calendar.MONTH)+1;
+		int date = cal.get(Calendar.DATE);
+		int amPm = cal.get(Calendar.AM_PM);
+		int hour = cal.get(Calendar.HOUR);
+		int min = cal.get(Calendar.MINUTE);
+		int sec = cal.get(Calendar.SECOND);
+		int msec = cal.get(Calendar.MILLISECOND);
 		String ampm=amPm==Calendar.AM? "AM":"PM";
-		int day = t.get(Calendar.DAY_OF_WEEK);
+		int day = cal.get(Calendar.DAY_OF_WEEK);
 		String sday = null;
 		switch(day) {
 		case 1:
@@ -103,87 +121,56 @@ public class PlannerGUI {
 				Thread.sleep(100);
 			} catch(Exception e) {}
 
-
-		frmMemoriaplanner = new JFrame();
-		frmMemoriaplanner.getContentPane().setBackground(Color.DARK_GRAY);
-		frmMemoriaplanner.getContentPane().setForeground(Color.DARK_GRAY);
-		frmMemoriaplanner.setForeground(Color.GRAY);
-		frmMemoriaplanner.setFont(new Font("Edwardian Script ITC", Font.BOLD | Font.ITALIC, 12));
-		frmMemoriaplanner.setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Administrator\\Desktop\\63376930-\uBB3C-\uD22C\uBA85-\uD55C-\uC0C1\uD488-\uC6D0\uD65C\uD55C-\uD328\uD134\uBE44 -.jpg"));
-		frmMemoriaplanner.setType(Type.UTILITY);
-		frmMemoriaplanner.setTitle("Memoria_Planner");
-		frmMemoriaplanner.setBounds(100, 100, 400, 530);
-		frmMemoriaplanner.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmMemoriaplanner.getContentPane().setLayout(null);
+		frame = new JFrame();
+		frame.getContentPane().setBackground(Color.DARK_GRAY);
+		frame.getContentPane().setForeground(Color.DARK_GRAY);
+		frame.setForeground(Color.GRAY);
+		frame.setFont(new Font("Edwardian Script ITC", Font.BOLD | Font.ITALIC, 12));
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\Administrator\\Desktop\\63376930-\uBB3C-\uD22C\uBA85-\uD55C-\uC0C1\uD488-\uC6D0\uD65C\uD55C-\uD328\uD134\uBE44 -.jpg"));
+		frame.setType(Type.UTILITY);
+		frame.setTitle("Memoria_Planner");
+		frame.setBounds(100, 100, 439, 600);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		frame.getContentPane().add(panel_main);
 		
-		JLabel lblNewLabel = new JLabel("Daliy Plan");
-		lblNewLabel.setForeground(Color.WHITE);
-		lblNewLabel.setBackground(Color.WHITE);
-		lblNewLabel.setFont(new Font("DialogInput", Font.BOLD | Font.ITALIC, 13));
-		lblNewLabel.setBounds(155, 10, 81, 23);
-		frmMemoriaplanner.getContentPane().add(lblNewLabel);
+		JLabel label_title = new JLabel("Daliy Plan");
+		label_title.setForeground(Color.WHITE);
+		label_title.setBackground(Color.WHITE);
+		label_title.setFont(new Font("Bahnschrift", Font.PLAIN, 21));
+		label_title.setBounds(152, 10, 105, 23);
+		panel_main.add(label_title);
 		
-		JLabel lblNewLabel_1 = new JLabel("\uC815\uB82C");
-		lblNewLabel_1.setForeground(Color.WHITE);
-		lblNewLabel_1.setBounds(269, 37, 35, 15);
-		frmMemoriaplanner.getContentPane().add(lblNewLabel_1);
-		
-		JCheckBox chckbxNewCheckBox = new JCheckBox("\uB0B4\uC6A9 ");
-		chckbxNewCheckBox.setBackground(Color.LIGHT_GRAY);
-		chckbxNewCheckBox.setBounds(8, 73, 368, 23);
-		frmMemoriaplanner.getContentPane().add(chckbxNewCheckBox);
-		
-		JCheckBox chckbxNewCheckBox_1 = new JCheckBox("\uC624\uD508\uC18C\uC2A4 \uD504\uB85C\uC81D\uD2B8 \uACFC\uC81C");
-		chckbxNewCheckBox_1.setBackground(Color.LIGHT_GRAY);
-		chckbxNewCheckBox_1.setBounds(8, 98, 368, 23);
-		frmMemoriaplanner.getContentPane().add(chckbxNewCheckBox_1);
-		
-		JCheckBox chckbxNewCheckBox_1_1 = new JCheckBox("New check box");
-		chckbxNewCheckBox_1_1.setBackground(Color.LIGHT_GRAY);
-		chckbxNewCheckBox_1_1.setBounds(8, 123, 368, 23);
-		frmMemoriaplanner.getContentPane().add(chckbxNewCheckBox_1_1);
-		
-		JCheckBox chckbxNewCheckBox_1_2 = new JCheckBox("New check box");
-		chckbxNewCheckBox_1_2.setBackground(Color.LIGHT_GRAY);
-		chckbxNewCheckBox_1_2.setBounds(8, 148, 368, 23);
-		frmMemoriaplanner.getContentPane().add(chckbxNewCheckBox_1_2);
-		
-		JCheckBox chckbxNewCheckBox_1_3 = new JCheckBox("New check box");
-		chckbxNewCheckBox_1_3.setBackground(Color.LIGHT_GRAY);
-		chckbxNewCheckBox_1_3.setBounds(8, 173, 368, 23);
-		frmMemoriaplanner.getContentPane().add(chckbxNewCheckBox_1_3);
+		JLabel label_sortBy = new JLabel("\uC815\uB82C");
+		label_sortBy.setForeground(Color.WHITE);
+		label_sortBy.setBounds(312, 37, 35, 15);
+	
+		panel_main.add(label_sortBy);
 		
 		JList list = new JList();
 		list.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		
 		list.setModel(new AbstractListModel() {
 			String[] values = new String[] {"\uC911\uC694\uB3C4", "\uC774\uB984", "\uB4F1\uB85D\uC77C\uC790"};
+			
 			public int getSize() {
 				return values.length;
 			}
+			
 			public Object getElementAt(int index) {
 				return values[index];
 			}
+			
 		});
 		list.setToolTipText("");
-		list.setBounds(305, 34, 71, 19);
-		frmMemoriaplanner.getContentPane().add(list);
+		list.setBounds(345, 34, 71, 19);
+		panel_main.add(list);
 		
-		JList list_1 = new JList();
-		list_1.setToolTipText("");
-		list_1.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		list_1.setBounds(42, 34, 71, 19);
-		frmMemoriaplanner.getContentPane().add(list_1);
-		
-		JLabel lblNewLabel_1_1 = new JLabel("\uAC80\uC0C9");
-		lblNewLabel_1_1.setForeground(Color.WHITE);
-		lblNewLabel_1_1.setBounds(8, 37, 35, 15);
-		frmMemoriaplanner.getContentPane().add(lblNewLabel_1_1);
-		
-		JLabel lblNewLabel_2 = new JLabel();
-		lblNewLabel_2.setFont(new Font("DialogInput", Font.BOLD, 12));
-		lblNewLabel_2.setForeground(Color.WHITE);
-		lblNewLabel_2.setBounds(237, 433, 139, 27);
-		frmMemoriaplanner.getContentPane().add(lblNewLabel_2);
+		JLabel label_date = new JLabel(Integer.toString(cal.YEAR) + "." + Integer.toString(cal.MONTH) + " . " + Integer.toString(cal.DATE));
+		label_date.setFont(new Font("Bahnschrift", Font.PLAIN, 12));
+		label_date.setForeground(Color.WHITE);
+		label_date.setBounds(174, 31, 71, 27);
+		panel_main.add(label_date);
 		second.setOpaque(true);
 		second.setBackground(new Color(0,0,0,0));
 		second.setBounds(85,170,300,50);
@@ -192,18 +179,21 @@ public class PlannerGUI {
 		first.setBackground(new Color(0,0,0,0));
 		first.setBounds(60,120,320,50);
 		first.setForeground(Color.black);
-		one=(year+"."+month+"."+date+" "+sday+"day");
-		two=(ampm+" "+hour+"Ω√"+min+"∫–"+sec+"√ ");
-		lblNewLabel_2.setText(one);
+		one=(year+"."+month+"."+date);
+		two=(ampm+ " " + hour + " : " + min + " : "+sec);
+		label_date.setText("2020.6.29");
 		
-		JLabel lblNewLabel_2_1 = new JLabel();
-		lblNewLabel_2_1.setText(two);
-		lblNewLabel_2_1.setForeground(Color.WHITE);
-		lblNewLabel_2_1.setFont(new Font("HY±◊∑°«»M", Font.BOLD, 12));
-		lblNewLabel_2_1.setBounds(267, 454, 105, 27);
-		frmMemoriaplanner.getContentPane().add(lblNewLabel_2_1);
+		JLabel label_time = new JLabel();
+		label_time.setText(two);
+		label_time.setForeground(Color.WHITE);
+		label_time.setFont(new Font("ÎßëÏùÄ Í≥†Îîï", Font.PLAIN, 12));
+		label_time.setBounds(8, 40, 105, 27);
+		panel_main.add(label_time);
+		panel_main.setBackground(SystemColor.inactiveCaption);
+		panel_main.setBounds(0, 0, 423, 561);
+		panel_main.setLayout(null);
+		
+
 	}
-
-
 }
 

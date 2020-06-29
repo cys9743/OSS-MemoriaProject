@@ -76,6 +76,9 @@ public class MainGUI {
 	int todayDayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
 	int todayDayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
 	
+	private int today_label_weight;
+	private int today_label_height;
+	
 	JButton btn_today = new JButton("Today");
 	
 	JButton btn_Backward = new JButton(cal.get(Calendar.MONTH)+"월");	
@@ -100,6 +103,7 @@ public class MainGUI {
 	Database database;				// 데이터베이스
 	String tempTitle;		// 사용자가 클릭한 컨텐츠의 이름을 임시저장하는 변수
 	SelectedPlanGUI selectedPlanGUI;
+	PlannerGUI plannerGUI;
 
 	public static void main(String[] args) {			//////메인 메소드
 		EventQueue.invokeLater(new Runnable() {
@@ -116,6 +120,22 @@ public class MainGUI {
 				}
 			}
 		});	
+	}
+	public void saveTodayLocation(int w, int h) {
+		today_label_weight = w;
+		today_label_height = h;
+	}
+	public int getTodayWeight() {
+		return today_label_weight;
+	}
+	public int getTodayHeight() {
+		return today_label_height;
+	}
+	public void setPlannerContents(int w, int h) {
+		for(int i = 0; i < label_space[w][h].getComponentCount(); i++ ) {
+			plannerGUI.setContents(i, ((JLabel)label_space[w][h].getComponent(i)).getText(), ((JLabel)label_space[w][h].getComponent(i)).getBackground());
+		}
+		plannerGUI.show();
 	}
 	public void setContentsToCalendar(String title, int index, int h){   	// 켈린더 라벨에 콘텐츠 라벨을 부착하는 메소드
 			int location = label_space[h/7][h%7].getComponentCount() * 25;
@@ -263,6 +283,7 @@ public class MainGUI {
 				if(label_space[w][h].getText().equals(todayDayOfMonth+"")){	
 					label_space[w][h].setOpaque(true);
 					label_space[w][h].setBackground(new Color(255, 255, 180));
+					
 				}
 			}	
 		}
@@ -275,6 +296,7 @@ public class MainGUI {
 					if(label_space[w][h].getText().equals(todayDayOfMonth+"")){	
 						label_space[w][h].setOpaque(true);
 						label_space[w][h].setBackground(new Color(255, 255, 180));
+						saveTodayLocation(w,h);
 					}
 				}	
 			}
@@ -448,10 +470,12 @@ public class MainGUI {
 		detailGUI = new DetailGUI();
 		database = new Database(); // 데이터베이스 객체생성
 		selectedPlanGUI = new SelectedPlanGUI();
+		plannerGUI = new PlannerGUI(); 
 		
 		initialize();
 		showCal(cal);
-		installContents(database.getContentsResultSet(todayYear, calMonth)); 
+		installContents(database.getContentsResultSet(todayYear, calMonth));
+		setPlannerContents(getTodayWeight(), getTodayHeight());
 		getList();
 	}
 	
@@ -1189,6 +1213,7 @@ public class MainGUI {
                 
                 if(event.getText().equals("더보기")) {  // 더보기 라벨 클릭했을시
                 	event_parents = (JLabel) event.getParent();
+                	selectedPlanGUI.setVisible(false);
                 	selectedPlanGUI.setDate(calMonth + " 월 " + event_parents.getText() + " 일 ");
                 	selectedPlanGUI.removeContents();
                 	for(int i = 0 ; i < event.getParent().getComponentCount(); i ++) {
