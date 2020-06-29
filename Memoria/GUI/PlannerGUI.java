@@ -39,6 +39,7 @@ public class PlannerGUI  {
 	private JLabel first = new JLabel();
 	private JLabel second = new JLabel();
 	private JLabel[] label_contents;
+	private JCheckBox[] checkBox;
 	private Calendar cal;
 	private final JPanel panel_main = new JPanel();
 	private MyListener ml;
@@ -64,21 +65,42 @@ public class PlannerGUI  {
 	}
 	public void setContents(int index, String title, Color color){		
 		System.out.println("index" + index + "title" + title);
+		if(title != "더보기") {
+			label_contents[index] = new JLabel();
+			label_contents[index].setText(title);
+			label_contents[index].setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+			label_contents[index].setOpaque(true);
+			label_contents[index].setBackground(color);
+			label_contents[index].setBounds(40, 70 + index * 45, 350, 35);
+			label_contents[index].addMouseListener(ml);
+			label_contents[index].setForeground(Color.white);
 		
-		label_contents[index].setText(title);
-		label_contents[index].setFont(new Font("맑은 고딕", Font.PLAIN, 14));
-		label_contents[index].setOpaque(true);
-		label_contents[index].setBackground(color);
-		label_contents[index].setBounds(40, 70 + index * 45, 350, 35);
-		label_contents[index].addMouseListener(ml);
-		label_contents[index].setForeground(Color.white);
+			checkBox[index] = new JCheckBox();
+			checkBox[index].setBackground(new Color(192, 192, 192));
+			checkBox[index].setBounds(20, 70 + index * 45, 20, 35);
+			panel_main.add(checkBox[index]);
+			
+			panel_main.add(label_contents[index]);
 		
-		JCheckBox chckbxNewCheckBox = new JCheckBox("");
-		chckbxNewCheckBox.setBackground(new Color(192, 192, 192));
-		chckbxNewCheckBox.setBounds(20, 70 + index * 45, 20, 35);
-		panel_main.add(chckbxNewCheckBox);
-		
-		panel_main.add(label_contents[index]);
+				if(index >= 3) {
+				index--;
+				label_contents[index] = new JLabel();
+				label_contents[index].setText(title);
+				label_contents[index].setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+				label_contents[index].setOpaque(true);
+				label_contents[index].setBackground(color);
+				label_contents[index].setBounds(40, 70 + index * 45, 350, 35);
+				label_contents[index].addMouseListener(ml);
+				label_contents[index].setForeground(Color.white);
+			
+				checkBox[index] = new JCheckBox();
+				checkBox[index].setBackground(new Color(192, 192, 192));
+				checkBox[index].setBounds(20, 70 + index * 45, 20, 35);
+				panel_main.add(checkBox[index]);
+			
+				panel_main.add(label_contents[index]);
+			}
+		}
 		
 	}	
 	public void show() {
@@ -95,10 +117,8 @@ public class PlannerGUI  {
 		database = new Database();
 		detailGUI = new DetailGUI();
 		label_contents = new JLabel[15];
+		checkBox = new JCheckBox[15];
 		ml = new MyListener();
-		for(int i = 0 ; i < label_contents.length; i ++) {
-			label_contents[i] = new JLabel();
-		}
 		
 		initialize();
 		
