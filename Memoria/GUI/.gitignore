@@ -21,3 +21,5 @@
 /MainGUI$KeyListener.class
 /MainGUI$MyContentsListener.class
 /SelectedPlanGUI.class
+/SelectedPlanGUI$MyListener.class
+/PlannerGUI$MyListener.class

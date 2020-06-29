@@ -12,6 +12,10 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.Window.Type;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 
 import javax.swing.JScrollPane;
@@ -33,8 +37,12 @@ public class PlannerGUI  {
 	private String two;
 	private JLabel first = new JLabel();
 	private JLabel second = new JLabel();
+	private JLabel[] label_contents;
 	private Calendar cal;
 	private final JPanel panel_main = new JPanel();
+	private MyListener ml;
+	private Database database;
+	private DetailGUI detailGUI;
 
 	/**
 	 * Launch the application.
@@ -47,22 +55,22 @@ public class PlannerGUI  {
 				try {
 					PlannerGUI window = new PlannerGUI();
 					window.frame.setVisible(true);
-					window.setContents(1,"A",Color.BLACK);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
 	}
-	public void setContents(int index, String title, Color color){
-		if(index > 2)
-			index--;
-			
-		JCheckBox chckbx_contents = new JCheckBox(title);
-		panel_main.add(chckbx_contents);
-		chckbx_contents.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
-		chckbx_contents.setBackground(color);
-		chckbx_contents.setBounds(8, 70 + index * 35, 408, 25);
+	public void setContents(int index, String title, Color color){		
+		System.out.println("index" + index + "title" + title);
+		
+		label_contents[index].setText(title);
+		label_contents[index].setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+		label_contents[index].setOpaque(true);
+		label_contents[index].setBackground(color);
+		label_contents[index].setBounds(8, 70 + index * 35, 408, 25);
+		label_contents[index].addMouseListener(ml);
+		panel_main.add(label_contents[index]);
 		
 	}
 	public void show() {
@@ -73,7 +81,19 @@ public class PlannerGUI  {
 	 * Create the application.
 	 */
 	public PlannerGUI() {
+		
+		
+		cal = Calendar.getInstance();
+		database = new Database();
+		detailGUI = new DetailGUI();
+		label_contents = new JLabel[15];
+		ml = new MyListener();
+		for(int i = 0 ; i < label_contents.length; i ++) {
+			label_contents[i] = new JLabel();
+		}
+		
 		initialize();
+		
 	}
 
 
@@ -81,8 +101,8 @@ public class PlannerGUI  {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+
 		
-		cal = Calendar.getInstance();
 		int year = cal.get(Calendar.YEAR);
 		int month = cal.get(Calendar.MONTH)+1;
 		int date = cal.get(Calendar.DATE);
@@ -193,7 +213,21 @@ public class PlannerGUI  {
 		panel_main.setBounds(0, 0, 423, 561);
 		panel_main.setLayout(null);
 		
-
+	}
+	class MyListener extends MouseAdapter {
+		JLabel label_event;
+		public void mouseReleased(MouseEvent e) {
+			if(e.getSource().getClass().equals(JLabel.class)) {
+				
+				label_event = (JLabel)e.getSource();
+				database.getSeletedContentsInfo(label_event.getText());
+				
+				detailGUI.setComponents(database.getSeletedContentsInfo(label_event.getText()));
+				System.out.println("테스트");
+				detailGUI.show();
+				
+			}
+		}
 	}
 }
 

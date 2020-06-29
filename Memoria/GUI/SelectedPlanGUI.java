@@ -11,6 +11,8 @@ import java.awt.Color;
 import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
 import java.awt.SystemColor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.Rectangle;
 
 public class SelectedPlanGUI extends JFrame {
@@ -19,11 +21,13 @@ public class SelectedPlanGUI extends JFrame {
 	private JPanel mainPanel;
 	private JLabel label_selected_date;
 	private JLabel[] label_contents = new JLabel[15];
-	
+	private Database database;
+	private MyListener ml;
 	
 	public void setDate(String date) {
 		label_selected_date.setText(date);
 	}
+	
 	
 	// GUI에 콘텐츠를 표기하는 메소드
 	public void setContents(int index, String title, Color color){
@@ -37,6 +41,8 @@ public class SelectedPlanGUI extends JFrame {
 		label_contents[index].setBounds(12, 10 +(index * 30), 360, 25);
 		mainPanel.add(label_contents[index]);
 	}
+	
+	
 	// SelectePlanGUI의 컴포넌트를 모두 지우는 메
 	public void removeContents() {
 		mainPanel.removeAll();
@@ -44,8 +50,7 @@ public class SelectedPlanGUI extends JFrame {
 	
 	// SelectePlanGUI 초기화
 	public SelectedPlanGUI() {
-		
-		
+
 		
 		setBounds(new Rectangle(400, 700, 400, 700));
 		getContentPane().setLayout(null);
@@ -68,6 +73,18 @@ public class SelectedPlanGUI extends JFrame {
 		mainPanel.setBounds(0, 68, 384, 593);
 		getContentPane().add(mainPanel);
 		mainPanel.setLayout(null);
+		
+	}
+	
+	class MyListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(e.getSource().getClass().equals(JLabel.class)) {
+				
+			}
+			
+		}
 		
 	}
 }
