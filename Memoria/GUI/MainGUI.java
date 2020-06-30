@@ -552,7 +552,7 @@ public class MainGUI {
 		btn_Backward = new JButton(cal.get(Calendar.MONTH)+"월");	
 		btn_Forward = new JButton((cal.get(Calendar.MONTH)+1+1)+"월");
 		detailGUI = new DetailGUI();
-		contentsGUI = new ContentsGUI();
+		
 		database = new Database(); // 데이터베이스 객체생성
 		selectedPlanGUI = new SelectedPlanGUI();
 		plannerGUI = new PlannerGUI(); 
@@ -563,6 +563,7 @@ public class MainGUI {
 		installContents(database.getContentsResultSet(todayYear, calMonth));
 		setPlannerContents(getTodayWeight(), getTodayHeight());
 		getList();
+		contentsGUI = new ContentsGUI();
 	}
 	
 	public void getList() {			//불러온 db에서 title을 불러와서 리스트에 출력해주는 메소드
@@ -1319,6 +1320,9 @@ public class MainGUI {
 			}
 			if(e.getSource().equals(mntmNewMenuItem_remove)){ // 팝업 메뉴에서 제거 버튼 눌렀을 시
 				database.removeContents(getContentsTitle());
+				clearCal();
+				showCal(cal);
+				installContents(database.getContentsResultSet(calYear, calMonth)); 
 			}
 			
 			if(e.getSource().equals(mntmNewMenuItem_fix_list)){ // 팝업 메뉴에서 수정 버튼 눌렀을 시
@@ -1330,10 +1334,13 @@ public class MainGUI {
 			if(e.getSource().equals(mntmNewMenuItem_remove_list)){ // 팝업 메뉴에서 제거 버튼 눌렀을 시
 				database.removeContents(event_list.getSelectedValue().toString());
 				getList();
+				clearCal();
+				showCal(cal);
+				installContents(database.getContentsResultSet(calYear, calMonth)); 
 			}
 		}
 		public void mouseReleased (MouseEvent e) { // 마우스가 눌렸다가 때어질때 발생하는 리스너 ((라벨))
-            if(e.getComponent().getClass().equals(JLabel.class)) {
+            if(e.getComponent().getClass().equals(JLabel.class) && e.isPopupTrigger() != true) {
                 event = (JLabel)e.getSource();
                 
                 if(event.getText().equals("더보기")) {  // 더보기 라벨 클릭했을시
