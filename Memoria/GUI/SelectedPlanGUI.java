@@ -28,7 +28,10 @@ public class SelectedPlanGUI extends JFrame {
 	private MyListener ml;
 	
 	public void setDate(String date) {
-		label_selected_date.setText(date);
+		label_selected_date = new JLabel(date);
+		label_selected_date.setFont(new Font("맑은 고딕", Font.PLAIN, 21));
+		mainPanel.add(label_selected_date);
+		label_selected_date.setBounds(150, 10, 140, 23);
 	}
 	
 	
@@ -37,11 +40,11 @@ public class SelectedPlanGUI extends JFrame {
 		if(index > 2)
 			index--;
 		label_contents[index] = new JLabel(title);
-		label_contents[index].setBorder(new LineBorder(SystemColor.scrollbar));
 		label_contents[index].setBackground(color);
 		label_contents[index].setOpaque(true);
 		label_contents[index].setFont(new Font("맑은 고딕", Font.PLAIN, 19));
-		label_contents[index].setBounds(12, 10 +(index * 30), 360, 25);
+		label_contents[index].setForeground(Color.white);
+		label_contents[index].setBounds(40, 70 +(index * 40), 350, 35);
 		mainPanel.add(label_contents[index]);
 	}
 	
@@ -56,44 +59,18 @@ public class SelectedPlanGUI extends JFrame {
 
 
 		setLocationRelativeTo(null);
-		setBounds(new Rectangle(400, 700, 400, 700));
+		setBounds(new Rectangle(400, 700, 445, 600));
 		getContentPane().setLayout(null);
-
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(0, 0, 394, 67);
-		getContentPane().add(panel_1);
-		panel_1.setLayout(null);
-		
-		label_selected_date = new JLabel("New label");
-		label_selected_date.setOpaque(true);
-		label_selected_date.setBackground(Color.WHITE);
-		label_selected_date.setFont(new Font("맑은 고딕", Font.PLAIN, 21));
-		label_selected_date.setHorizontalAlignment(SwingConstants.CENTER);
-		label_selected_date.setBounds(0, 0, 382, 67);
-		panel_1.add(label_selected_date);
 		
 		mainPanel = new JPanel();
-		mainPanel.setBackground(Color.ORANGE);
-		mainPanel.setBounds(0, 68, 384, 593);
+		mainPanel.setToolTipText("");
+		mainPanel.setBackground(Color.WHITE);
+		mainPanel.setBounds(0, 0, 429, 561);
 		getContentPane().add(mainPanel);
 		mainPanel.setLayout(null);
 		
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-		} catch (ClassNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (InstantiationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+
+
 	}
 	
 	class MyListener implements ActionListener {

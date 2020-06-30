@@ -1279,8 +1279,9 @@ public class MainGUI {
                 if(event.getText().equals("더보기")) {  // 더보기 라벨 클릭했을시
                 	event_parents = (JLabel) event.getParent();
                 	selectedPlanGUI.setVisible(false);
-                	selectedPlanGUI.setDate(calMonth + " 월 " + event_parents.getText() + " 일 ");
                 	selectedPlanGUI.removeContents();
+                	selectedPlanGUI.setDate("<"+calYear + "." +calMonth + "." + event_parents.getText()+">");
+                	
                 	for(int i = 0 ; i < event.getParent().getComponentCount(); i ++) {
                 		if(i != 3) {		// 더보기 라벨은 제외한다.
                 			label_temp = (JLabel)event_parents.getComponent(i);
