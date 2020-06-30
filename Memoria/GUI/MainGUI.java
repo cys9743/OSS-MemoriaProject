@@ -39,6 +39,8 @@ import javax.swing.JTextField;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -110,6 +112,7 @@ public class MainGUI {
 	String tempTitle;		// 사용자가 클릭한 컨텐츠의 이름을 임시저장하는 변수
 	SelectedPlanGUI selectedPlanGUI;
 	PlannerGUI plannerGUI;
+	JFileChooser chooser;
 
 	public static void main(String[] args) {			//////메인 메소드
 		EventQueue.invokeLater(new Runnable() {
@@ -167,7 +170,7 @@ public class MainGUI {
 		int h = -1;
 		int cnt = 0;
 		String title = "";
-		
+
 		try {
 			while(resultSet.next()) {	
 				cnt = 0;
@@ -490,8 +493,9 @@ public class MainGUI {
 		database = new Database(); // 데이터베이스 객체생성
 		selectedPlanGUI = new SelectedPlanGUI();
 		plannerGUI = new PlannerGUI(); 
-		
+
 		initialize();
+
 		showCal(cal);
 		installContents(database.getContentsResultSet(todayYear, calMonth));
 		setPlannerContents(getTodayWeight(), getTodayHeight());
@@ -527,6 +531,22 @@ public class MainGUI {
 	
 	private void initialize() {
 		setToday();
+		
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (InstantiationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IllegalAccessException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		list_searchlist.setBorder(new LineBorder(new Color(105, 105, 105)));
 		list_searchlist.addMouseListener(ml);
 		list_searchlist.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -1150,7 +1170,30 @@ public class MainGUI {
 		popupMenuList.add(mntmNewMenuItem_fix_list);
 		popupMenuList.add(mntmNewMenuItem_remove_list);
 
+
+		chooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+
+		chooser.setCurrentDirectory(new File("/")); // 현재 사용 디렉터리 지정
+		chooser.setAcceptAllFileFilterUsed(true);
+		chooser.setDialogTitle("메모리아 파일 열기");
+		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // 파일 또는 디렉터리 여는 chooser
 		//JMenuItem 
+		
+		try {
+			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (InstantiationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IllegalAccessException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 	class MyContentsListener extends MouseAdapter{
 		
@@ -1179,18 +1222,14 @@ public class MainGUI {
 		JLabel event;
 		JLabel event_parents;
 		JList event_list;
-		JFileChooser chooser; 
+		 
 		JLabel label_temp;
 		int returnChoice;
 
 		//MyListener 생성자
 		MyListener(){
 			// 파일 다이얼로그 세팅
-			chooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-			chooser.setCurrentDirectory(new File("/")); // 현재 사용 디렉터리 지정
-			chooser.setAcceptAllFileFilterUsed(true);
-			chooser.setDialogTitle("메모리아 파일 열기");
-			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // 파일 또는 디렉터리 여는 chooser
+		
 		}
 		public void actionPerformed(ActionEvent e) {
 			

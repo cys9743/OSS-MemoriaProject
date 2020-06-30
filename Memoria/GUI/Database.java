@@ -41,6 +41,27 @@ public class Database {
 			e.printStackTrace();
 		}
 	}
+	public boolean updateContents(String title, String text, int priority, String registerDate, String lastDate, String fileLink ) {//DB에서 콘텐츠를 조회하고 존재하면 FALSE 리턴, 존재하지 않으면 매개변수 DB에 삽입하고 TRUE 리턴, 나머지 안되는경우에도 FALSE
+		try {	
+
+			String sql_update_contents = "UPDATE memoria.contents " // 콘텐츠 삽입 UPDATE문
+					+ "SET" 
+					+ " TEXT='" + text 
+					+ "',PRIORITY='"+ priority 
+					+ "',R_DATE='"+ registerDate 
+					+ "',L_DATE='"+ lastDate 
+					+ "',F_LINK='"+fileLink
+					+ "' WHERE TITLE ='"+ title +"';";
+			
+				statement.executeUpdate(sql_update_contents);
+				System.out.println("쿼리 삽입 성공");
+				return true;
+		}catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("DB콘텐츠 등록 오류 : Database.registerContets() ");
+		}
+		return false;
+	}
 	public boolean registerContents(String title, String text, int priority, String registerDate, String lastDate, String fileLink ) {//DB에서 콘텐츠를 조회하고 존재하면 FALSE 리턴, 존재하지 않으면 매개변수 DB에 삽입하고 TRUE 리턴, 나머지 안되는경우에도 FALSE
 		try {	
 

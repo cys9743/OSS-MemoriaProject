@@ -27,6 +27,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.JCheckBox;
 
@@ -41,6 +42,8 @@ public class DetailGUI {
 	private JLabel label_fileKind;
 	private JButton button_Add_File;
 	private JButton button_delete_file;
+	private JButton button_apply;
+	private JButton button_cancel;
 	private JFileChooser chooser; 
 	private int returnChoice;
 	private JTextField textField_addContentYear;
@@ -50,9 +53,8 @@ public class DetailGUI {
 	private JTextField textField_addContentDay;
 	private JTextField textField_deadLineDay;
 	private JComboBox comboBox_star;
-	private JOptionPane op;
+	private JOptionPane op_askRegisterContents;
 	
-	JButton button_cancel = new JButton("취소");
 	
 	Database database;
 	Contents contents;
@@ -175,8 +177,31 @@ public class DetailGUI {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+
+		
+		button_Add_File = new JButton("\uD30C\uC77C \uCD94\uAC00");
+		button_delete_file = new JButton("\uD30C\uC77C \uC81C\uAC70");
+		button_apply = new JButton("확인");
+		button_cancel = new JButton("취소");
+		
+		try {				
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());		// 이 코드부분 이후로 생성되는 컴포넌트 객체는 윈도우ui 처럼 형성됨.
+			
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (InstantiationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IllegalAccessException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
 		// 객체 생성
-		op = new JOptionPane();
 		ml = new MyListener();
 		contents = new Contents();
 		database = new Database();
@@ -219,7 +244,7 @@ public class DetailGUI {
 		label_path.setBounds(22, 259, 244, 15);
 		frame.getContentPane().add(label_path);
 		
-		button_Add_File = new JButton("\uD30C\uC77C \uCD94\uAC00");
+		
 		button_Add_File.setForeground(Color.WHITE);
 		button_Add_File.setBackground(new Color(85, 107, 4));
 		button_Add_File.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
@@ -241,7 +266,7 @@ public class DetailGUI {
 				}
 			}
 		});
-		button_delete_file = new JButton("\uD30C\uC77C \uC81C\uAC70");
+		
 		button_delete_file.setForeground(Color.WHITE);
 		button_delete_file.setBackground(new Color(85, 107, 47));
 		button_delete_file.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
@@ -304,7 +329,7 @@ public class DetailGUI {
 		label_img.setBounds(464, 275, 228, 233);
 		frame.getContentPane().add(label_img);
 		
-		JButton button_apply = new JButton("확인");
+		
 		button_apply.setForeground(Color.WHITE);
 		button_apply.setBackground(new Color(85, 107, 4));
 		button_apply.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
@@ -317,10 +342,25 @@ public class DetailGUI {
 				}
 				else {
 					contents.setContents();
-					database.registerContents(contents.getTitle(), contents.getText(),contents.getPriority(),contents.getRegisterDate(),contents.getLastDate(),contents.getFileLink());
-					InitComponents();
-					frame.dispose();
+					
+					if(database.registerContents(contents.getTitle(), contents.getText(),contents.getPriority(),contents.getRegisterDate(),contents.getLastDate(),contents.getFileLink())) {
+						InitComponents();
+						frame.dispose();	
 					}
+					else {
+						try {
+							UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+						} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+								| UnsupportedLookAndFeelException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						if(op_askRegisterContents.showConfirmDialog(null, "이미 등록된 콘텐츠 '"+ contents.getTitle() + "'이(가) 존재합니다. \n 기존의 내용을 변경 하시겠습니까?") == 0) {
+							database.updateContents(contents.getTitle(), contents.getText(),contents.getPriority(),contents.getRegisterDate(),contents.getLastDate(),contents.getFileLink());
+							frame.dispose();
+						}
+					}
+				}
 				}
 			});
 		
@@ -458,6 +498,10 @@ public class DetailGUI {
 		label_text_deadLineMinute.setBounds(478, 526, 19, 15);
 		frame.getContentPane().add(label_text_deadLineMinute);
 		textField_deadLineDay.addKeyListener(ml);
+		
+		// 옵션 펜
+		op_askRegisterContents = new JOptionPane();
+		op_askRegisterContents.setBackground(Color.white);
 
 		// 파일 다이얼로그 세팅
 		chooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
@@ -467,6 +511,21 @@ public class DetailGUI {
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // 파일 또는 디렉터리 여는 chooser
 		
 		
+		try {
+			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (InstantiationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IllegalAccessException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 	}
 	class Contents{ 		//콘텐츠의 내용을 담는 클래스
