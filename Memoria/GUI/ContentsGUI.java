@@ -401,24 +401,6 @@ public class ContentsGUI {
 		textField_deadLineDay.setBounds(212, 520, 57, 21);
 		frame.getContentPane().add(textField_deadLineDay);
 		
-		JLabel label_text_notification = new JLabel("마감전 알림");
-		label_text_notification.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
-		label_text_notification.setBounds(283, 337, 135, 15);
-		frame.getContentPane().add(label_text_notification);
-		
-		JComboBox comboBox_notification = new JComboBox();
-		comboBox_notification.setEnabled(false);
-		comboBox_notification.setModel(new DefaultComboBoxModel(new String[] {"하루전", "1시간전", "10분전", "1분전", "10초전", "없음"}));
-		comboBox_notification.setBounds(283, 359, 156, 21);
-		frame.getContentPane().add(comboBox_notification);
-		
-		JCheckBox checkBox_notification = new JCheckBox("기억주기 자동 알림");
-		checkBox_notification.setEnabled(false);
-		checkBox_notification.setBackground(Color.WHITE);
-		checkBox_notification.setSelected(true);
-		checkBox_notification.setBounds(283, 401, 156, 23);
-		frame.getContentPane().add(checkBox_notification);
-		
 		// 옵션 펜
 		op_askRegisterContents = new JOptionPane();
 		op_askRegisterContents.setBackground(Color.white);

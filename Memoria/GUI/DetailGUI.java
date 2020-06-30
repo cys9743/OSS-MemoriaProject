@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.swing.DefaultComboBoxModel;
@@ -55,7 +56,7 @@ public class DetailGUI {
 	private JComboBox comboBox_star;
 	private JOptionPane op_askRegisterContents;
 	
-	
+	Calendar cal;
 	Database database;
 	Contents contents;
 	MyListener ml;
@@ -64,8 +65,6 @@ public class DetailGUI {
 	int selectYear;
 	int selectMonth;
 	int selectDayOfMonth;
-	private JTextField textField_deadLineHour;
-	private JTextField textField_deadLineMinute;
 	/**
 	 * Launch the application.
 	 */
@@ -142,6 +141,7 @@ public class DetailGUI {
 		return this.frame.isVisible();
 	}
 	
+	
 	public void setFileInfo(String filepath) {
 		System.out.println(filepath);
 		int index;
@@ -165,7 +165,6 @@ public class DetailGUI {
 		label_lastModify.setText(simpleDateFormat.format(lastmodifiedDate));
 	
 	}
-	
 	
 	void InitComponents() {
 		textField_title.setText("");
@@ -339,6 +338,7 @@ public class DetailGUI {
 		frame.getContentPane().add(label_img);
 		
 		
+		
 		button_apply.setForeground(Color.WHITE);
 		button_apply.setBackground(new Color(85, 107, 4));
 		button_apply.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
@@ -347,7 +347,6 @@ public class DetailGUI {
 				if(textField_title.getText().isEmpty() || textField_content.getText().isEmpty() || textField_deadLineDay.getText().isEmpty() || textField_deadLineMonth.getText().isEmpty()
 						|| textField_deadLineDay.getText().isEmpty() || textField_deadLineYear.getText().isEmpty() || textField_addContentDay.getText().isEmpty() || textField_addContentDay.getText().isEmpty()
 						|| textField_addContentMonth.getText().isEmpty() || textField_addContentYear.getText().isEmpty()) {
-					System.out.println("빈칸금지");
 				}
 				else {
 					if(textField_deadLineDay.getText().length() < 2) textField_deadLineDay.setText("0"+textField_deadLineDay.getText());
@@ -373,6 +372,8 @@ public class DetailGUI {
 							frame.dispose();
 						}
 					}
+					mainGUI.check_refush = true;	//새로고침요청
+					
 				}
 				}
 			});
@@ -474,42 +475,6 @@ public class DetailGUI {
 		textField_deadLineDay.setColumns(10);
 		textField_deadLineDay.setBounds(212, 520, 57, 21);
 		frame.getContentPane().add(textField_deadLineDay);
-		
-		JLabel label_text_notification = new JLabel("마감전 알림");
-		label_text_notification.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
-		label_text_notification.setBounds(283, 337, 135, 15);
-		frame.getContentPane().add(label_text_notification);
-		
-		JComboBox comboBox_notification = new JComboBox();
-		comboBox_notification.setModel(new DefaultComboBoxModel(new String[] {"하루전", "1시간전", "10분전", "1분전", "10초전", "없음"}));
-		comboBox_notification.setBounds(283, 359, 156, 21);
-		frame.getContentPane().add(comboBox_notification);
-		
-		JCheckBox checkBox_notification = new JCheckBox("기억주기 자동 알림");
-		checkBox_notification.setBackground(Color.WHITE);
-		checkBox_notification.setSelected(true);
-		checkBox_notification.setBounds(283, 401, 156, 23);
-		frame.getContentPane().add(checkBox_notification);
-		
-		textField_deadLineHour = new JTextField();
-		textField_deadLineHour.setColumns(10);
-		textField_deadLineHour.setBounds(311, 520, 57, 21);
-		frame.getContentPane().add(textField_deadLineHour);
-		
-		JLabel label_text_deadLineHour = new JLabel("시");
-		label_text_deadLineHour.setFont(new Font("새굴림", Font.PLAIN, 12));
-		label_text_deadLineHour.setBounds(379, 526, 19, 15);
-		frame.getContentPane().add(label_text_deadLineHour);
-		
-		textField_deadLineMinute = new JTextField();
-		textField_deadLineMinute.setColumns(10);
-		textField_deadLineMinute.setBounds(410, 520, 57, 21);
-		frame.getContentPane().add(textField_deadLineMinute);
-		
-		JLabel label_text_deadLineMinute = new JLabel("분");
-		label_text_deadLineMinute.setFont(new Font("새굴림", Font.PLAIN, 12));
-		label_text_deadLineMinute.setBounds(478, 526, 19, 15);
-		frame.getContentPane().add(label_text_deadLineMinute);
 		textField_deadLineDay.addKeyListener(ml);
 		
 		// 옵션 펜
@@ -522,7 +487,6 @@ public class DetailGUI {
 		chooser.setAcceptAllFileFilterUsed(true);
 		chooser.setDialogTitle("메모리아 파일 열기");
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); // 파일 또는 디렉터리 여는 chooser
-		
 		
 		try {
 			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());

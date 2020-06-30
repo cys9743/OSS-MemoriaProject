@@ -17,10 +17,12 @@ public class Database {
 
 	private String JDBC_DRIVER =  "com.mysql.cj.jdbc.Driver"; // Mysql 드라이버
 	private final String DB_URL = "jdbc:mysql://localhost:3306/memoria?serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false&autoreconnect=true";// 3306포트에 localhost 아이피 주소를 가진다.
-	private  String DB_USER = "root"; // DB에 접속할 ID
+	
+	private  String DB_USER = "roo2t"; // DB에 접속할 ID
 	//DOKKU
 	//root
-	private String DB_PASSWORD = "root"; // DB에 접속할 비밀번호.
+	private String DB_PASSWORD = "roo2t"; // DB에 접속할 비밀번호.
+
 	//land1!4$7&2@
 	//root
 
@@ -73,7 +75,7 @@ public class Database {
 	public boolean setUpSchemaAndTable() {
 		
 		try {
-			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/?serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false&autoreconnect=true", DB_USER, DB_PASSWORD);
+			connection = DriverManager.getConnection(DB_URL);
 			statement = connection.createStatement();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block

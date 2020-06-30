@@ -72,6 +72,8 @@ public class MainGUI {
 	DetailGUI detailGUI;
 	ContentsGUI contentsGUI;
 	
+	static boolean check_refush = false;
+	
 	Font f1 = new Font("HY헤드라인M",Font.PLAIN, 13);		//캘린더 날짜 (숫자) 폰트
 	
 	int calYear; 			//표시할 년도 설정
@@ -147,6 +149,8 @@ public class MainGUI {
 		}
 		plannerGUI.show();
 	}
+	
+
 	public void setContentsToCalendar(String title, int index, int h){   	// 켈린더 라벨에 콘텐츠 라벨을 부착하는 메소드
 			int location = label_space[h/7][h%7].getComponentCount() * 25;
             if(label_space[h/7][h%7].getText() != "" && label_space[h/7][h%7].getComponentCount() < 3) {         //만약 캘린더에 라벨에 숫자가 표시되어있지 않으면 실행안함
@@ -159,6 +163,27 @@ public class MainGUI {
     		label_contentsTitle[index].setFont(new Font("맑은 고딕", Font.PLAIN, 15));
 
 			}
+	}
+
+	
+	public void refush() {		//다른 GUI에서의 새로고침 요청을 기다리는 메소드
+		Thread thread = new Thread() {
+			public void run() {
+				while(true) {
+					try{
+						if(check_refush == true) {
+							clearCal();
+							showCal(cal);
+							installContents(database.getContentsResultSet(calYear, calMonth)); 
+							setPlannerContents(getTodayWeight(), getTodayHeight());
+							check_refush = false;
+						}
+						sleep(50);
+					}catch(Exception e) {}
+				}
+			}
+		};
+		thread.start();
 	}
 	public int installContents(ResultSet resultSet) {		// 이번달에 표시할 수 있는 컨텐츠들을 가져와서 주기에 따라 캘린더에 컨텐츠를 표시하는 메소드
 		int labelIndex = 0;
@@ -195,17 +220,20 @@ public class MainGUI {
 						cnt++;
 						if(resultDay >= 0 ) {
 							h = startDateOfMonth(cal) + resultDay;			//이번 달의 시작일과 resultDay를 더해서 GUI에 표시할 콘텐츠의 등록일을 구한다.
-							if(cnt == 1 || cnt == 8 || cnt == 16 || (cnt % 30) == 0 && resultDay != 0) { 	// 콘텐츠 등록날로부터 기억 주기 (당일, 7일 후, 8일 후, 이후 30일 지날때마다 쭉..)가 되면
+							if(cnt == 1 || cnt == 8 || cnt == 16 || (cnt % 30) == 0 && resultDay != 0 ||(extraDate - resultDay) == -1) { 	// 콘텐츠 등록날로부터 기억 주기 (당일, 7일 후, 8일 후, 이후 30일 지날때마다 쭉..)가 되면
                                 if(label_space[h/7][h%7].getComponentCount() < 3) {
                                     setContentsToCalendar(title, labelIndex, h);              // 컨텐츠 라벨을 캘린더 라벨에 배치하는 메소드
                                     if(cnt == 1) { 		// 라벨이 처음 표기된 경우
-                                    	System.out.println("색깔 레드");
                                         label_contentsTitle[labelIndex].setBackground(new Color(255, 69, 0));
                                         label_contentsTitle[labelIndex].setForeground(Color.white);
                                     }
-                                    else if((extraDate - resultDay) < 0) { // 마지막으로 표기된 라벨이 마지막이 되었을 경우
+                                    
+                                    else if(extraDate == 1) { // 마지막으로 표기된 라벨이 마지막이 되었을 경우
+                                    	System.out.println(title +": ex = "+ extraDate + ", re = " + resultDay);
+                                    	if(label_contentsTitle[labelIndex] != null) {
                                         label_contentsTitle[labelIndex].setBackground(new Color(25, 25, 122));
                                     	label_contentsTitle[labelIndex].setForeground(Color.white);
+                                    	}
                                     }
                                     else // 등록일과 마감일 사이의 경우
                                     {
@@ -229,17 +257,18 @@ public class MainGUI {
                                         setContentsTitle(title);
 								}
                                 else {
-                                		System.out.println("과연");
                                 		label_contentsTitle[labelIndex] = new JLabel(title);
                                 		label_space[h/7][h%7].add(label_contentsTitle[labelIndex]);
                                         if(cnt == 1) { 		// 라벨이 처음 표기된 경우
-                                        	System.out.println("색깔 레드");
                                             label_contentsTitle[labelIndex].setBackground(new Color(255, 69, 0));
                                             label_contentsTitle[labelIndex].setForeground(Color.white);
                                         }
                                         else if((extraDate - resultDay) < 0) { // 마지막으로 표기된 라벨이 마지막이 되었을 경우
+                                        	System.out.println(title + (extraDate - resultDay));
+                                        	if(label_contentsTitle != null) {
                                             label_contentsTitle[labelIndex].setBackground(new Color(25, 25, 122));
                                     		label_contentsTitle[labelIndex].setForeground(Color.white);
+                                        	}
                                         }
                                         else // 등록일과 마감일 사이의 경우
                                         {
@@ -295,8 +324,12 @@ public class MainGUI {
 		}	
 	}
 	
-	public void showToday() {			//버튼을 누를경우 월, 년도를 이동해서 오늘을 표시해주는 메소드
-		Calendar cal = Calendar.getInstance();
+	public void showToday() {			//버튼을 누를경우 월, 년도를 이동해서 오늘을 표시해주는 메소드\
+		calMonth = todayMonth;
+		calYear = todayYear;
+		cal.set(Calendar.MONTH, calMonth-1);
+		cal.set(Calendar.DAY_OF_MONTH, 1);
+		clearCal();
 		showCal(cal);
 		btn_Backward.setText(todayMonth-1+"월");
 		btn_Forward.setText((todayMonth+1)+"월");
@@ -311,6 +344,7 @@ public class MainGUI {
 				}
 			}	
 		}
+		check_refush = true;
 	}
 	
 	public void showToday_auto() {
@@ -381,6 +415,7 @@ public class MainGUI {
 				label_space[i][j].removeAll();    	// 등록된 컨텐츠를 없애는 명령
 			}
 		}
+		disableCal();
 	}
 	
 	public void nextMonth(){			//다음 달로 변경하는 메소드
@@ -394,6 +429,8 @@ public class MainGUI {
 			btn_Backward.setText(calMonth-1+"월");
 			btn_Forward.setText((calMonth+1)+"월");
 			label_Month.setText(calMonth+"월");
+			System.out.println(todayMonth);
+
 			if(label_Month.getText().equals("1월")) { 		//년도가 넘어가기전 12월과 1월에 13월 혹은 0 월이 표기되던 문제 해결
 				btn_Forward.setText("2월"); 
 				btn_Backward.setText("12월");
@@ -495,7 +532,7 @@ public class MainGUI {
 		database = new Database(); // 데이터베이스 객체생성
 		selectedPlanGUI = new SelectedPlanGUI();
 		plannerGUI = new PlannerGUI(); 
-
+		refush();
 		initialize();
 
 		showCal(cal);
@@ -1052,7 +1089,7 @@ public class MainGUI {
 		
 		JPanel panel_Search = new JPanel();
 		panel_Search.setBorder(new LineBorder(new Color(105, 105, 105)));
-		panel_Search.setBounds(0, 49, 232, 560);
+		panel_Search.setBounds(0, 24, 232, 585);
 		frame.getContentPane().add(panel_Search);
 		panel_Search.setLayout(new GridLayout(0, 1, 0, 0));
 
@@ -1108,13 +1145,6 @@ public class MainGUI {
 		textField_searchField.setToolTipText("");
 		textField_searchField.setColumns(10);
 		textField_searchField.addKeyListener(kl);
-		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setFont(new Font("맑은 고딕", Font.PLAIN, 15));
-		comboBox.setBorder(new LineBorder(new Color(105, 105, 105)));
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"이름 순", "등록일 순", "마감일 순", "중요도 순"}));
-		comboBox.setBounds(0, 24, 232, 26);
-		frame.getContentPane().add(comboBox);
 		btn_today.addActionListener(ml);
 		
 		//Main 메뉴바 컴포넌트
@@ -1183,6 +1213,7 @@ public class MainGUI {
 		
 		try {
 			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+		
 		} catch (ClassNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -1344,6 +1375,7 @@ public class MainGUI {
 		}
 
 	}
+
 }
 
 
