@@ -11,6 +11,8 @@ import java.awt.BorderLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+
 import java.awt.Window.Type;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,6 +24,7 @@ import javax.swing.JScrollPane;
 import java.awt.Color;
 import java.awt.Toolkit;
 import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.AbstractListModel;
 import javax.swing.border.LineBorder;
 import javax.swing.border.BevelBorder;
@@ -30,6 +33,7 @@ import java.awt.SystemColor;
 import java.util.Calendar;
 import java.util.Date;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 public class PlannerGUI  {
 	
 
@@ -45,6 +49,10 @@ public class PlannerGUI  {
 	private MyListener ml;
 	private Database database;
 	private DetailGUI detailGUI;
+	private ContentsGUI contentsGUI;
+	
+	private JPopupMenu popupMenuComponents;
+	private JMenuItem mntmNewMenuItem_fix;
 
 	/**
 	 * Launch the application.
@@ -116,6 +124,7 @@ public class PlannerGUI  {
 		cal = Calendar.getInstance();
 		database = new Database();
 		detailGUI = new DetailGUI();
+		contentsGUI = new ContentsGUI();
 		label_contents = new JLabel[15];
 		checkBox = new JCheckBox[15];
 		ml = new MyListener();
@@ -129,7 +138,22 @@ public class PlannerGUI  {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-
+		try {				
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());		// 이 코드부분 이후로 생성되는 컴포넌트 객체는 윈도우ui 처럼 형성됨.
+			
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (InstantiationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IllegalAccessException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		int year = cal.get(Calendar.YEAR);
 		int month = cal.get(Calendar.MONTH)+1;
@@ -216,23 +240,61 @@ public class PlannerGUI  {
 		panel_main.setBounds(0, 0, 423, 561);
 		panel_main.setLayout(null);
 		
-
+		popupMenuComponents = new JPopupMenu();
+		mntmNewMenuItem_fix = new JMenuItem("수정(F)"); // 수정 메뉴아이템
+		mntmNewMenuItem_fix.addActionListener(ml);
+		popupMenuComponents.add(mntmNewMenuItem_fix);
+		
+		try {
+			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (InstantiationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IllegalAccessException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 	}
-	class MyListener extends MouseAdapter {
+	class MyListener extends MouseAdapter implements ActionListener {
 		JLabel label_event;
+		
 		public void mouseReleased(MouseEvent e) {
-			if(e.getSource().getClass().equals(JLabel.class)) {
-				
+			if(e.isPopupTrigger()) {// 만약 우클릭(팝업트리거 발동)을 했다면 프레임에 해당 좌표에 팝업메뉴 호출	
+				if(e.getComponent().getClass().equals(JLabel.class)) {  // 라벨 우클릭
+					JLabel event = (JLabel)e.getSource();
+					System.out.println(event.getParent().getClass().getName());
+					if(event.getText().equals("") == false  &&  event.getParent().getClass().getName().equals("javax.swing.JPanel")) { // 만약 클릭한 라벨의 텍스트 값이 널값이 아니라면 인식
+						label_event = (JLabel)e.getSource();
+						popupMenuComponents.show(panel_main, e.getX() + e.getComponent().getX() ,
+								e.getY() + e.getComponent().getY());
+					} 
+				}
+			}
+			else if(e.getSource().getClass().equals(JLabel.class)) {
 				label_event = (JLabel)e.getSource();
-				database.getSeletedContentsInfo(label_event.getText());
-				
-				detailGUI.setComponents(database.getSeletedContentsInfo(label_event.getText()));
-				System.out.println("테스트");
-				detailGUI.show();
-				
+				contentsGUI.setComponents(database.getSeletedContentsInfo(label_event.getText()));
+				contentsGUI.show();
 			}
 		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			if(e.getSource().equals(mntmNewMenuItem_fix)){ // 팝업 메뉴에서 수정 버튼 눌렀을 시
+				System.out.println("테스트");
+				detailGUI.setComponents(
+						database.getSeletedContentsInfo(label_event.getText()));
+				detailGUI.show();
+			}
+		}
+		
+		
 	}
 }
 

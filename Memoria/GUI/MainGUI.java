@@ -70,6 +70,7 @@ public class MainGUI {
 	KeyListener kl = new KeyListener();
 	
 	DetailGUI detailGUI;
+	ContentsGUI contentsGUI;
 	
 	Font f1 = new Font("HY헤드라인M",Font.PLAIN, 13);		//캘린더 날짜 (숫자) 폰트
 	
@@ -490,6 +491,7 @@ public class MainGUI {
 	}	
 	public MainGUI() { // 생성자
 		detailGUI = new DetailGUI();
+		contentsGUI = new ContentsGUI();
 		database = new Database(); // 데이터베이스 객체생성
 		selectedPlanGUI = new SelectedPlanGUI();
 		plannerGUI = new PlannerGUI(); 
@@ -1263,6 +1265,7 @@ public class MainGUI {
 			}
 			
 			if(e.getSource().equals(mntmNewMenuItem_fix_list)){ // 팝업 메뉴에서 수정 버튼 눌렀을 시
+
 				detailGUI.setComponents(
 						database.getSeletedContentsInfo(event_list.getSelectedValue().toString()));
 				detailGUI.show();
@@ -1289,7 +1292,6 @@ public class MainGUI {
                 		}
                 	}
                 	selectedPlanGUI.setVisible(true);
-                    System.out.println("테스트");
                 }
                 
             }
@@ -1306,7 +1308,7 @@ public class MainGUI {
 						detailGUI.selectYear = calYear;
 						detailGUI.selectMonth = calMonth;
 						detailGUI.selectDayOfMonth = Integer.parseInt(event.getText());
-					}
+					}  
 					else if(event.getText().equals("") == false)	// (우)클릭한 라벨이 컨텐츠일 경우
 					{
 						getPopupMenu("label_components").show(panel_Calendar, event.getParent().getX() + e.getX()  + e.getComponent().getX(),
@@ -1321,16 +1323,16 @@ public class MainGUI {
 			if(e.getComponent().equals(list_searchlist) && !(e.isPopupTrigger())) {	// 리스트 선택 후 더블클릭시 불러옴
 				if(e.getClickCount() == 2) {
 					event_list = (JList)e.getSource();
-					detailGUI.setComponents(
+					contentsGUI.setComponents(
 							database.getSeletedContentsInfo(event_list.getSelectedValue().toString()));
-					detailGUI.show();
+					contentsGUI.show();
 					list_searchlist.clearSelection();
 				}
 			}
 			else if (e.getComponent().equals(list_searchlist) && e.isPopupTrigger() && !(((JList)e.getSource()).isSelectionEmpty())) {	//리스트우클릭시 수정 제거섵=ㄴ택
 				getPopupMenu("list").show(list_searchlist, e.getX() + e.getComponent().getX() ,
 						e.getY() + e.getComponent().getY());
-
+				event_list = (JList)e.getSource();
 			}
 
 		}
