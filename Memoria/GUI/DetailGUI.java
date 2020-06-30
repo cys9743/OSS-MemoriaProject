@@ -87,8 +87,17 @@ public class DetailGUI {
 	
 	void firstOpen() {
 		textField_addContentYear.setText(selectYear+"");
-		textField_addContentMonth.setText(selectMonth+"");
-		textField_addContentDay.setText(selectDayOfMonth+"");
+		
+		if(selectMonth >= 1 && selectMonth <= 9)
+			textField_addContentMonth.setText("0"+selectMonth+"");
+		else
+			textField_addContentMonth.setText(selectMonth+"");
+
+		
+		if(selectDayOfMonth >= 1 && selectDayOfMonth <= 9)
+			textField_addContentDay.setText("0"+selectDayOfMonth+"");
+		else
+			textField_addContentDay.setText(selectDayOfMonth+"");
 	}
 	
 	void show() {
@@ -341,6 +350,10 @@ public class DetailGUI {
 					System.out.println("빈칸금지");
 				}
 				else {
+					if(textField_deadLineDay.getText().length() < 2) textField_deadLineDay.setText("0"+textField_deadLineDay.getText());
+					if(textField_deadLineMonth.getText().length() < 2) textField_deadLineMonth.setText("0"+textField_deadLineMonth.getText());
+					if(textField_addContentDay.getText().length() < 2) textField_addContentDay.setText("0"+textField_addContentDay.getText());
+					if(textField_addContentMonth.getText().length() < 2) textField_addContentMonth.setText("0"+textField_addContentMonth.getText());
 					contents.setContents();
 					
 					if(database.registerContents(contents.getTitle(), contents.getText(),contents.getPriority(),contents.getRegisterDate(),contents.getLastDate(),contents.getFileLink())) {
