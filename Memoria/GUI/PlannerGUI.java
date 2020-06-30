@@ -3,6 +3,7 @@ package Memoria.GUI;
 
 import java.awt.EventQueue;
 
+
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -25,16 +26,23 @@ import java.awt.Color;
 import java.awt.Toolkit;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.AbstractListModel;
 import javax.swing.border.LineBorder;
 import javax.swing.border.BevelBorder;
 import java.awt.Font;
 import java.awt.SystemColor;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class PlannerGUI  {
+	
 	
 
 	private JFrame frame;
@@ -50,13 +58,19 @@ public class PlannerGUI  {
 	private Database database;
 	private DetailGUI detailGUI;
 	private ContentsGUI contentsGUI;
-	
+	private int hour;
+	private int minute;
+	private int sec;
 	private JPopupMenu popupMenuComponents;
 	private JMenuItem mntmNewMenuItem_fix;
+
+	ArrayList<JCheckBox> box = new ArrayList<>();
+	ArrayList<JLabel> label = new ArrayList<>();
 
 	/**
 	 * Launch the application.
 	 */
+	
 	public static void main(String[] args) {
 		
 		
@@ -71,9 +85,13 @@ public class PlannerGUI  {
 			}
 		});
 	}
+	
+
+	
 	public void setContents(int index, String title, Color color){		
-		System.out.println("index" + index + "title" + title);
+
 		if(title != "더보기") {
+			
 			label_contents[index] = new JLabel();
 			label_contents[index].setText(title);
 			label_contents[index].setFont(new Font("맑은 고딕", Font.PLAIN, 14));
@@ -82,37 +100,76 @@ public class PlannerGUI  {
 			label_contents[index].setBounds(40, 70 + index * 45, 350, 35);
 			label_contents[index].addMouseListener(ml);
 			label_contents[index].setForeground(Color.white);
+			label.add(label_contents[index]);
 		
 			checkBox[index] = new JCheckBox();
 			checkBox[index].setBackground(new Color(192, 192, 192));
 			checkBox[index].setBounds(20, 70 + index * 45, 20, 35);
+			box.add(checkBox[index]);
 			panel_main.add(checkBox[index]);
 			
 			panel_main.add(label_contents[index]);
 		
 				if(index >= 3) {
-				index--;
-				label_contents[index] = new JLabel();
-				label_contents[index].setText(title);
-				label_contents[index].setFont(new Font("맑은 고딕", Font.PLAIN, 14));
-				label_contents[index].setOpaque(true);
-				label_contents[index].setBackground(color);
-				label_contents[index].setBounds(40, 70 + index * 45, 350, 35);
-				label_contents[index].addMouseListener(ml);
-				label_contents[index].setForeground(Color.white);
-			
-				checkBox[index] = new JCheckBox();
-				checkBox[index].setBackground(new Color(192, 192, 192));
-				checkBox[index].setBounds(20, 70 + index * 45, 20, 35);
-				panel_main.add(checkBox[index]);
-			
-				panel_main.add(label_contents[index]);
+					index--;
+					label_contents[index] = new JLabel();
+					label_contents[index].setText(title);
+					label_contents[index].setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+					label_contents[index].setOpaque(true);
+					label_contents[index].setBackground(color);
+					label_contents[index].setBounds(40, 70 + index * 45, 350, 35);
+					label_contents[index].addMouseListener(ml);
+					label_contents[index].setForeground(Color.white);
+	
+	
+					checkBox[index] = new JCheckBox();
+					checkBox[index].setBackground(new Color(192, 192, 192));
+					checkBox[index].setBounds(20, 70 + index * 45, 20, 35);
+	
+	
+					panel_main.add(checkBox[index]);
+				
+					panel_main.add(label_contents[index]);
+				}
 			}
-		}
-		
-	}	
+		}	
+	
+	public void alarm() {
+		Thread thread = new Thread() {
+			public void run() {
+				ArrayList<String> text = new ArrayList<>();
+				while(true) {
+					if(hour % 2 == 0 && minute == 0 && sec == 0 ) {
+						for(int i =0; i<box.size() ; i++) {
+							if(box.get(i).isSelected()) {
+								text.add(label.get(i).getText());
+							}
+						}
+
+						if(!(text.isEmpty())) {
+							JOptionPane.showMessageDialog(null, text+" 알림!");
+							text.clear();
+						}
+
+					}
+		            try {
+		                Thread.sleep(100);	//0.1초마다 갱신
+		                cal = Calendar.getInstance();
+		                hour = cal.get(Calendar.HOUR_OF_DAY);
+		                minute = cal.get(Calendar.MINUTE);
+		                sec = cal.get(Calendar.SECOND);
+		            } catch (Exception e) {
+		            	e.printStackTrace();
+		            }
+				}	
+			}
+		};		
+		thread.start();
+	}
+
 	public void show() {
 		frame.setVisible(true);
+		alarm();
 	}
 	
 	/**
@@ -296,5 +353,8 @@ public class PlannerGUI  {
 		
 		
 	}
+	
 }
+
+
 
