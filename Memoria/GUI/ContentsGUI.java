@@ -1,6 +1,7 @@
 package Memoria.GUI;
 
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -10,6 +11,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
@@ -137,7 +139,8 @@ public class ContentsGUI {
 		SimpleDateFormat simpleDateFormat;
 		Date lastmodifiedDate;
 
-		label_path.setText(filepath);
+		String fileP = filepath.replaceFirst(":", ":/");
+		label_path.setText(fileP);
 		//확장자 라벨 설정
 		index = filepath.lastIndexOf(".");
 		extension = filepath.substring(index + 1);
@@ -174,7 +177,7 @@ public class ContentsGUI {
 	 */
 	private void initialize() {
 
-		button_open_filePath = new JButton("경로 열기");
+		button_open_filePath = new JButton("파일 열기");
 		button_cancel = new JButton("취소");
 		
 		try {				
@@ -252,7 +255,12 @@ public class ContentsGUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				
+				try {
+					Desktop.getDesktop().open(new File(label_path.getText()));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 
 		});
@@ -291,19 +299,6 @@ public class ContentsGUI {
 		label_lastModify.setFont(new Font("새굴림", Font.PLAIN, 12));
 		label_lastModify.setBounds(22, 409, 210, 15);
 		frame.getContentPane().add(label_lastModify);
-		
-		JLabel label_text_img = new JLabel("\uBBF8\uB9AC\uBCF4\uAE30");
-		label_text_img.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
-		label_text_img.setBounds(551, 246, 57, 15);
-		frame.getContentPane().add(label_text_img);
-		
-		JLabel label_img = new JLabel("\uC774\uBBF8\uC9C0");
-		label_img.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
-		label_img.setBorder(UIManager.getBorder("PasswordField.border"));
-		label_img.setHorizontalAlignment(SwingConstants.CENTER);
-		label_img.setBackground(new Color(0, 255, 0));
-		label_img.setBounds(464, 275, 228, 233);
-		frame.getContentPane().add(label_img);
 		button_cancel.setForeground(Color.WHITE);
 		button_cancel.setBackground(new Color(85, 107, 4));
 		
