@@ -324,19 +324,6 @@ public class DetailGUI {
 		label_lastModify.setBounds(22, 409, 210, 15);
 		frame.getContentPane().add(label_lastModify);
 		
-		JLabel label_text_img = new JLabel("\uBBF8\uB9AC\uBCF4\uAE30");
-		label_text_img.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
-		label_text_img.setBounds(551, 246, 57, 15);
-		frame.getContentPane().add(label_text_img);
-		
-		JLabel label_img = new JLabel("\uC774\uBBF8\uC9C0");
-		label_img.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
-		label_img.setBorder(UIManager.getBorder("PasswordField.border"));
-		label_img.setHorizontalAlignment(SwingConstants.CENTER);
-		label_img.setBackground(new Color(0, 255, 0));
-		label_img.setBounds(464, 275, 228, 233);
-		frame.getContentPane().add(label_img);
-		
 		
 		
 		button_apply.setForeground(Color.WHITE);
