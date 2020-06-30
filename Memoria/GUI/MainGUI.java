@@ -1196,6 +1196,7 @@ public class MainGUI {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		frame.setVisible(true);
 	}
 	class MyContentsListener extends MouseAdapter{
 		

@@ -1,9 +1,15 @@
 package Memoria.GUI;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLSyntaxErrorException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -11,10 +17,10 @@ public class Database {
 
 	private String JDBC_DRIVER =  "com.mysql.cj.jdbc.Driver"; // Mysql 드라이버
 	private final String DB_URL = "jdbc:mysql://localhost:3306/memoria?serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false&autoreconnect=true";// 3306포트에 localhost 아이피 주소를 가진다.
-	private final String DB_USER = "root"; // DB에 접속할 ID
+	private  String DB_USER = "root"; // DB에 접속할 ID
 	//DOKKU
 	//root
-	private final String DB_PASSWORD = "root"; // DB에 접속할 비밀번호.
+	private String DB_PASSWORD = "root"; // DB에 접속할 비밀번호.
 	//land1!4$7&2@
 	//root
 
@@ -26,19 +32,104 @@ public class Database {
 	ArrayList <String> list_dbTitle = new ArrayList<>();
 	
 	public Database() {
+		
+        try{
+            File file = new File("C:\\Memoria\\log.txt");
+            FileReader filereader = new FileReader(file);
+            BufferedReader bufReader = new BufferedReader(filereader);
+            String line = "";
+            DB_USER = bufReader.readLine();
+            DB_PASSWORD = bufReader.readLine();
+                  
+            bufReader.close();
+        }catch (FileNotFoundException e) {
+            // TODO: handle exception
+        }catch(IOException e){
+            System.out.println(e);
+        }
+		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 			statement = connection.createStatement();
-
+		
 			System.out.println("DB 접속 완료");
-		}catch(SQLException e) {
+			
+		}
+		catch(SQLSyntaxErrorException e) {
+			System.out.println("DB 테이블 오류");
+			e.printStackTrace();
+		} 
+		catch(SQLException e) {
 			System.out.println("DB 접속 오류");
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			System.out.println("DB(MYsql) 드라이버 오류");
 			e.printStackTrace();
+		}
+	}
+	
+	public boolean setUpSchemaAndTable() {
+		
+		try {
+			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/?serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false&autoreconnect=true", DB_USER, DB_PASSWORD);
+			statement = connection.createStatement();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		String statement_make_schema = "CREATE SCHEMA `memoria` DEFAULT CHARACTER SET utf8mb4;";
+		String statement_make_table = " CREATE TABLE memoria.`contents` ( "
+				+ "`ID` int NOT NULL AUTO_INCREMENT,"
+				+ "`TITLE` varchar(256) NOT NULL,"
+				+ "`TEXT` mediumtext,"
+				+ "`PRIORITY` int DEFAULT NULL,"
+				+ "`R_DATE` varchar(256) NOT NULL,"
+				+ "`L_DATE` varchar(256) NOT NULL,"
+				+ "`F_LINK` varchar(256) DEFAULT NULL,"
+				+ "PRIMARY KEY (`ID`),"
+				+ "UNIQUE KEY `TITLE_UNIQUE` (`TITLE`)"
+				+ " )";
+		try {
+			statement.execute(statement_make_schema);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println("스키마 생성 오류");
+			e.printStackTrace();
+			return false;
+		}
+		try {
+			statement.execute(statement_make_table);
+		} catch (SQLException e) {
+			System.out.println("테이블 생성 오류");
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	public int login() {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+			statement = connection.createStatement();
+
+			System.out.println("DB 접속 완료");
+			return 1;
+		}
+		catch(SQLSyntaxErrorException e) {
+			System.out.println("DB 테이블 오류");
+			return -3;
+		} catch(SQLException e) {
+			System.out.println("DB 접속 오류");
+			e.printStackTrace();
+			return -1;
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			System.out.println("DB(MYsql) 드라이버 오류");
+			e.printStackTrace();
+			return -2;
 		}
 	}
 	public boolean updateContents(String title, String text, int priority, String registerDate, String lastDate, String fileLink ) {//DB에서 콘텐츠를 조회하고 존재하면 FALSE 리턴, 존재하지 않으면 매개변수 DB에 삽입하고 TRUE 리턴, 나머지 안되는경우에도 FALSE
