@@ -90,10 +90,10 @@ public class MainGUI {
 	private int today_label_weight;
 	private int today_label_height;
 	
-	JButton btn_today = new JButton("오늘로 이동");
+	JButton btn_today;
 	
-	JButton btn_Backward = new JButton(cal.get(Calendar.MONTH)+"월");	
-	JButton btn_Forward = new JButton((cal.get(Calendar.MONTH)+1+1)+"월");
+	JButton btn_Backward;
+	JButton btn_Forward;
 	JLabel label_Month = new JLabel((cal.get(Calendar.MONTH)+1)+"월");
 	
 	JMenuItem mntmNewMenuItem_open;
@@ -255,6 +255,26 @@ public class MainGUI {
                                 		label_contentsTitle[labelIndex].setFont(new Font("맑은 고딕", Font.PLAIN, 14));
                                         label_contentsTitle[labelIndex].addMouseListener(ml);
                                         setContentsTitle(title);
+                                		label_contentsTitle[labelIndex] = new JLabel(title);
+                                		label_space[h/7][h%7].add(label_contentsTitle[labelIndex]);
+                                        if(cnt == 1) { 		// 라벨이 처음 표기된 경우
+                                            label_contentsTitle[labelIndex].setBackground(new Color(255, 69, 0));
+                                            label_contentsTitle[labelIndex].setForeground(Color.white);
+                                        }
+                                        else if((extraDate - resultDay) < 0) { // 마지막으로 표기된 라벨이 마지막이 되었을 경우
+                                        	System.out.println(title + (extraDate - resultDay));
+                                        	if(label_contentsTitle != null) {
+                                            label_contentsTitle[labelIndex].setBackground(new Color(25, 25, 122));
+                                    		label_contentsTitle[labelIndex].setForeground(Color.white);
+                                        	}
+                                        }
+                                        else // 등록일과 마감일 사이의 경우
+                                        {
+                                            if(label_contentsTitle[labelIndex] != null) {
+                                            label_contentsTitle[labelIndex].setBackground(new Color(150, 150, 0));
+                                        	label_contentsTitle[labelIndex].setForeground(Color.white);
+                                            }
+                                        }
 								}
                                 else {
                                 		label_contentsTitle[labelIndex] = new JLabel(title);
@@ -527,6 +547,10 @@ public class MainGUI {
 		return tempTitle;
 	}	
 	public MainGUI() { // 생성자
+		btn_today = new JButton("오늘로 이동");
+		
+		btn_Backward = new JButton(cal.get(Calendar.MONTH)+"월");	
+		btn_Forward = new JButton((cal.get(Calendar.MONTH)+1+1)+"월");
 		detailGUI = new DetailGUI();
 		contentsGUI = new ContentsGUI();
 		database = new Database(); // 데이터베이스 객체생성
@@ -571,21 +595,7 @@ public class MainGUI {
 	private void initialize() {
 		setToday();
 		
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (InstantiationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+
 		list_searchlist.setBorder(new LineBorder(new Color(105, 105, 105)));
 		list_searchlist.addMouseListener(ml);
 		list_searchlist.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -1146,7 +1156,21 @@ public class MainGUI {
 		textField_searchField.setColumns(10);
 		textField_searchField.addKeyListener(kl);
 		btn_today.addActionListener(ml);
-		
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (InstantiationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IllegalAccessException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		//Main 메뉴바 컴포넌트
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -1203,6 +1227,7 @@ public class MainGUI {
 		popupMenuList.add(mntmNewMenuItem_remove_list);
 
 
+		
 		chooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 
 		chooser.setCurrentDirectory(new File("/")); // 현재 사용 디렉터리 지정
@@ -1324,6 +1349,11 @@ public class MainGUI {
                 		}
                 	}
                 	selectedPlanGUI.setVisible(true);
+                }
+                else if(event.getParent().getClass().getName().equals("javax.swing.JPanel") != true && event.getText().equals("더보기") != true) {
+					contentsGUI.setComponents(
+							database.getSeletedContentsInfo(event.getText()));
+					contentsGUI.show();
                 }
                 
             }

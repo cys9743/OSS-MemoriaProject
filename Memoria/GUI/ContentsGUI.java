@@ -255,11 +255,24 @@ public class ContentsGUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				if(label_path.getText().equals("비어있음")) {
+					try {
+						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+					} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+							| UnsupportedLookAndFeelException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					JOptionPane.showMessageDialog(null, "파일 경로가 비어있습니다.", "파일 경로 열기 오류", JOptionPane.WARNING_MESSAGE);
+					
+				}
+				else {
 				try {
 					Desktop.getDesktop().open(new File(label_path.getText()));
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
+				}
 				}
 			}
 
@@ -320,6 +333,7 @@ public class ContentsGUI {
 		
 		comboBox_star = new JComboBox();
 		comboBox_star.setEnabled(false);
+		comboBox_star.setEditable(true);
 		comboBox_star.setModel(new DefaultComboBoxModel(new String[] {"(0)", "☆ (1)", "★ (2)", "★☆ (3)", "★★ (4)", "★★☆ (5)", "★★★ (6)", "★★★☆ (7)", "★★★★ (8)", "★★★★☆ (9)", "★★★★★ (10)"}));
 		comboBox_star.setBounds(283, 306, 156, 21);
 		frame.getContentPane().add(comboBox_star);
@@ -401,21 +415,7 @@ public class ContentsGUI {
 		op_askRegisterContents.setBackground(Color.white);
 		
 		
-		try {
-			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-		} catch (ClassNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (InstantiationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+
 
 	}
 	class Contents{ 		//콘텐츠의 내용을 담는 클래스

@@ -48,8 +48,9 @@ public class SelectedPlanGUI extends JFrame {
 	
 	// GUI에 콘텐츠를 표기하는 메소드
 	public void setContents(int index, String title, Color color){
-		if(index > 2)
+		if(index >= 3)
 			index--;
+		if(title.equals("더보기") != true) {
 		label_contents[index] = new JLabel(title);
 		label_contents[index].setBackground(color);
 		label_contents[index].setOpaque(true);
@@ -58,6 +59,7 @@ public class SelectedPlanGUI extends JFrame {
 		label_contents[index].setBounds(40, 70 +(index * 40), 350, 35);
 		label_contents[index].addMouseListener(ml);
 		mainPanel.add(label_contents[index]);
+		}
 	}
 	
 	

@@ -56,22 +56,6 @@ public class LogInGUI extends JFrame {
 	public LogInGUI() {
 		JButton btnNewButton = new JButton("등록");
 		
-		try {				
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());		// 이 코드부분 이후로 생성되는 컴포넌트 객체는 윈도우ui 처럼 형성됨.
-			
-		} catch (ClassNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (InstantiationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		ml = new MyListener();
 		file = new File("C:\\Memoria\\" , "log.txt"); 
 		setBackground(Color.WHITE);
